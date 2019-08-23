@@ -1,0 +1,2 @@
+source ./scripts/setenv.sh NOSET
+docker run --name jbpython  -e KAFKA_ENV=$KAFKA_ENV -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY  -v $(pwd):/home -it  -p 5000:5000 jbcodeforce/python37 bash

@@ -1,0 +1,4 @@
+pandas
+gunicorn
+Flask
+confluent_kafka

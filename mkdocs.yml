@@ -1,0 +1,15 @@
+site_name: Reefer Container Predictive Maintenance
+repo_url: https://github.com/jbcodeforce/refarch-reefer-ml
+nav:
+  - Introduction: index.md
+  - Run integration tests: integration-tests.md
+  - Container Predictive Maintenance: predictive-maintenance.md
+theme: 
+  name: material
+extra_css: ["extra.css"]
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
