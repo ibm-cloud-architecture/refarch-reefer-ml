@@ -58,109 +58,6 @@ The other common potential issues are:
 
 So the question we want to answer is: does the Reefer keep accurate temperature overtime between what is set versus what is measured?
 
-## Architecture
-
-The target production architecture is based on the data and AI reference architecture, adapted for real time analytics. It is very close to what [Open Data Hub](https://opendatahub.io/) architecture looks like.
-
-![](images/RT-analytics.png)
-
-The Reefer container,a as IoT device emits container metrics avery minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the message to a kafka events. Kafka is used as the event backbone and event sourcin so microservices, deployed on openshift, can consume and publish messages. 
-
-For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used for the Data Scientists to do its data preparation and build training and test sets. 
-
-Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of kafka events. The action will be to trigger an email for the Reefer container to be put in maintenance.
-
-## Data set
-
-Well we do not have real Reefer data. But we may be able to simulate them. As this is not production work, we should be able to get the end to end story still working from a solution point of view.
-
-The historical data need to represent failure, and represent the characteristics of a Reefer container. We can imagine it includes a lot of sensors to get interesting correlated or independant features.
-
-We have implemented a simulator to create those metrics to be used to build the model inside Jupiter notebook and with sklearn or tensorflow library. 
-
-The simulator will be also used as an event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a containermaintance topic.
-
-Here is a diagram for the data scientist environment:
-
-![](images/ds-env.png)
-
-For the runtime execution we will plug the model as a consumer of `containerMetrics` topic which keeps container metrics in the form of event like below, keyed by containerID.
-
-```json
-{
-    "timestamp": 1234567,
-    "containerID": "C10",
-    
-}
-```
-
-
- The code is under the `tools` folder. The simulator can create two types of data: poweroff or co2 
-
-### 1. Poweroff
-
-When the reefer containers lose power at some time, the temperature within the container starts raising. To generate data for this scenario, start the python environment using our docker image and the script - startPythonEnv
-
-```
- ./startPythonEnv 
-```
-
-you will be in a bash within the container with the local `tools` folder mounted under the `/home` folder.
-
-The simulator accepts different arguments: 
-
-```
-sage reefer_simulator --stype [poweroff | co2sensor | atsea]
-	 --cid <container ID>
-	 --records <the number of records to generate>
-	 --temp <expected temperature for the goods>
-	 --file <the filename to create (without .csv)>
-	 --append [yes | no]  (reuse the data file)
-```
-
-```
-root@03721594782f: cd home
-root@03721594782f: python reefer_simulator.py --stype poweroff --cid 101 --records 1000 -temp 4 --file testdata --append yes
-
-Generating  1000  poweroff metrics
-Timestamp   ID  Temperature(celsius) Target_Temperature(celsius)      Power  PowerConsumption ContentType  O2 CO2  Time_Door_Open Maintenance_Required Defrost_Cycle
-1.000000  2019-06-30 T15:43 Z  101              3.416766                           4  17.698034          6.662044           1  11   1        8.735273                    0             6
-1.001001  2019-06-30 T15:43 Z  101              4.973630                           4   3.701072          8.457314           1  13   3        5.699655                    0             6
-1.002002  2019-06-30 T15:43 Z  101              1.299275                           4   7.629094          7.174810           1  15   1        7.146702                    0             6
-1.003003  2019-06-30 T15:43 Z  101              5.371080                           4   5.857190          6.542220           1   0   3        4.305004                    0             6
-1.004004  2019-06-30 T15:43 Z  101              5.371080                           4   0.000000          7.145957           1   0   0        8.305748                    0             6
-1.005005  2019-06-30 T15:43 Z  101              6.971080                           4   0.000000          6.438677           1   1   0        6.495389                    0             6
-1.
-```
-
-### 2. Co2 sensor malfunction
-
-In the same way as above the simulator can generate data for Co2 sensor malfunction, using the below command,
-```
-python reefer_simulator.py co2sensor 101 1000 4 testdata no
-```
-
-To build the data set we are using the following approaches:
-
-1. When the door of the reefer container is open
-
-    We are using exponential distribution here to generate data which varies at a very fast rate.
-
-2. When there is a sensor malfunction (or sensors are incorrectly calibrated)
-
-    We are using random gaussian distribution here to generate data with arbitrary variations
-
-3. When the reefer container is functioning as expected (baseline/groundtruth for our model)
-
-    We are using uniform distribution here to generate expected data.
-
-The features we are creating are:
-```
-=====================
-Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Amp, CumulativePowerConsumption, ContentType, Humidity, CO2, Door_Open, Maintainence_Required, Defrost_Cycle
-=====================
-```
-
 ## Modeling techniques
 
 The model uses the generated data from above scenarios: 
@@ -179,8 +76,6 @@ There are different modeling approach to tackle predictive maintenance:
 ### Code execution
 
 The simulator continuosly generates container metrics, publishes it to Kafka and run the predictMaintainence.ipynb to predict if maintainence is sought at this point in time. 
-
-
 
 ## Model description
 

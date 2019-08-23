@@ -3,13 +3,14 @@ import random
 import numpy as np
 import pandas as pd
 import os
-import ReeferSimulator from reefer_simulator
+from simulator.reefer_simulator import ReeferSimulator
 
 '''
 Tool to create the csv file for ML work using the Reefer metrics simulator.
 '''
-
-FILENAME = "../testdata"
+POWEROFF_SIMUL="poweroff"
+CO2_SIMUL="co2sensor"
+FILENAME = "../ml/data/testdata"
 
 def saveFile(df,fname = FILENAME,flag = "yes"):
     print("Save to file ", fname)  
