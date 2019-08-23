@@ -36,7 +36,7 @@
     
     
       
-        <title>Container Predictive Maintenance - Reefer Container Predictive Maintenance</title>
+        <title>Reefer Container Predictive Maintenance - Reefer Container Predictive Maintenance</title>
       
     
     
@@ -117,12 +117,7 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            <span class="md-header-nav__topic">
-              Reefer Container Predictive Maintenance
-            </span>
-            <span class="md-header-nav__topic">
-              Container Predictive Maintenance
-            </span>
+            Reefer Container Predictive Maintenance
           
         </div>
       </div>
@@ -264,11 +259,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Container Predictive Maintenance
+        Reefer Container Predictive Maintenance
       </label>
     
-    <a href="./" title="Container Predictive Maintenance" class="md-nav__link md-nav__link--active">
-      Container Predictive Maintenance
+    <a href="./" title="Reefer Container Predictive Maintenance" class="md-nav__link md-nav__link--active">
+      Reefer Container Predictive Maintenance
     </a>
     
       
@@ -299,40 +294,6 @@
           <li class="md-nav__item">
   <a href="#reefer-problem-types" title="Reefer problem types" class="md-nav__link">
     Reefer problem types
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#architecture" title="Architecture" class="md-nav__link">
-    Architecture
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-set" title="Data set" class="md-nav__link">
-    Data set
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-poweroff" title="1. Poweroff" class="md-nav__link">
-    1. Poweroff
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-co2-sensor-malfunction" title="2. Co2 sensor malfunction" class="md-nav__link">
-    2. Co2 sensor malfunction
   </a>
   
 </li>
@@ -452,40 +413,6 @@
           <li class="md-nav__item">
   <a href="#reefer-problem-types" title="Reefer problem types" class="md-nav__link">
     Reefer problem types
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#architecture" title="Architecture" class="md-nav__link">
-    Architecture
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-set" title="Data set" class="md-nav__link">
-    Data set
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-poweroff" title="1. Poweroff" class="md-nav__link">
-    1. Poweroff
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-co2-sensor-malfunction" title="2. Co2 sensor malfunction" class="md-nav__link">
-    2. Co2 sensor malfunction
   </a>
   
 </li>
@@ -620,81 +547,6 @@
 <li>Blocked air passage: to keep the temperature homogenous inside the reefer.</li>
 </ul>
 <p>So the question we want to answer is: does the Reefer keep accurate temperature overtime between what is set versus what is measured?</p>
-<h2 id="architecture">Architecture</h2>
-<p>The target production architecture is based on the data and AI reference architecture, adapted for real time analytics. It is very close to what <a href="https://opendatahub.io/">Open Data Hub</a> architecture looks like.</p>
-<p><img alt="" src="../images/RT-analytics.png" /></p>
-<p>The Reefer container,a as IoT device emits container metrics avery minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the message to a kafka events. Kafka is used as the event backbone and event sourcin so microservices, deployed on openshift, can consume and publish messages. </p>
-<p>For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used for the Data Scientists to do its data preparation and build training and test sets. </p>
-<p>Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of kafka events. The action will be to trigger an email for the Reefer container to be put in maintenance.</p>
-<h2 id="data-set">Data set</h2>
-<p>Well we do not have real Reefer data. But we may be able to simulate them. As this is not production work, we should be able to get the end to end story still working from a solution point of view.</p>
-<p>The historical data need to represent failure, and represent the characteristics of a Reefer container. We can imagine it includes a lot of sensors to get interesting correlated or independant features.</p>
-<p>We have implemented a simulator to create those metrics to be used to build the model inside Jupiter notebook and with sklearn or tensorflow library. </p>
-<p>The simulator will be also used as an event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a containermaintance topic.</p>
-<p>Here is a diagram for the data scientist environment:</p>
-<p><img alt="" src="../images/ds-env.png" /></p>
-<p>For the runtime execution we will plug the model as a consumer of <code>containerMetrics</code> topic which keeps container metrics in the form of event like below, keyed by containerID.</p>
-<div class="codehilite"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="mi">1234567</span><span class="p">,</span>
-    <span class="nt">&quot;containerID&quot;</span><span class="p">:</span> <span class="s2">&quot;C10&quot;</span><span class="p">,</span>
-
-<span class="p">}</span>
-</pre></div>
-
-<p>The code is under the <code>tools</code> folder. The simulator can create two types of data: poweroff or co2 </p>
-<h3 id="1-poweroff">1. Poweroff</h3>
-<p>When the reefer containers lose power at some time, the temperature within the container starts raising. To generate data for this scenario, start the python environment using our docker image and the script - startPythonEnv</p>
-<div class="codehilite"><pre><span></span> ./startPythonEnv 
-</pre></div>
-
-<p>you will be in a bash within the container with the local <code>tools</code> folder mounted under the <code>/home</code> folder.</p>
-<p>The simulator accepts different arguments: </p>
-<div class="codehilite"><pre><span></span>sage reefer_simulator --stype [poweroff | co2sensor | atsea]
-     --cid &lt;container ID&gt;
-     --records &lt;the number of records to generate&gt;
-     --temp &lt;expected temperature for the goods&gt;
-     --file &lt;the filename to create (without .csv)&gt;
-     --append [yes | no]  (reuse the data file)
-</pre></div>
-
-<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">cd</span> <span class="n">home</span>
-<span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">python</span> <span class="n">reefer_simulator</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="mi">101</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">-</span><span class="n">temp</span> <span class="mi">4</span> <span class="o">--</span><span class="n">file</span> <span class="n">testdata</span> <span class="o">--</span><span class="n">append</span> <span class="n">yes</span>
-
-<span class="n">Generating</span>  <span class="mi">1000</span>  <span class="n">poweroff</span> <span class="n">metrics</span>
-<span class="n">Timestamp</span>   <span class="n">ID</span>  <span class="n">Temperature</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span> <span class="n">Target_Temperature</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span>      <span class="n">Power</span>  <span class="n">PowerConsumption</span> <span class="n">ContentType</span>  <span class="n">O2</span> <span class="n">CO2</span>  <span class="n">Time_Door_Open</span> <span class="n">Maintenance_Required</span> <span class="n">Defrost_Cycle</span>
-<span class="mf">1.000000</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">3.416766</span>                           <span class="mi">4</span>  <span class="mf">17.698034</span>          <span class="mf">6.662044</span>           <span class="mi">1</span>  <span class="mi">11</span>   <span class="mi">1</span>        <span class="mf">8.735273</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.001001</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">4.973630</span>                           <span class="mi">4</span>   <span class="mf">3.701072</span>          <span class="mf">8.457314</span>           <span class="mi">1</span>  <span class="mi">13</span>   <span class="mi">3</span>        <span class="mf">5.699655</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.002002</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">1.299275</span>                           <span class="mi">4</span>   <span class="mf">7.629094</span>          <span class="mf">7.174810</span>           <span class="mi">1</span>  <span class="mi">15</span>   <span class="mi">1</span>        <span class="mf">7.146702</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.003003</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">5.371080</span>                           <span class="mi">4</span>   <span class="mf">5.857190</span>          <span class="mf">6.542220</span>           <span class="mi">1</span>   <span class="mi">0</span>   <span class="mi">3</span>        <span class="mf">4.305004</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.004004</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">5.371080</span>                           <span class="mi">4</span>   <span class="mf">0.000000</span>          <span class="mf">7.145957</span>           <span class="mi">1</span>   <span class="mi">0</span>   <span class="mi">0</span>        <span class="mf">8.305748</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.005005</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">6.971080</span>                           <span class="mi">4</span>   <span class="mf">0.000000</span>          <span class="mf">6.438677</span>           <span class="mi">1</span>   <span class="mi">1</span>   <span class="mi">0</span>        <span class="mf">6.495389</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-<span class="mf">1.</span>
-</pre></div>
-
-<h3 id="2-co2-sensor-malfunction">2. Co2 sensor malfunction</h3>
-<p>In the same way as above the simulator can generate data for Co2 sensor malfunction, using the below command,
-<div class="codehilite"><pre><span></span>python reefer_simulator.py co2sensor 101 1000 4 testdata no
-</pre></div></p>
-<p>To build the data set we are using the following approaches:</p>
-<ol>
-<li>
-<p>When the door of the reefer container is open</p>
-<p>We are using exponential distribution here to generate data which varies at a very fast rate.</p>
-</li>
-<li>
-<p>When there is a sensor malfunction (or sensors are incorrectly calibrated)</p>
-<p>We are using random gaussian distribution here to generate data with arbitrary variations</p>
-</li>
-<li>
-<p>When the reefer container is functioning as expected (baseline/groundtruth for our model)</p>
-<p>We are using uniform distribution here to generate expected data.</p>
-</li>
-</ol>
-<p>The features we are creating are:
-<div class="codehilite"><pre><span></span>=====================
-Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Amp, CumulativePowerConsumption, ContentType, Humidity, CO2, Door_Open, Maintainence_Required, Defrost_Cycle
-=====================
-</pre></div></p>
 <h2 id="modeling-techniques">Modeling techniques</h2>
 <p>The model uses the generated data from above scenarios: </p>
 <ol>
