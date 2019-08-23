@@ -1,3 +1,4 @@
 simulator/scripts/setenv.sh
 __pycache__/
 site/
+scripts/setenv.sh
