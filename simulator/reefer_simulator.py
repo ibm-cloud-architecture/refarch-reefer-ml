@@ -10,37 +10,29 @@ Simulate the metrics for a Reefer container.
 # Define constants for average
 POWEROFF_SIMUL="poweroff"
 CO2_SIMUL="co2sensor"
-
-simulation_type = POWEROFF_SIMUL
-
 CO2_LEVEL = 4 # in %
 O2_LEVEL = 21 # in %
 NITROGEN_LEVEL = 0.78 # in %
 POWER_LEVEL= 7.2 # in kW
 NB_RECORDS_IMPACTED = 7
-
-
-Today= datetime.datetime.today()
 MAX_RECORDS = 1000
 
 class ReeferSimulator:
-
-    def __init__(self):
-
     def defineDataFrame(self):
         return pd.DataFrame(columns=['Timestamp', 'ID', 'Temperature(celsius)', 'Target_Temperature(celsius)', 'Power', 'PowerConsumption', 'ContentType', 'O2', 'CO2', 'Time_Door_Open', 
     'Maintenance_Required', 'Defrost_Cycle'])
 
     def generatePowerOff(self,cid="101",nb_records = MAX_RECORDS, tgood=4.4):
-        df = defineDataFrame()
+        df = self.defineDataFrame()
         range_list=np.linspace(1,2,nb_records)
         ctype=random.randint(1,5)   # ContentType
         print("Generating ",nb_records, " poweroff metrics")
         count_pwr = 0  # generate n records with power off
         
         temp = random.gauss(tgood, 2.0)
+        Today= datetime.datetime.today()
         for i in range_list:
-            adate = Today + datetime.timedelta(minutes=10*i)
+            adate = Today + datetime.timedelta(minutes=15*i)
             timestamp =  adate.strftime('%Y-%m-%d T%H:%M Z')
             oldtemp = temp
             temp =  random.gauss(tgood, 2.0)
@@ -77,14 +69,15 @@ class ReeferSimulator:
  
     # Generate data if co2 sensor malfunctions
     def generateCo2(self,cid="101", nb_records= MAX_RECORDS, tgood=4.4):
-        df = defineDataFrame()
+        df = self.defineDataFrame()
         range_list=np.linspace(1,2,nb_records)
         ctype=random.randint(1,5)   # ContentType
         print("Generating ",nb_records, " Co2 metrics")
         temp = random.gauss(tgood, 3.0)
+        Today= datetime.datetime.today()
         for i in range_list:
             maintenance_flag = 0
-            adate = Today + datetime.timedelta(minutes=10*i)
+            adate = Today + datetime.timedelta(minutes=15*i)
             timestamp =  adate.strftime('%Y-%m-%d T%H:%M Z')
             pwr =  random.gauss(POWER_LEVEL,8)
             co2 = random.gauss(3.5, 3.0)

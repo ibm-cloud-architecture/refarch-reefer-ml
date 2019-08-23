@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, abort
-import os, time, datetime
+import os, time
+from datetime import datetime
 from KcProducer import KafkaProducer 
+from reefer_simulator import ReeferSimulator
 
 try:
     KAFKA_BROKERS = os.environ['KAFKA_BROKERS']
@@ -16,6 +18,9 @@ try:
     KAFKA_ENV = os.environ['KAFKA_ENV']
 except KeyError:
     KAFKA_ENV='LOCAL'
+
+POWEROFF_SIMUL="poweroff"
+CO2_SIMUL="co2sensor"
 
 application = Flask(__name__)
 
@@ -33,15 +38,23 @@ def runSimulator():
     if not 'containerID' in request.json:
         abort(400) 
     control = request.json
+    simulator = ReeferSimulator()
+    if control["simulation"] == POWEROFF_SIMUL:
+        df=simulator.generatePowerOff(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
+    elif  control["simulation"]  == CO2_SIMUL:
+        df=simulator.generateCo2(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
+    else:
+        return "Wrong simulation controller data"
     
-    evt = {"containerID": control["containerID"],"timestamp": int(datetime.datetime.today()),"type":"ContainerMetric","payload": order}
-    kp.publishEvent('containerMetrics',evt,"containerID")
-    return jsonify(evt)
+    for index, row in df.iterrows():
+        print(row)
+        ts=time.strptime(row["Timestamp"],"%Y-%m-%d T%H:%M Z")
+        evt = {"containerID": control["containerID"],"timestamp": int(time.mktime(ts)),"type":"ContainerMetric","payload": row}
+        print(evt)
+    # kp.publishEvent('containerMetrics',evt,"containerID")
+    return "Simulation started"
+    
 
-def produceMetricEvents(cid="101", nb_records= MAX_RECORDS, tgood=4.4):
-    print("Producing metrics events")
-    print ("Done!")
-    
 if __name__ == "__main__":
     application.run(debug=True)
     
