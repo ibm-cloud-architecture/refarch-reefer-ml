@@ -13,15 +13,20 @@ class TestReeferSimulator(unittest.TestCase):
         simul = ReeferSimulator()
         df=simul.generatePowerOff(cid="101",nb_records = 10, tgood=4.4)
         self.assertIsNotNone(df)
-        self.assertEquals(df.size, 120)  # nb of rows x nbr of columns
+        self.assertEqual(df.size, 120)  # nb of rows x nbr of columns
         print(df)
 
     def testGeneratingCo2(self):
         simul = ReeferSimulator()
-        df=simul.generateCo2(cid="101",nb_records = 10, tgood=4.4)
+        df=simul.generateCo2(cid="102",nb_records = 10, tgood=4.4)
         self.assertIsNotNone(df)
-        self.assertEquals(df.size, 120)  # nb of rows x nbr of columns
+        self.assertEqual(df.size, 120)  # nb of rows x nbr of columns
         print(df)
+
+    def testGenerateRecordsAtSea():
+        simul = ReeferSimulator()
+        values = simul.generatePowerOffTuples(cid="103",nb_records = 5, tgood=4)
+        print(values)
 
 if __name__ == '__main__':
     unittest.main()

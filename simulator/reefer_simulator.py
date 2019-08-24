@@ -16,13 +16,56 @@ NITROGEN_LEVEL = 0.78 # in %
 POWER_LEVEL= 7.2 # in kW
 NB_RECORDS_IMPACTED = 7
 MAX_RECORDS = 1000
+DEFROST_LEVEL = 7
 
 class ReeferSimulator:
     def defineDataFrame(self):
         return pd.DataFrame(columns=['Timestamp', 'ID', 'Temperature(celsius)', 'Target_Temperature(celsius)', 'Power', 'PowerConsumption', 'ContentType', 'O2', 'CO2', 'Time_Door_Open', 
     'Maintenance_Required', 'Defrost_Cycle'])
 
+    def generatePowerOffTuples(self,cid="101",nb_records = MAX_RECORDS, tgood=4.4):
+        '''
+        Generate an array of tuples with random values
+        '''
+        df = self.defineDataFrame()
+        range_list=np.linspace(1,2,nb_records)
+        ctype=random.randint(1,5)   # ContentType
+        count_pwr = 0  # generate n records with power off
+        temp = random.gauss(tgood, 2.0)
+        Today= datetime.datetime.today()
+        records = []
+        for i in range_list:
+            adate = Today + datetime.timedelta(minutes=15*i)
+            timestamp =  adate.strftime('%Y-%m-%d T%H:%M Z')
+            oldtemp = temp
+            temp =  random.gauss(tgood, 2.0)
+            pwr =  random.gauss(POWER_LEVEL,8)   # Power at this time - 
+            # as soon as one record power < 0 then poweroff for n records
+            if  pwr < 0.0:
+                pwr = 0
+                count_pwr = count_pwr + 1
+                temp = oldtemp
+            elif 0 < count_pwr < NB_RECORDS_IMPACTED:
+                # when powerer off the T increase
+                count_pwr = count_pwr + 1
+                pwr = 0
+                temp = oldtemp + 0.8 * count_pwr
+            if count_pwr == NB_RECORDS_IMPACTED:
+                count_pwr = 0
+            records.append((timestamp,cid,temp,tgood,pwr,random.gauss(POWER_LEVEL,1.0)
+                        ,ctype,                # ContentType
+                        random.randrange(O2_LEVEL),  # O2
+                        random.randrange(CO2_LEVEL), # CO2
+                        random.gauss(8.0, 2.0), # Time_Door_Open
+                        0,    # maintenance required
+                        random.randrange(DEFROST_LEVEL)))
+        return records
+
+    
     def generatePowerOff(self,cid="101",nb_records = MAX_RECORDS, tgood=4.4):
+        '''
+        Generate n records for training and test set.
+        '''
         df = self.defineDataFrame()
         range_list=np.linspace(1,2,nb_records)
         ctype=random.randint(1,5)   # ContentType
@@ -49,6 +92,7 @@ class ReeferSimulator:
                 pwr = 0
                 temp = oldtemp + 0.8 * count_pwr
             if count_pwr == NB_RECORDS_IMPACTED:
+                # when it reaches n records at power 0 time to flag it
                 maintenance_flag = 1
                 count_pwr = 0
             df.loc[i] = [timestamp, 
@@ -62,7 +106,7 @@ class ReeferSimulator:
                         random.randrange(CO2_LEVEL), # CO2
                         random.gauss(8.0, 2.0), # Time_Door_Open
                         maintenance_flag,    # maintenance required
-                        6]    # defrost cycle
+                        random.randrange(DEFROST_LEVEL)]    # defrost cycle
 
         return df    
         
@@ -94,5 +138,5 @@ class ReeferSimulator:
                         co2, # CO2
                         random.gauss(8.0, 2.0), # Time_Door_Open
                         maintenance_flag, # maintenance required
-                        6] # defrost cycle
+                        random.randrange(DEFROST_LEVEL)] # defrost cycle
         return df

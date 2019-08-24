@@ -30,7 +30,7 @@ kp.prepareProducer("ReeferMetricsSimulator")
 @application.route("/")
 def hello():
     print(KAFKA_BROKERS)
-    return "Reefer Container simulator v01"
+    return "Reefer Container simulator v0.0.2"
     
 @application.route("/control", methods = ['POST'])
 def runSimulator():
@@ -49,9 +49,9 @@ def runSimulator():
     for index, row in df.iterrows():
         print(row)
         ts=time.strptime(row["Timestamp"],"%Y-%m-%d T%H:%M Z")
-        evt = {"containerID": control["containerID"],"timestamp": int(time.mktime(ts)),"type":"ContainerMetric","payload": row}
+        evt = {"containerID": control["containerID"],"timestamp": int(time.mktime(ts)),"type":"ContainerMetric","payload": row.to_json(orient='records')}
         print(evt)
-    # kp.publishEvent('containerMetrics',evt,"containerID")
+        kp.publishEvent('containerMetrics',evt,"containerID")
     return "Simulation started"
     
 

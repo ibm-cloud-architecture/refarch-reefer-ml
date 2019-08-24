@@ -10,6 +10,8 @@ For persistence reason, we may leverage big data type of storage like Cassandra 
 
 Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of kafka Reefer metrics events. The action will be to change the state of the Reefer entity via an events to the `containers` topic. 
 
+## Component view
+
 While for the minimum viable demonstration the components looks like in the figure below:
 
 ![](images/mvp-runtime.png)
@@ -24,9 +26,11 @@ While for the minimum viable demonstration the components looks like in the figu
     }
     ```
 
-1. A curl script will do the post of this json object
-1. The metrics events are sent to the `containerMetrics` topic in Kafka
-1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required.
+    See [this section to build and deploy](#the-simulator-as-webapp) the simulator web app.
+
+1. A curl script will do the post of this json object. [See this paragraph.](#test-sending-a-simulation-control-to-the-post-api)
+1. The metrics events are sent to the `containerMetrics` topic in Kafka.
+1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/#the-predictive-scoring-microservice) for details.
 1. The maintenance requirement is an event in the `containers` topic.
 1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance.
 
@@ -179,29 +183,160 @@ To deploy the code to an openshift cluster do the following:
 1. Create a project if not done already:
 
     ```
-    oc  new-project order-producer-python --description="A kafka producer with python"
+    oc  new-project reefershipmentsolution --description="A Reefer container shipment solution"
     ```
 
-1. Create an app from the source code, and use source to image build process to deploy the app:
+    *Remember the project is mapped to a kubernestes namespace, but includes other componetns too*
+
+1. Create an app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.
 
     ```
-    oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml/simulator -name order-producer-python
+    oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
     ```
 
-    Then to track the deployment progress:
+    Then to track the build progress:
     ```
-    oc logs -f bc/order-producer-python
+    oc logs -f bc/reefersimulator
     ```
     The dependencies are loaded, the build is scheduled and executed, the image is uploaded to the registry, and started.
 
 1. To display information about the build configuration for the application:
 
     ```
-    oc describe bc/order-producer-python
+    oc describe bc/reefersimulator
     ```
 
+1. To trigger a remote build (run on Openshift) from local source code do the following command:
+
+    ```
+    oc start-build reefersimulator --from-file=.
+    ```
+
+1. Set environment variables
+
+    For Broker URLs
+    ```
+    oc set env dc/reefersimulator KAFKA_BROKERS=kafka03-prod02.messagehub.services.us-south.blu....
+    ```
+
+    For apikey:
+    ```
+    oc set env dc/reefersimulator KAFKA_APIKEY=""
+    ```
+
+    For the kafka runtime env: 
+
+    ```
+     oc set env dc/reefersimulator KAFKA_ENV="IBM_CLOUD"
+    ```
+
+    Get all environment variables set for a given pod: (det the pod id with `oc get pod`)
+
+    ```
+    oc set env pod/reefersimulator-4-tq27j --list
+    ```
+
+    ![](images/env-variables.png)
+
+1. Once the build is done you should see the container up and running
+
+    ```
+    oc get pod
+
+    reefersimulator-3-build         0/1       Completed    0          15m
+    reefersimulator-3-jdh2v         1/1       Running      0          1m
+    ```
+
+    !!! note
+            The first time the container start, it may crash as he environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/setenv.sh SET` command to create the needed environment variable.
+
+1. To make it visible externally, you need to add a route for this deployment:
+
+Use `Create Route` button on top right, 
+
+![](images/create-routes.png)
+
+The enter a name and select the existing service
+
+![](images/simul-route-create.png)
+
+Once created, the URL of the app is visible in the route list panel:
+
+![](images/simul-route.png)
+
+Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.
+
+## Test sending a simulation control to the POST api
+
+The script `sendSimulControl.sh` is used for that. 
+
+    ```
+    pwd
+
+    refarch-reefer-ml
+
+    cd scripts
+    ./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor
+
+    ```
+
+    Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
+
+    ```
+     "POST /order HTTP/1.1" 404 232 "-" "curl/7.54.0"
+    {'containerID': 'c100', 'simulation': 'co2sensor', 'nb_of_records': 10, 'good_temperature': 4.4}
+    Generating  10  Co2 metrics
+
+    ```
+
+    We will see how those events are processed in the next section.
 
 
+## The predictive scoring microservice
 
+Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that call the serialized analytic model. The code in the `scoring` folder.
 
+Applying a TDD approach we start by a TestScoring.py class.
 
+```python
+import unittest
+from scoring.predictservice import PredictService
+
+class TestScoreMetric(unittest.TestCase):
+    def testCreation(self):
+        serv = PredictService
+        
+if __name__ == '__main__':
+    unittest.main()
+```
+
+Use the same python environment with docker:
+
+```
+./startPythonEnv
+root@1de81b16f940:/# cd /home/scoring/
+root@1de81b16f940:/home/scoring# python TestScoring.py 
+```
+
+Test fails, so let add the scoring service with a constructor, and load the serialized pickle model (which was copied from the ml folder).
+
+```python
+import pickle
+
+class PredictService:
+    model = pickle.load(open("model_logistic_regression.pkl","rb"),encoding='latin1')
+    
+    
+```
+
+Next we need to test a predict on an event formated as a csv string. The test looks like:
+
+```
+    serv = PredictService()
+    header="""Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"""
+    event="2019-04-01 T16:29 Z,1813, 101, 4.291843460900875,4.4,0,10.273342381017777,3,4334.920958996634,4.9631508046318755,1,0,6"""
+    record=header+"\n"+event
+    print(serv.predict(record))
+```
+
+So the scoring works, now we need to code the scoring application that will be deploy to openshift, and which acts as a consumer of container metrics events and produce container events. The code of this app is [here]()

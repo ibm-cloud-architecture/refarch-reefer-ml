@@ -1,2 +1,4 @@
-docker run -v $(pwd):/home  -ti ibmcase/python bash
+source ./scripts/setenv.sh NOSET
+
+docker run -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV  -ti ibmcase/python bash
 #docker run -v $(pwd):/home  -ti image bash
