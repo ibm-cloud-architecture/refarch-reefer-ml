@@ -258,6 +258,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#component-view" title="Component view" class="md-nav__link">
+    Component view
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pre-requisites" title="Pre-requisites" class="md-nav__link">
     Pre-requisites
   </a>
@@ -362,6 +369,20 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
+    Test sending a simulation control to the POST api
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-predictive-scoring-microservice" title="The predictive scoring microservice" class="md-nav__link">
+    The predictive scoring microservice
+  </a>
   
 </li>
       
@@ -421,6 +442,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#component-view" title="Component view" class="md-nav__link">
+    Component view
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pre-requisites" title="Pre-requisites" class="md-nav__link">
     Pre-requisites
   </a>
@@ -528,6 +556,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
+    Test sending a simulation control to the POST api
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-predictive-scoring-microservice" title="The predictive scoring microservice" class="md-nav__link">
+    The predictive scoring microservice
+  </a>
+  
+</li>
+      
       
       
       
@@ -553,6 +595,7 @@
 <p>The Reefer container is a IoT device, which emits container metrics every 15 minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the metrics message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on openshift, can consume and publish messages.</p>
 <p>For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and build model.</p>
 <p>Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of kafka Reefer metrics events. The action will be to change the state of the Reefer entity via an events to the <code>containers</code> topic. </p>
+<h2 id="component-view">Component view</h2>
 <p>While for the minimum viable demonstration the components looks like in the figure below:</p>
 <p><img alt="" src="images/mvp-runtime.png" /></p>
 <ol>
@@ -565,12 +608,13 @@
 <span class="p">}</span>
 </pre></div>
 
+<p>See <a href="#the-simulator-as-webapp">this section to build and deploy</a> the simulator web app.</p>
 </li>
 <li>
-<p>A curl script will do the post of this json object</p>
+<p>A curl script will do the post of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
 </li>
-<li>The metrics events are sent to the <code>containerMetrics</code> topic in Kafka</li>
-<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required.</li>
+<li>The metrics events are sent to the <code>containerMetrics</code> topic in Kafka.</li>
+<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/#the-predictive-scoring-microservice">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
 <li>The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance.</li>
 </ol>
@@ -685,27 +729,136 @@ The POST operation in on the /control url. The control object, to generate 1000 
 </li>
 <li>
 <p>Create a project if not done already:</p>
-<div class="codehilite"><pre><span></span>oc  new-project order-producer-python --description=&quot;A kafka producer with python&quot;
+<div class="codehilite"><pre><span></span>oc  new-project reefershipmentsolution --description=&quot;A Reefer container shipment solution&quot;
 </pre></div>
 
+<p><em>Remember the project is mapped to a kubernestes namespace, but includes other componetns too</em></p>
 </li>
 <li>
-<p>Create an app from the source code, and use source to image build process to deploy the app:</p>
-<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml/simulator -name order-producer-python
+<p>Create an app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.</p>
+<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
 </pre></div>
 
-<p>Then to track the deployment progress:
-<div class="codehilite"><pre><span></span>oc logs -f bc/order-producer-python
+<p>Then to track the build progress:
+<div class="codehilite"><pre><span></span>oc logs -f bc/reefersimulator
 </pre></div>
 The dependencies are loaded, the build is scheduled and executed, the image is uploaded to the registry, and started.</p>
 </li>
 <li>
 <p>To display information about the build configuration for the application:</p>
-<div class="codehilite"><pre><span></span>oc describe bc/order-producer-python
+<div class="codehilite"><pre><span></span>oc describe bc/reefersimulator
 </pre></div>
 
 </li>
+<li>
+<p>To trigger a remote build (run on Openshift) from local source code do the following command:</p>
+<div class="codehilite"><pre><span></span>oc start-build reefersimulator --from-file=.
+</pre></div>
+
+</li>
+<li>
+<p>Set environment variables</p>
+<p>For Broker URLs
+<div class="codehilite"><pre><span></span>oc set env dc/reefersimulator KAFKA_BROKERS=kafka03-prod02.messagehub.services.us-south.blu....
+</pre></div></p>
+<p>For apikey:
+<div class="codehilite"><pre><span></span>oc set env dc/reefersimulator KAFKA_APIKEY=&quot;&quot;
+</pre></div></p>
+<p>For the kafka runtime env: </p>
+<div class="codehilite"><pre><span></span> oc set env dc/reefersimulator KAFKA_ENV=&quot;IBM_CLOUD&quot;
+</pre></div>
+
+<p>Get all environment variables set for a given pod: (det the pod id with <code>oc get pod</code>)</p>
+<div class="codehilite"><pre><span></span>oc set env pod/reefersimulator-4-tq27j --list
+</pre></div>
+
+<p><img alt="" src="images/env-variables.png" /></p>
+</li>
+<li>
+<p>Once the build is done you should see the container up and running</p>
+<div class="codehilite"><pre><span></span>oc get pod
+
+reefersimulator-3-build         0/1       Completed    0          15m
+reefersimulator-3-jdh2v         1/1       Running      0          1m
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note<p>The first time the container start, it may crash as he environment variables like KAFKA_APIKEY is not defined. You can use the  <code>./scripts/setenv.sh SET</code> command to create the needed environment variable.</p>
+</p>
+</div>
+</li>
+<li>
+<p>To make it visible externally, you need to add a route for this deployment:</p>
+</li>
 </ol>
+<p>Use <code>Create Route</code> button on top right, </p>
+<p><img alt="" src="images/create-routes.png" /></p>
+<p>The enter a name and select the existing service</p>
+<p><img alt="" src="images/simul-route-create.png" /></p>
+<p>Once created, the URL of the app is visible in the route list panel:</p>
+<p><img alt="" src="images/simul-route.png" /></p>
+<p>Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.</p>
+<h2 id="test-sending-a-simulation-control-to-the-post-api">Test sending a simulation control to the POST api</h2>
+<p>The script <code>sendSimulControl.sh</code> is used for that. </p>
+<div class="codehilite"><pre><span></span>```
+pwd
+
+refarch-reefer-ml
+
+cd scripts
+./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor
+
+```
+
+Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
+
+```
+ &quot;POST /order HTTP/1.1&quot; 404 232 &quot;-&quot; &quot;curl/7.54.0&quot;
+{&#39;containerID&#39;: &#39;c100&#39;, &#39;simulation&#39;: &#39;co2sensor&#39;, &#39;nb_of_records&#39;: 10, &#39;good_temperature&#39;: 4.4}
+Generating  10  Co2 metrics
+
+```
+
+We will see how those events are processed in the next section.
+</pre></div>
+
+
+<h2 id="the-predictive-scoring-microservice">The predictive scoring microservice</h2>
+<p>Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that call the serialized analytic model. The code in the <code>scoring</code> folder.</p>
+<p>Applying a TDD approach we start by a TestScoring.py class.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">scoring.predictservice</span> <span class="kn">import</span> <span class="n">PredictService</span>
+
+<span class="k">class</span> <span class="nc">TestScoreMetric</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">testCreation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">serv</span> <span class="o">=</span> <span class="n">PredictService</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+<p>Use the same python environment with docker:</p>
+<div class="codehilite"><pre><span></span><span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="o">/</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="err">#</span> <span class="n">python</span> <span class="n">TestScoring</span><span class="p">.</span><span class="n">py</span> 
+</pre></div>
+
+<p>Test fails, so let add the scoring service with a constructor, and load the serialized pickle model (which was copied from the ml folder).</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">class</span> <span class="nc">PredictService</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;model_logistic_regression.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">),</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>Next we need to test a predict on an event formated as a csv string. The test looks like:</p>
+<div class="codehilite"><pre><span></span>    serv = PredictService()
+    header=&quot;&quot;&quot;Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle&quot;&quot;&quot;
+    event=&quot;2019-04-01 T16:29 Z,1813, 101, 4.291843460900875,4.4,0,10.273342381017777,3,4334.920958996634,4.9631508046318755,1,0,6&quot;&quot;&quot;
+    record=header+&quot;\n&quot;+event
+    print(serv.predict(record))
+</pre></div>
+
+<p>So the scoring works, now we need to code the scoring application that will be deploy to openshift, and which acts as a consumer of container metrics events and produce container events. The code of this app is <a href="">here</a></p>
                 
                   
                 
