@@ -920,9 +920,11 @@ We will see how those events are processed in the next section.
  reeferpredictivescoring-1-build   1/1       Running      0          24s
 </pre></div>
 
-<p>To run the build again from the scoring folder:</p>
-<div class="codehilite"><pre><span></span>oc start-build reeferpredictivescoring --from-file=.
+<p>To run the build again after commit code to github:</p>
+<div class="codehilite"><pre><span></span>oc start-build reeferpredictivescoring 
 </pre></div>
+
+<p>To be able to run on opanshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the <code>environment</code> file under the <code>.s2i</code> folder.</p>
                 
                   
                 
