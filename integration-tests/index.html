@@ -485,14 +485,14 @@
 <div class="codehilite"><pre><span></span>./runContainerConsumer.sh
 </pre></div>
 
-<p>This script starts the docker python image, we built earlier and use the <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/consumer/ConsumeContainers.py">ConsumeContainers.py</a> module.</p>
+<p>This script starts the docker python image, we built earlier and use the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/consumer/ConsumeContainers.py">ConsumeContainers.py</a> module.</p>
 <h2 id="start-the-predictive-scoring-service">Start the predictive scoring service</h2>
 <p>We can run it locally or on kubernetes cluster like Openshift. Under <code>scoring</code> folder, use the command:</p>
 <p><div class="codehilite"><pre><span></span>./runScoringApp.sh
 </pre></div>
 In the beginning of the trace log you should see the <code>bootstrap.servers</code> brokers list, the <code>group.id</code>, and api key as <code>sasl.password</code>.</p>
 <p>Recalls the scoring is a producer and a consumer.</p>
-<p>See the <a href="https://jbcodeforce.github.io/refarch-reefer-ml/#scoring:-build-and-run-on-openshift">build and run on Openshift section</a> for running on kubernetes cluster.</p>
+<p>See the <a href="https://ibm-cloud-architecture.github.io/refarch-reefer-ml/#scoring:-build-and-run-on-openshift">build and run on Openshift section</a> for running on kubernetes cluster.</p>
 <h2 id="start-the-simulator-web-app">Start the simulator web app</h2>
 <p>Under the <code>simulator</code> folder </p>
 <div class="codehilite"><pre><span></span>./runReeferSimulator.sh

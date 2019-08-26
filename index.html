@@ -660,7 +660,7 @@
 </ol>
 <h2 id="pre-requisites">Pre-requisites</h2>
 <p>Start by cloning this project using the command:</p>
-<div class="codehilite"><pre><span></span>git clone https://github.com/jbcodeforce/refarch-reefer-ml
+<div class="codehilite"><pre><span></span>git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 </pre></div>
 
 <h3 id="building-the-python-environment-as-docker-image">Building the python environment as docker image</h3>
@@ -776,7 +776,7 @@ The POST operation in on the /control url. The control object, to generate 1000 
 </li>
 <li>
 <p>Create an app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.</p>
-<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
+<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
 </pre></div>
 
 <p>Then to track the build progress:
@@ -907,7 +907,7 @@ We will see how those events are processed in the next section.
 </pre></div>
 
 <p>So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. </p>
-<p>The Scoring App code of this app is <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py">ScoringApp.py</a> module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.</p>
+<p>The Scoring App code of this app is <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring/ScoringApp.py">ScoringApp.py</a> module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.</p>
 <p>During the tests we have issue in the data quality, so it is always a good practice to add a validation function to assess if all the records are good. For production, this code needs to be enhanced for better error handling an reporting.</p>
 <h3 id="run-locally">Run locally</h3>
 <p>Under <code>scoring</code> folder, set the environment variables for KAFKA using the commands</p>
@@ -924,10 +924,20 @@ docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFK
 
 <h3 id="scoring-build-and-run-on-openshift">Scoring: Build and run on Openshift</h3>
 <p>The first time we need to add the application to the existing project, run the following command:</p>
-<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
+<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
 </pre></div>
 
-<p>This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod. It use the <code>--context</code> flag to define what to build and run. With this capability we can use the same githuv repository for different sub component.</p>
+<p>This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod. It use the <code>--context</code> flag to define what to build and run. With this capability we can use the same github repository for different sub component.</p>
+<p>As done for simulator, the scoring service needs environment variables. We can set them using the commands</p>
+<div class="codehilite"><pre><span></span>oc set env dc/reeferpredictivescoring KAFKA_BROKERS=$KAFKA_BROKERS
+oc set env dc/reeferpredictivescoring KAFKA_ENV=$KAFKA_ENV
+oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
+</pre></div>
+
+<p>but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:</p>
+<div class="codehilite"><pre><span></span>./os-setenv.sh
+</pre></div>
+
 <p>The list of running pods should show the build pods for this application:</p>
 <div class="codehilite"><pre><span></span> oc get pods
  reeferpredictivescoring-1-build   1/1       Running      0          24s
@@ -937,7 +947,12 @@ docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFK
 <div class="codehilite"><pre><span></span>oc start-build reeferpredictivescoring 
 </pre></div>
 
+<p>To see the log:</p>
+<div class="codehilite"><pre><span></span> oc logs reeferpredictivescoring-2-rxr6j
+</pre></div>
+
 <p>To be able to run on Openshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the <code>environment</code> file under the <code>.s2i</code> folder.</p>
+<p>The scoring service has no API exposed to the external world, so we do not need to create a <code>Route</code> or ingress.</p>
 <p>See the <a href="#integration-tests">integration test</a> section to see a demonstration of the solution end to end.</p>
                 
                   
