@@ -346,8 +346,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-simulator-as-webapp" title="The Simulator as webapp" class="md-nav__link">
-    The Simulator as webapp
+  <a href="#the-simulator-as-web-app" title="The Simulator as web app" class="md-nav__link">
+    The Simulator as web app
   </a>
   
     <nav class="md-nav">
@@ -361,8 +361,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#build-and-run-on-opentshift" title="Build and run on OpentShift" class="md-nav__link">
-    Build and run on OpentShift
+  <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
+    Simulator: Build and run on OpentShift
   </a>
   
 </li>
@@ -395,8 +395,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deploy-to-openshift" title="Deploy to Openshift" class="md-nav__link">
-    Deploy to Openshift
+  <a href="#scoring-build-and-run-on-openshift" title="Scoring: Build and run on Openshift" class="md-nav__link">
+    Scoring: Build and run on Openshift
   </a>
   
 </li>
@@ -550,8 +550,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-simulator-as-webapp" title="The Simulator as webapp" class="md-nav__link">
-    The Simulator as webapp
+  <a href="#the-simulator-as-web-app" title="The Simulator as web app" class="md-nav__link">
+    The Simulator as web app
   </a>
   
     <nav class="md-nav">
@@ -565,8 +565,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#build-and-run-on-opentshift" title="Build and run on OpentShift" class="md-nav__link">
-    Build and run on OpentShift
+  <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
+    Simulator: Build and run on OpentShift
   </a>
   
 </li>
@@ -599,8 +599,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deploy-to-openshift" title="Deploy to Openshift" class="md-nav__link">
-    Deploy to Openshift
+  <a href="#scoring-build-and-run-on-openshift" title="Scoring: Build and run on Openshift" class="md-nav__link">
+    Scoring: Build and run on Openshift
   </a>
   
 </li>
@@ -630,7 +630,7 @@
                 
                 
                 <h1 id="reefer-predictive-maintenance-solution">Reefer Predictive Maintenance Solution</h1>
-<p>This project is to demonstrate how to perform real time scoring on Reefer container metrics. The runtime environment in production will look like:</p>
+<p>This project is to demonstrate how to perform real time analytics, like predictive maintenance scoring from Reefer container metric event stream. The runtime environment in production may look like in the following diagram:</p>
 <p><img alt="" src="images/RT-analytics.png" /></p>
 <p>The Reefer container is a IoT device, which emits container metrics every 15 minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the metrics message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on openshift, can consume and publish messages.</p>
 <p>For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and build model.</p>
@@ -656,7 +656,7 @@
 <li>The metrics events are sent to the <code>containerMetrics</code> topic in Kafka.</li>
 <li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/#the-predictive-scoring-microservice">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
-<li>The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance.</li>
+<li>The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="">following repository</a> is the microservice we could use on as this component, but we have a simple consumer in the <code>consumer</code> folder.</li>
 </ol>
 <h2 id="pre-requisites">Pre-requisites</h2>
 <p>Start by cloning this project using the command:</p>
@@ -670,7 +670,7 @@ docker build -f docker-python-tools -t ibmcase/python .
 </pre></div>
 
 <h3 id="be-sure-to-have-event-stream-or-kafka-running">Be sure to have Event Stream or kafka running</h3>
-<p>Create the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a></p>
+<p>Create the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/">here</a>.</p>
 <p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
 <p><img alt="" src="images/es-topics.png" /></p>
 <p>In the service credentials creates new credentials to get the Kafka broker list, the admin URL and the api_key needed to authenticate the consumers or producers.</p>
@@ -739,7 +739,7 @@ The notebook persists the trained model as a pickle file so it can be loaded by 
 <p>Use the model in another notebook: We can use a second notebook to assess some one record test using the pickle serialized model. The notebook is named <code>predictMaintenance.ipynb</code></p>
 </li>
 </ol>
-<h2 id="the-simulator-as-webapp">The Simulator as webapp</h2>
+<h2 id="the-simulator-as-web-app">The Simulator as web app</h2>
 <p>This is a simple python Flask web app exposing a REST POST end point and producing Reefer metrics event to kafka. 
 The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:</p>
 <div class="codehilite"><pre><span></span>    <span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;c100&#39;,</span>
@@ -758,7 +758,7 @@ The POST operation in on the /control url. The control object, to generate 1000 
 <div class="codehilite"><pre><span></span>docker run -p 8080:8080 -e KAFKA_ENV=$KAFKA_ENV -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY ibmcase/reefersimulator
 </pre></div>
 
-<h3 id="build-and-run-on-opentshift">Build and run on OpentShift</h3>
+<h3 id="simulator-build-and-run-on-opentshift">Simulator: Build and run on OpentShift</h3>
 <p>To deploy the code to an openshift cluster do the following:</p>
 <ol>
 <li>
@@ -888,6 +888,14 @@ We will see how those events are processed in the next section.
 
 <span class="k">class</span> <span class="nc">PredictService</span><span class="p">:</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;model_logistic_regression.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">),</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">metricEvent</span><span class="p">):</span>
+        <span class="n">TESTDATA</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">metricEvent</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">TESTDATA</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Temperature(celsius)&#39;</span><span class="p">,</span><span class="s1">&#39;Target_Temperature(celsius)&#39;</span><span class="p">,</span><span class="s1">&#39;Power&#39;</span><span class="p">,</span><span class="s1">&#39;PowerConsumption&#39;</span><span class="p">,</span><span class="s1">&#39;ContentType&#39;</span><span class="p">,</span><span class="s1">&#39;O2&#39;</span><span class="p">,</span><span class="s1">&#39;CO2&#39;</span><span class="p">,</span><span class="s1">&#39;Time_Door_Open&#39;</span><span class="p">,</span><span class="s1">&#39;Maintenance_Required&#39;</span><span class="p">,</span><span class="s1">&#39;Defrost_Cycle&#39;</span><span class="p">]</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 
 <p>Next we need to test a predict on an event formated as a csv string. The test looks like:</p>
@@ -899,23 +907,28 @@ We will see how those events are processed in the next section.
 </pre></div>
 
 <p>So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. </p>
-<p>The code of this app is <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py">here</a></p>
+<p>The Scoring App code of this app is <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py">ScoringApp.py</a> module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.</p>
+<p>During the tests we have issue in the data quality, so it is always a good practice to add a validation function to assess if all the records are good. For production, this code needs to be enhanced for better error handling an reporting.</p>
 <h3 id="run-locally">Run locally</h3>
-<p>Under <code>scoring</code> folde, set the environment variables for KAFKAuse the commands</p>
-<div class="codehilite"><pre><span></span>
+<p>Under <code>scoring</code> folder, set the environment variables for KAFKA using the commands</p>
+<div class="codehilite"><pre><span></span>export KAFKA_BROKERS=broker-3.eventstreams.cloud.ibm.com:9093,broker-1.eventstreams.cloud.ibm.com:9093,broker-0.eventstreams.cloud.ibm.com:9093,broker-5.eventstreams.cloud.ibm.com:9093,broker-2.eventstreams.cloud.ibm.com:9093,broker-4.eventstreams.cloud.ibm.com:9093
+export KAFKA_APIKEY=&quot;&quot;
+export KAFKA_ENV=IBMCLOUD
+
+docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV -v $(pwd)/..:/home -ti ibmcase/python bash -c &quot;cd /home/scoring &amp;&amp; export PYTHONPATH=/home &amp;&amp; python ScoringApp.py&quot;
 </pre></div>
 
-<p>The script does this for you:</p>
-<div class="codehilite"><pre><span></span>
+<p>The following script does these things for you:</p>
+<div class="codehilite"><pre><span></span>./runScoringApp.sh 
 </pre></div>
 
-<h3 id="deploy-to-openshift">Deploy to Openshift</h3>
+<h3 id="scoring-build-and-run-on-openshift">Scoring: Build and run on Openshift</h3>
 <p>The first time we need to add the application to the existing project, run the following command:</p>
 <div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
 </pre></div>
 
-<p>This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod.</p>
-<p>An list of running pods, should show the build prod for this application:</p>
+<p>This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod. It use the <code>--context</code> flag to define what to build and run. With this capability we can use the same githuv repository for different sub component.</p>
+<p>The list of running pods should show the build pods for this application:</p>
 <div class="codehilite"><pre><span></span> oc get pods
  reeferpredictivescoring-1-build   1/1       Running      0          24s
 </pre></div>
@@ -924,7 +937,8 @@ We will see how those events are processed in the next section.
 <div class="codehilite"><pre><span></span>oc start-build reeferpredictivescoring 
 </pre></div>
 
-<p>To be able to run on opanshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the <code>environment</code> file under the <code>.s2i</code> folder.</p>
+<p>To be able to run on Openshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the <code>environment</code> file under the <code>.s2i</code> folder.</p>
+<p>See the <a href="#integration-tests">integration test</a> section to see a demonstration of the solution end to end.</p>
                 
                   
                 

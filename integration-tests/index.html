@@ -270,6 +270,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pre-requisites" title="Pre-requisites" class="md-nav__link">
+    Pre-requisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#start-reefer-container-events-consumer" title="Start Reefer container events consumer" class="md-nav__link">
     Start Reefer container events consumer
   </a>
@@ -280,6 +287,54 @@
   <a href="#start-the-predictive-scoring-service" title="Start the predictive scoring service" class="md-nav__link">
     Start the predictive scoring service
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-simulator-web-app" title="Start the simulator web app" class="md-nav__link">
+    Start the simulator web app
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-a-simulation" title="Start a simulation" class="md-nav__link">
+    Start a simulation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-integration-tests" title="Validate integration tests" class="md-nav__link">
+    Validate integration tests
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simulator-trace" title="Simulator trace" class="md-nav__link">
+    Simulator trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoring-trace" title="Scoring trace" class="md-nav__link">
+    Scoring trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-consumer-trace" title="Container consumer trace" class="md-nav__link">
+    Container consumer trace
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -327,6 +382,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pre-requisites" title="Pre-requisites" class="md-nav__link">
+    Pre-requisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#start-reefer-container-events-consumer" title="Start Reefer container events consumer" class="md-nav__link">
     Start Reefer container events consumer
   </a>
@@ -337,6 +399,54 @@
   <a href="#start-the-predictive-scoring-service" title="Start the predictive scoring service" class="md-nav__link">
     Start the predictive scoring service
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-simulator-web-app" title="Start the simulator web app" class="md-nav__link">
+    Start the simulator web app
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-a-simulation" title="Start a simulation" class="md-nav__link">
+    Start a simulation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-integration-tests" title="Validate integration tests" class="md-nav__link">
+    Validate integration tests
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simulator-trace" title="Simulator trace" class="md-nav__link">
+    Simulator trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoring-trace" title="Scoring trace" class="md-nav__link">
+    Scoring trace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#container-consumer-trace" title="Container consumer trace" class="md-nav__link">
+    Container consumer trace
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -360,19 +470,52 @@
                 
                 
                 <h1 id="integration-tests-to-proof-the-solution">Integration tests to proof the solution</h1>
-<p>Recall that the architecture of the deployed components look like in the figure below. </p>
+<p>Recall that the architecture of the deployed components look like in the figure below: </p>
 <p><img alt="" src="../images/mvp-runtime.png" /></p>
-<p>So the first component to start is the container consumer which consumer events on the kafka <code>containers</code> topic. This is where the microservices will post message about a Reefer container. </p>
+<p>So the first component to start is the container consumer which consumes events from the kafka <code>containers</code> topic. This topic is where the microservices will post messages about a Reefer container. It is used by this microservice already: <a href="https://github.com/ibm-cloud-architecture/refarch-kc-container-ms/">Reefer container manager</a>.</p>
+<h2 id="pre-requisites">Pre-requisites</h2>
+<p>Be sure to have set the environment variables in the <code>./scripts/setenv.sh</code> to point to your Event Stream or Kafka deployment.</p>
+<p>You need to start four terminal windows if you run the solution locally on you laptop, and only 2 terminals if you run the solution on our deployed cluster.</p>
+<div class="admonition note">
+<p class="admonition-title">Note<p>Our deployed cluster in on IBM Cloud Openshift 3.11 cluster.</p>
+</p>
+</div>
 <h2 id="start-reefer-container-events-consumer">Start Reefer container events consumer</h2>
 <p>In the <code>consumer</code> folder use the command:</p>
 <div class="codehilite"><pre><span></span>./runContainerConsumer.sh
 </pre></div>
 
-<p>This script the docker python image, we built earlier. </p>
+<p>This script starts the docker python image, we built earlier and use the <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/consumer/ConsumeContainers.py">ConsumeContainers.py</a> module.</p>
 <h2 id="start-the-predictive-scoring-service">Start the predictive scoring service</h2>
-<p>We can run it locally or on kubernetes cluster like openshift. Under <code>scoring</code> folder, use the command:</p>
-<div class="codehilite"><pre><span></span>
+<p>We can run it locally or on kubernetes cluster like Openshift. Under <code>scoring</code> folder, use the command:</p>
+<p><div class="codehilite"><pre><span></span>./runScoringApp.sh
 </pre></div>
+In the beginning of the trace log you should see the <code>bootstrap.servers</code> brokers list, the <code>group.id</code>, and api key as <code>sasl.password</code>.</p>
+<p>Recalls the scoring is a producer and a consumer.</p>
+<p>See the <a href="https://jbcodeforce.github.io/refarch-reefer-ml/#scoring:-build-and-run-on-openshift">build and run on Openshift section</a> for running on kubernetes cluster.</p>
+<h2 id="start-the-simulator-web-app">Start the simulator web app</h2>
+<p>Under the <code>simulator</code> folder </p>
+<div class="codehilite"><pre><span></span>./runReeferSimulator.sh
+</pre></div>
+
+<p>To build and run it on Openshift review <a href="#simulator:-build-and-run-on-openshift">this section</a>.</p>
+<h2 id="start-a-simulation">Start a simulation</h2>
+<p>Under the <code>scripts</code> folder</p>
+<div class="codehilite"><pre><span></span>./sendSimulControl.sh 
+</pre></div>
+
+<h2 id="validate-integration-tests">Validate integration tests</h2>
+<p>To test your local deployment
+<div class="codehilite"><pre><span></span>./sendSimulControl.sh localhost:8080 poweroff
+</pre></div></p>
+<p>or to test on our cloud base deployed solution</p>
+<div class="codehilite"><pre><span></span>./sendSimulControl.sh
+</pre></div>
+
+<p>The trace will look like that.</p>
+<h3 id="simulator-trace">Simulator trace</h3>
+<h3 id="scoring-trace">Scoring trace</h3>
+<h3 id="container-consumer-trace">Container consumer trace</h3>
                 
                   
                 
