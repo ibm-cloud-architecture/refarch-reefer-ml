@@ -2,7 +2,7 @@ import json
 from confluent_kafka import Consumer, KafkaError
 
 
-class KafkaConsumer:
+class KcConsumer:
 
     def __init__(self, kafka_env = 'LOCAL', kafka_brokers = "", kafka_apikey = "", topic_name = "",autocommit = True):
         self.kafka_env = kafka_env

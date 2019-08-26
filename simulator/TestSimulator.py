@@ -23,9 +23,14 @@ class TestReeferSimulator(unittest.TestCase):
         self.assertEqual(df.size, 120)  # nb of rows x nbr of columns
         print(df)
 
-    def testGenerateRecordsAtSea():
+    def testGenerateRecordsAtSea(self):
         simul = ReeferSimulator()
         values = simul.generatePowerOffTuples(cid="103",nb_records = 5, tgood=4)
+        print(values)
+
+    def testGenerateCO2tuples(self):
+        simul = ReeferSimulator()
+        values = simul.generateCo2Tuples(cid="103",nb_records = 5, tgood=4)
         print(values)
 
 if __name__ == '__main__':

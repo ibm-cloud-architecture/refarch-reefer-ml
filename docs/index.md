@@ -339,4 +339,42 @@ Next we need to test a predict on an event formated as a csv string. The test lo
     print(serv.predict(record))
 ```
 
-So the scoring works, now we need to code the scoring application that will be deploy to openshift, and which acts as a consumer of container metrics events and produce container events. The code of this app is [here]()
+So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. 
+
+The code of this app is [here](https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py)
+
+### Run locally
+
+Under `scoring` folde, set the environment variables for KAFKAuse the commands
+
+```
+```
+
+The script does this for you:
+
+```
+```
+
+### Deploy to Openshift
+
+The first time we need to add the application to the existing project, run the following command:
+
+```
+oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
+```
+
+This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod.
+
+An list of running pods, should show the build prod for this application:
+
+```
+ oc get pods
+ reeferpredictivescoring-1-build   1/1       Running      0          24s
+```
+
+To run the build again from the scoring folder:
+
+```
+oc start-build reeferpredictivescoring --from-file=.
+```
+

@@ -40,16 +40,19 @@ def runSimulator():
     control = request.json
     simulator = ReeferSimulator()
     if control["simulation"] == POWEROFF_SIMUL:
-        df=simulator.generatePowerOff(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
+        metrics=simulator.generatePowerOffTuples(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
     elif  control["simulation"]  == CO2_SIMUL:
-        df=simulator.generateCo2(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
+        metrics=simulator.generateCo2Tuples(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
     else:
         return "Wrong simulation controller data"
     
-    for index, row in df.iterrows():
-        print(row)
-        ts=time.strptime(row["Timestamp"],"%Y-%m-%d T%H:%M Z")
-        evt = {"containerID": control["containerID"],"timestamp": int(time.mktime(ts)),"type":"ContainerMetric","payload": row.to_json(orient='records')}
+    for metric in metrics:
+        print(metric)
+        ts=time.strptime(metric[0],"%Y-%m-%d T%H:%M Z")
+        evt = {"containerID": control["containerID"],
+                "timestamp": int(time.mktime(ts)),
+                "type":"ContainerMetric",
+                "payload": str(metric)}
         print(evt)
         kp.publishEvent('containerMetrics',evt,"containerID")
     return "Simulation started"

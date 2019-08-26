@@ -18,5 +18,7 @@ echo ""
 echo "Send $fname to $url"
 sed "s/co2sensor/${stype}/g" $fname > new.json
 
+echo "POST the following data:"
+cat new.json
 curl -v  -H "accept: */*" -H "Content-Type: application/json" -d @new.json $url
 rm new.json
