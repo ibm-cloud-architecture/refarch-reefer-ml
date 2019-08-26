@@ -384,6 +384,26 @@
     The predictive scoring microservice
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-locally" title="Run locally" class="md-nav__link">
+    Run locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-to-openshift" title="Deploy to Openshift" class="md-nav__link">
+    Deploy to Openshift
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -567,6 +587,26 @@
   <a href="#the-predictive-scoring-microservice" title="The predictive scoring microservice" class="md-nav__link">
     The predictive scoring microservice
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-locally" title="Run locally" class="md-nav__link">
+    Run locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-to-openshift" title="Deploy to Openshift" class="md-nav__link">
+    Deploy to Openshift
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -858,7 +898,31 @@ We will see how those events are processed in the next section.
     print(serv.predict(record))
 </pre></div>
 
-<p>So the scoring works, now we need to code the scoring application that will be deploy to openshift, and which acts as a consumer of container metrics events and produce container events. The code of this app is <a href="">here</a></p>
+<p>So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. </p>
+<p>The code of this app is <a href="https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py">here</a></p>
+<h3 id="run-locally">Run locally</h3>
+<p>Under <code>scoring</code> folde, set the environment variables for KAFKAuse the commands</p>
+<div class="codehilite"><pre><span></span>
+</pre></div>
+
+<p>The script does this for you:</p>
+<div class="codehilite"><pre><span></span>
+</pre></div>
+
+<h3 id="deploy-to-openshift">Deploy to Openshift</h3>
+<p>The first time we need to add the application to the existing project, run the following command:</p>
+<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
+</pre></div>
+
+<p>This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod.</p>
+<p>An list of running pods, should show the build prod for this application:</p>
+<div class="codehilite"><pre><span></span> oc get pods
+ reeferpredictivescoring-1-build   1/1       Running      0          24s
+</pre></div>
+
+<p>To run the build again from the scoring folder:</p>
+<div class="codehilite"><pre><span></span>oc start-build reeferpredictivescoring --from-file=.
+</pre></div>
                 
                   
                 

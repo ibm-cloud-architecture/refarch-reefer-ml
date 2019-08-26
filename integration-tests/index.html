@@ -251,9 +251,45 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Run integration tests
+      </label>
+    
     <a href="./" title="Run integration tests" class="md-nav__link md-nav__link--active">
       Run integration tests
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-reefer-container-events-consumer" title="Start Reefer container events consumer" class="md-nav__link">
+    Start Reefer container events consumer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-predictive-scoring-service" title="Start the predictive scoring service" class="md-nav__link">
+    Start the predictive scoring service
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -287,6 +323,29 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-reefer-container-events-consumer" title="Start Reefer container events consumer" class="md-nav__link">
+    Start Reefer container events consumer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-the-predictive-scoring-service" title="Start the predictive scoring service" class="md-nav__link">
+    Start the predictive scoring service
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -301,6 +360,19 @@
                 
                 
                 <h1 id="integration-tests-to-proof-the-solution">Integration tests to proof the solution</h1>
+<p>Recall that the architecture of the deployed components look like in the figure below. </p>
+<p><img alt="" src="../images/mvp-runtime.png" /></p>
+<p>So the first component to start is the container consumer which consumer events on the kafka <code>containers</code> topic. This is where the microservices will post message about a Reefer container. </p>
+<h2 id="start-reefer-container-events-consumer">Start Reefer container events consumer</h2>
+<p>In the <code>consumer</code> folder use the command:</p>
+<div class="codehilite"><pre><span></span>./runContainerConsumer.sh
+</pre></div>
+
+<p>This script the docker python image, we built earlier. </p>
+<h2 id="start-the-predictive-scoring-service">Start the predictive scoring service</h2>
+<p>We can run it locally or on kubernetes cluster like openshift. Under <code>scoring</code> folder, use the command:</p>
+<div class="codehilite"><pre><span></span>
+</pre></div>
                 
                   
                 
