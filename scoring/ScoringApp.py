@@ -1,5 +1,5 @@
 from predictservice import PredictService
-import os, sys, json
+import os, sys, json, time
 from KcConsumer import KcConsumer
 from KcProducer import KcProducer
 
@@ -28,14 +28,15 @@ def processMessage(msg):
     print(msg['payload'])
     score = 0
     if dataAreValid(msg['payload']):
-        metric=header+"\n"+msg['payload']
+        metricValue = msg['payload'].replace('(','').replace(')','')
+        metric = header+"\n"+metricValue
         score = predictService.predict(metric)
     print(score)
     if score == 1:
         print("Go to maintenance " + msg['containerID'])
         tstamp = int(time.time())
         data = {"timestamp": tstamp,
-                "type": eventType,
+                "type": "ContainerMaintenance",
                 "version":"1",
                 "containerID":  msg['containerID'],
                 "payload": {"containerID":  msg['containerID'], 
@@ -43,8 +44,7 @@ def processMessage(msg):
                     "status": "MaintenanceNeeded",
                     "Reason": "Predictive maintenance scoring found a risk of failure",}
                 }
-        evt = json.dumps(data)
-        producer.publishEvent("containers",evt,"containerID")
+        producer.publishEvent("containers",data,"containerID")
     
 
 def dataAreValid(metricStr):
@@ -54,7 +54,6 @@ def dataAreValid(metricStr):
         return False
     try:
         for i in range(0,9):
-            print(metric[2 + i])
             float(metric[2 + i])
             
     except TypeError or ValueError:

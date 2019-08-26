@@ -372,9 +372,10 @@ An list of running pods, should show the build prod for this application:
  reeferpredictivescoring-1-build   1/1       Running      0          24s
 ```
 
-To run the build again from the scoring folder:
+To run the build again after commit code to github:
 
 ```
-oc start-build reeferpredictivescoring --from-file=.
+oc start-build reeferpredictivescoring 
 ```
 
+To be able to run on opanshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the `environment` file under the `.s2i ` folder.
