@@ -1,6 +1,6 @@
 # Reefer Predictive Maintenance Solution
 
-This project is to demonstrate how to perform real time scoring on Reefer container metrics. The runtime environment in production will look like:
+This project is to demonstrate how to perform real time analytics, like predictive maintenance scoring from Reefer container metric event stream. The runtime environment in production may look like in the following diagram:
 
 ![](images/RT-analytics.png)
 
@@ -32,16 +32,15 @@ While for the minimum viable demonstration the components looks like in the figu
 1. The metrics events are sent to the `containerMetrics` topic in Kafka.
 1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/#the-predictive-scoring-microservice) for details.
 1. The maintenance requirement is an event in the `containers` topic.
-1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance.
+1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use on as this component, but we have a simple consumer in the `consumer` folder.
 
 ## Pre-requisites
 
 Start by cloning this project using the command:
 
 ```
-git clone https://github.com/jbcodeforce/refarch-reefer-ml
+git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 ```
-
 
 ### Building the python environment as docker image
 
@@ -54,7 +53,7 @@ docker build -f docker-python-tools -t ibmcase/python .
 
 ### Be sure to have Event Stream or kafka running
 
-Create the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams)
+Create the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described [here](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/).
 
 The following diagram illustrates the topics configured in IBM Cloud Event Stream service:
 
@@ -143,7 +142,7 @@ The notebook persists the trained model as a pickle file so it can be loaded by 
 
 1. Use the model in another notebook: We can use a second notebook to assess some one record test using the pickle serialized model. The notebook is named `predictMaintenance.ipynb`
 
-## The Simulator as webapp
+## The Simulator as web app
 
 This is a simple python Flask web app exposing a REST POST end point and producing Reefer metrics event to kafka. 
 The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:
@@ -170,7 +169,7 @@ Then to run it locally, use the local script `./runReeferSimulator.sh ` or after
 docker run -p 8080:8080 -e KAFKA_ENV=$KAFKA_ENV -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY ibmcase/reefersimulator
 ```
 
-### Build and run on OpentShift
+### Simulator: Build and run on OpentShift
 
 To deploy the code to an openshift cluster do the following:
 
@@ -191,7 +190,7 @@ To deploy the code to an openshift cluster do the following:
 1. Create an app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.
 
     ```
-    oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
+    oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
     ```
 
     Then to track the build progress:
@@ -326,6 +325,13 @@ import pickle
 class PredictService:
     model = pickle.load(open("model_logistic_regression.pkl","rb"),encoding='latin1')
     
+    def predict(self,metricEvent):
+        TESTDATA = StringIO(metricEvent)
+        data = pd.read_csv(TESTDATA, sep=",")
+        data.columns = data.columns.to_series().apply(lambda x: x.strip())
+        feature_cols = ['Temperature(celsius)','Target_Temperature(celsius)','Power','PowerConsumption','ContentType','O2','CO2','Time_Door_Open','Maintenance_Required','Defrost_Cycle']
+        X = data[feature_cols]
+        return self.model.predict(X)
     
 ```
 
@@ -341,31 +347,53 @@ Next we need to test a predict on an event formated as a csv string. The test lo
 
 So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. 
 
-The code of this app is [here](https://github.com/jbcodeforce/refarch-reefer-ml/blob/master/scoring/ScoringApp.py)
+The Scoring App code of this app is [ScoringApp.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring/ScoringApp.py) module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.
+
+During the tests we have issue in the data quality, so it is always a good practice to add a validation function to assess if all the records are good. For production, this code needs to be enhanced for better error handling an reporting.
 
 ### Run locally
 
-Under `scoring` folde, set the environment variables for KAFKAuse the commands
+Under `scoring` folder, set the environment variables for KAFKA using the commands
 
 ```
+export KAFKA_BROKERS=broker-3.eventstreams.cloud.ibm.com:9093,broker-1.eventstreams.cloud.ibm.com:9093,broker-0.eventstreams.cloud.ibm.com:9093,broker-5.eventstreams.cloud.ibm.com:9093,broker-2.eventstreams.cloud.ibm.com:9093,broker-4.eventstreams.cloud.ibm.com:9093
+export KAFKA_APIKEY=""
+export KAFKA_ENV=IBMCLOUD
+
+docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV -v $(pwd)/..:/home -ti ibmcase/python bash -c "cd /home/scoring && export PYTHONPATH=/home && python ScoringApp.py"
 ```
 
-The script does this for you:
+The following script does these things for you:
 
 ```
+./runScoringApp.sh 
 ```
 
-### Deploy to Openshift
+### Scoring: Build and run on Openshift
 
 The first time we need to add the application to the existing project, run the following command:
 
 ```
-oc new-app python:latest~https://github.com/jbcodeforce/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
+oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
 ```
 
-This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod.
+This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod. It use the `--context` flag to define what to build and run. With this capability we can use the same github repository for different sub component.
 
-An list of running pods, should show the build prod for this application:
+As done for simulator, the scoring service needs environment variables. We can set them using the commands
+
+```
+oc set env dc/reeferpredictivescoring KAFKA_BROKERS=$KAFKA_BROKERS
+oc set env dc/reeferpredictivescoring KAFKA_ENV=$KAFKA_ENV
+oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
+```
+
+but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
+
+```
+./os-setenv.sh
+```
+
+The list of running pods should show the build pods for this application:
 
 ```
  oc get pods
@@ -378,4 +406,14 @@ To run the build again after commit code to github:
 oc start-build reeferpredictivescoring 
 ```
 
-To be able to run on opanshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the `environment` file under the `.s2i ` folder.
+To see the log:
+
+```
+ oc logs reeferpredictivescoring-2-rxr6j
+```
+
+To be able to run on Openshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the `environment` file under the `.s2i ` folder.
+
+
+See the [integration test](#integration-tests) section to see a demonstration of the solution end to end.
+

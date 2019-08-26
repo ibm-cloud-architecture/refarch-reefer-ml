@@ -32,5 +32,6 @@ class KafkaProducer:
 
     def publishEvent(self, topicName, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
+        print(" Reefer contaimer metric event to send:" + str(dataStr))
         self.producer.produce(topicName,key=eventToSend[keyName],value=dataStr.encode('utf-8'), callback=self.delivery_report)
         self.producer.flush()

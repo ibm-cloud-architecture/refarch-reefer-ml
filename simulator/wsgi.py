@@ -47,13 +47,11 @@ def runSimulator():
         return "Wrong simulation controller data"
     
     for metric in metrics:
-        print(metric)
         ts=time.strptime(metric[0],"%Y-%m-%d T%H:%M Z")
         evt = {"containerID": control["containerID"],
                 "timestamp": int(time.mktime(ts)),
                 "type":"ContainerMetric",
                 "payload": str(metric)}
-        print(evt)
         kp.publishEvent('containerMetrics',evt,"containerID")
     return "Simulation started"
     

@@ -1,5 +1,5 @@
-{ "containerID": "c100",
+{ "containerID": "c101",
     "simulation": "co2sensor",
-    "nb_of_records": 10,
+    "nb_of_records": 50,
     "good_temperature": 4.4
 }

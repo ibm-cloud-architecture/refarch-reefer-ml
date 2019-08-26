@@ -2,7 +2,9 @@
 
 This project presents an approach to develop a predictive maintenance model from Reefer container metrics events and integrate it in real time.
 
-The content is presented [in a book view](https://jbcodeforce.github.io/refarch-reefer-ml)
+The content is presented [in a book view](https://ibm-cloud-architecture.github.io/refarch-reefer-ml), and the goal is to run all those components together, and build the logistic regression model, deployed as a service.
+
+![](docs/images/mvp-runtime.png)
 
 
 
@@ -12,7 +14,7 @@ The content of this repository is written with markdown files, packaged with [Mk
 
 1. Install MkDocs locally following the [official documentation instructions](https://www.mkdocs.org/#installation).
 1. Install Material plugin for mkdocs:  `pip install mkdocs-material` 
-2. `git clone https://github.com/jbcodeforce/refarch-reefer-ml.git` _(or your forked repository if you plan to edit)_
+2. `git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git` _(or your forked repository if you plan to edit)_
 3. `cd refarch-reefer-ml`
 4. `mkdocs serve`
 5. Go to `http://127.0.0.1:8000/` in your browser.
