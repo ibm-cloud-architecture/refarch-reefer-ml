@@ -66,19 +66,40 @@ To test your local deployment
 ./sendSimulControl.sh localhost:8080 poweroff
 ```
 
-or to test on our cloud base deployed solution
+or to test on our cloud based deployed solution
 
 ```
 ./sendSimulControl.sh
 ```
 
-The trace will look like that.
+The traces will look like these:
 
 ### Simulator trace
 
+The trace from the pod demonstrate the configuration and the control message received at the POST operation, and then the event generated. 
+
+```
+{'bootstrap.servers': 'broker-3-"<hidden-part>.eventstreams.cloud.ibm.com:9093,broker-1-"<hidden-part>.eventstreams.cloud.ibm.com:9093,broker-0-"<hidden-part>.eventstreams.cloud.ibm.com:9093,broker-5-"<hidden-part>.eventstreams.cloud.ibm.com:9093,broker-2-"<hidden-part>.eventstreams.cloud.ibm.com:9093,broker-4-"<hidden-part>.eventstreams.cloud.ibm.com:9093', 'group.id': 'ReeferMetricsSimulator', 'security.protocol': 'sasl_ssl', 'sasl.mechanisms': 'PLAIN', 'ssl.ca.location': '/etc/pki/tls/cert.pem', 'sasl.username': 'token', 'sasl.password': '<hidden-part>'}
+
+...
+
+{'containerID': 'c101', 'simulation': 'poweroff', 'nb_of_records': 50, 'good_temperature': 4.4}
+ Reefer contaimer metric event to send:{"containerID": "c101", "timestamp": 1566859800, "type": "ContainerMetric", "payload": "('2019-08-26 T22:50 Z', 'c101', 2.0905792037649547, 4.4, 16.282392569138707, 6.603341673152029, 2, 16, 8.827184272293419, 6.33603138958275, 0, 5)"}
+Message delivered to containerMetrics [0]
+ Reefer contaimer metric event to send:{"containerID": "c101", "timestamp": 1566859860, "type": "ContainerMetric", "payload": "('2019-08-26 T22:51 Z', 'c101', 2.0905792037649547, 4.4, 0, -0.04371530981778182, 2, 3, 6.295683442800409, 5.36863196753292, 0, 1)"}
+Message delivered to containerMetrics [0]
+
+...
+```
 
 ### Scoring trace
 
+```
+```
 
 ### Container consumer trace
 
+```
+@@@ poll next container from containers partition: [0] at offset 3 with key b'c100':
+	value: {"timestamp": 1566854815, "type": "ContainerMaintenance", "version": "1", "containerID": "c100", "payload": {"containerID": "c100", "type": "Reefer", "status": "MaintenanceNeeded", "Reason": "Predictive maintenance scoring found a risk of failure"}}
+```

@@ -1,5 +1,5 @@
 from predictservice import PredictService
-import os, sys, json, time
+import os, sys, json, time, uuid
 from KcConsumer import KcConsumer
 from KcProducer import KcProducer
 
@@ -63,7 +63,8 @@ def dataAreValid(metricStr):
 
 def startConsumer(predictService):
     print("startConsumer...")
-    consumer = KcConsumer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY,"containerMetrics",True)
+    groupid = "reefermetricsconsumer" + str(uuid.uuid4()) 
+    consumer = KcConsumer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY,groupid,True)
     consumer.prepareConsumer()
     consumer.pollNextEvent(processMessage)
     consumer.close()

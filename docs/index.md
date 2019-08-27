@@ -94,7 +94,7 @@ When the reefer containers lose power at some time, the temperature within the c
 The simulator accepts different arguments: 
 
 ```
-usage reefer_simulator --stype [poweroff | co2sensor | atsea]
+usage reefer_simulator-tool --stype [poweroff | co2sensor | atsea]
 	 --cid <container ID>
 	 --records <the number of records to generate>
 	 --temp <expected temperature for the goods>
@@ -414,6 +414,7 @@ To see the log:
 
 To be able to run on Openshift, the APP_FILE environment variable has to be set to ScoringApp.py. This can be done in the `environment` file under the `.s2i ` folder.
 
+The scoring service has no API exposed to the external world, so we do not need to create a `Route` or ingress.
 
 See the [integration test](#integration-tests) section to see a demonstration of the solution end to end.
 

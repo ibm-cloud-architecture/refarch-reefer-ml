@@ -32,7 +32,7 @@ class KafkaConsumer:
     
     def traceResponse(self, msg):
         msgStr = msg.value().decode('utf-8')
-        print('@@@ pollNextOrder {} partition: [{}] at offset {} with key {}:\n\tvalue: {}'
+        print('@@@ poll next container from {} partition: [{}] at offset {} with key {}:\n\tvalue: {}'
                     .format(msg.topic(), msg.partition(), msg.offset(), str(msg.key()), msgStr ))
         return msgStr
 

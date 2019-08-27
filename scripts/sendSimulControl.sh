@@ -3,8 +3,9 @@
 if [[ $# -ne 2 ]];then
     echo "Usage: Need two arguments:  sendSimulControl.sh hostname simultype (co2sensor | poweroff)"
     echo "Let use default settings"
-    hostn="reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local/"
-    stype="co2sensor"
+    # CSP one: hostn="reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local/"
+    hostn="reefersimulatorroute-reefer-shipment-solution.greencluster-fa9ee67c9ab6a7791435450358e564cc-0001.us-east.containers.appdomain.cloud/"
+    stype="poweroff"
 else
     hostn=$1
     stype=$2
