@@ -508,14 +508,34 @@ In the beginning of the trace log you should see the <code>bootstrap.servers</co
 <p>To test your local deployment
 <div class="codehilite"><pre><span></span>./sendSimulControl.sh localhost:8080 poweroff
 </pre></div></p>
-<p>or to test on our cloud base deployed solution</p>
+<p>or to test on our cloud based deployed solution</p>
 <div class="codehilite"><pre><span></span>./sendSimulControl.sh
 </pre></div>
 
-<p>The trace will look like that.</p>
+<p>The traces will look like these:</p>
 <h3 id="simulator-trace">Simulator trace</h3>
+<p>The trace from the pod demonstrate the configuration and the control message received at the POST operation, and then the event generated. </p>
+<div class="codehilite"><pre><span></span>{&#39;bootstrap.servers&#39;: &#39;broker-3-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093,broker-1-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093,broker-0-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093,broker-5-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093,broker-2-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093,broker-4-&quot;&lt;hidden-part&gt;.eventstreams.cloud.ibm.com:9093&#39;, &#39;group.id&#39;: &#39;ReeferMetricsSimulator&#39;, &#39;security.protocol&#39;: &#39;sasl_ssl&#39;, &#39;sasl.mechanisms&#39;: &#39;PLAIN&#39;, &#39;ssl.ca.location&#39;: &#39;/etc/pki/tls/cert.pem&#39;, &#39;sasl.username&#39;: &#39;token&#39;, &#39;sasl.password&#39;: &#39;&lt;hidden-part&gt;&#39;}
+
+...
+
+{&#39;containerID&#39;: &#39;c101&#39;, &#39;simulation&#39;: &#39;poweroff&#39;, &#39;nb_of_records&#39;: 50, &#39;good_temperature&#39;: 4.4}
+ Reefer contaimer metric event to send:{&quot;containerID&quot;: &quot;c101&quot;, &quot;timestamp&quot;: 1566859800, &quot;type&quot;: &quot;ContainerMetric&quot;, &quot;payload&quot;: &quot;(&#39;2019-08-26 T22:50 Z&#39;, &#39;c101&#39;, 2.0905792037649547, 4.4, 16.282392569138707, 6.603341673152029, 2, 16, 8.827184272293419, 6.33603138958275, 0, 5)&quot;}
+Message delivered to containerMetrics [0]
+ Reefer contaimer metric event to send:{&quot;containerID&quot;: &quot;c101&quot;, &quot;timestamp&quot;: 1566859860, &quot;type&quot;: &quot;ContainerMetric&quot;, &quot;payload&quot;: &quot;(&#39;2019-08-26 T22:51 Z&#39;, &#39;c101&#39;, 2.0905792037649547, 4.4, 0, -0.04371530981778182, 2, 3, 6.295683442800409, 5.36863196753292, 0, 1)&quot;}
+Message delivered to containerMetrics [0]
+
+...
+</pre></div>
+
 <h3 id="scoring-trace">Scoring trace</h3>
+<div class="codehilite"><pre><span></span>
+</pre></div>
+
 <h3 id="container-consumer-trace">Container consumer trace</h3>
+<div class="codehilite"><pre><span></span>@@@ poll next container from containers partition: [0] at offset 3 with key b&#39;c100&#39;:
+    value: {&quot;timestamp&quot;: 1566854815, &quot;type&quot;: &quot;ContainerMaintenance&quot;, &quot;version&quot;: &quot;1&quot;, &quot;containerID&quot;: &quot;c100&quot;, &quot;payload&quot;: {&quot;containerID&quot;: &quot;c100&quot;, &quot;type&quot;: &quot;Reefer&quot;, &quot;status&quot;: &quot;MaintenanceNeeded&quot;, &quot;Reason&quot;: &quot;Predictive maintenance scoring found a risk of failure&quot;}}
+</pre></div>
                 
                   
                 
