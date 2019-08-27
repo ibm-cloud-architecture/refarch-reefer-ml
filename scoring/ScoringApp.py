@@ -63,11 +63,12 @@ def dataAreValid(metricStr):
 
 def startConsumer(predictService):
     print("startConsumer...")
-    groupid = "reefermetricsconsumer" + str(uuid.uuid4()) 
-    consumer = KcConsumer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY,groupid,True)
-    consumer.prepareConsumer()
+    groupid = "reefermetricsconsumer_" + str(uuid.uuid4()) 
+    consumer = KcConsumer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY,"containerMetrics",True)
+    consumer.prepareConsumer(groupid)
     consumer.pollNextEvent(processMessage)
     consumer.close()
 
 if __name__ == "__main__":
+    print("Reefer Container Predictive Maintenance Scoring Service v0.0.2")
     startConsumer(predictService)

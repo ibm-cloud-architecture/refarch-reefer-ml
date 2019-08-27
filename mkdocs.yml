@@ -1,5 +1,5 @@
 site_name: Reefer Container Predictive Maintenance
-repo_url: https://github.com/jbcodeforce/refarch-reefer-ml
+repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
   - Introduction: index.md
   - Run integration tests: integration-tests.md

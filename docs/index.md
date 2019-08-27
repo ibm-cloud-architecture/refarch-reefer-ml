@@ -279,6 +279,8 @@ The script `sendSimulControl.sh` is used for that.
 
     ```
 
+    If you use no argument for this script, it will send poweroff control to the service running on our openshift cluster on IBM Cloud.
+
     Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
 
     ```
