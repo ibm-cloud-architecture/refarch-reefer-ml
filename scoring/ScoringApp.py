@@ -70,5 +70,5 @@ def startConsumer(predictService):
     consumer.close()
 
 if __name__ == "__main__":
-    print("Reefer Container Predictive Maintenance Scoring Service v0.0.2")
+    print("Reefer Container Predictive Maintenance Scoring Service v0.0.3")
     startConsumer(predictService)

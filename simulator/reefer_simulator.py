@@ -40,14 +40,14 @@ class ReeferSimulator:
     def generateRecordSpecificValues(self,Today,idx,pwrc_in):
         adate = Today + datetime.timedelta(minutes=15*idx)
         timestamp =  adate.strftime('%Y-%m-%d T%H:%M Z')
-        pwr =  random.gauss(POWER_LEVEL,8)    # Power
+        pwr =  random.gauss(POWER_LEVEL,6)    # Power
         if pwrc_in == 0:
-            pwrc = random.gauss(POWER_LEVEL,1.0)  # PowerConsumption
+            pwrc = random.gauss(POWER_LEVEL,10.0)  # PowerConsumption
         else:
             pwrc=pwr+pwrc_in
-        co2 = random.gauss(3.5, 3.0)
-        o2 = random.randrange(O2_LEVEL)  # O2
-        tdoor = random.gauss(8.0, 2.0) # Time_Door_Open
+        co2 = random.gauss(CO2_LEVEL, 3.0)
+        o2 = random.gauss(O2_LEVEL,3.0)  # O2
+        tdoor = random.gauss(30.0, 2.0) # Time_Door_Open
         return (timestamp,pwr,pwrc,co2,o2,tdoor)
 
 
@@ -59,7 +59,7 @@ class ReeferSimulator:
         (Today,ctype,temp) = self.generateCommonValues(tgood)
         records = []
         pwrc=0
-        for i in np.linspace(1,2,nb_records):
+        for i in range(nb_records):
             oldtemp = temp
             (timestamp,pwr,pwrc, co2,o2,tdoor) = self.generateRecordSpecificValues(Today,i,pwrc)  
             temp =  random.gauss(tgood, 2.0)
@@ -99,7 +99,7 @@ class ReeferSimulator:
         (Today,ctype,temp) = self.generateCommonValues(tgood)
         df = self.defineDataFrame()
         pwrc=0
-        for i in np.linspace(1,2,nb_records):
+        for i in range(nb_records):
             oldtemp = temp
             (timestamp,pwr,pwrc, co2,o2,tdoor) = self.generateRecordSpecificValues(Today,i,pwrc)
             temp =  random.gauss(tgood, 2.0)
@@ -141,7 +141,7 @@ class ReeferSimulator:
         (Today,ctype,temp) = self.generateCommonValues(tgood)
         df = self.defineDataFrame()
         pwrc=0
-        for i in np.linspace(1,2,nb_records):
+        for i in range(nb_records):
             maintenance_flag = 0
             (timestamp,pwr,pwrc, co2,o2,tdoor) = self.generateRecordSpecificValues(Today,i,pwrc);        
             if co2>CO2_LEVEL or co2<0:
@@ -164,7 +164,7 @@ class ReeferSimulator:
         (Today,ctype,temp) = self.generateCommonValues(tgood)
         records = []
         pwrc=0
-        for i in np.linspace(1,2,nb_records):
+        for i in range(nb_records):
             (timestamp,pwr,pwrc, co2,o2,tdoor) = self.generateRecordSpecificValues(Today,i,pwrc);
             records.append((timestamp,cid,temp,tgood,pwr,random.gauss(POWER_LEVEL,1.0),
                         ctype,                # ContentType

@@ -17,11 +17,11 @@ except KeyError:
 try:
     KAFKA_ENV = os.environ['KAFKA_ENV']
 except KeyError:
-    KAFKA_ENV='LOCAL'
+    KAFKA_ENV = 'LOCAL'
 
-POWEROFF_SIMUL="poweroff"
-CO2_SIMUL="co2sensor"
-
+POWEROFF_SIMUL = "poweroff"
+CO2_SIMUL = "co2sensor"
+VERSION = "Reefer Container simulator v0.0.3"
 application = Flask(__name__)
 
 kp = KafkaProducer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY)
@@ -30,7 +30,7 @@ kp.prepareProducer("ReeferMetricsSimulator")
 @application.route("/")
 def hello():
     print(KAFKA_BROKERS)
-    return "Reefer Container simulator v0.0.2"
+    return VERSION
     
 @application.route("/control", methods = ['POST'])
 def runSimulator():
@@ -57,5 +57,6 @@ def runSimulator():
     
 
 if __name__ == "__main__":
+    print(VERSION)
     application.run(debug=True)
     
