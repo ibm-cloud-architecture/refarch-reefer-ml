@@ -5,7 +5,7 @@ if [[ $# -ne 2 ]];then
     echo "Let use default settings"
     # CSP one: hostn="reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local/"
     hostn="reefersimulatorroute-reefer-shipment-solution.greencluster-fa9ee67c9ab6a7791435450358e564cc-0001.us-east.containers.appdomain.cloud/"
-    stype="poweroff"
+    stype="co2sensor"
 else
     hostn=$1
     stype=$2
