@@ -1,29 +1,30 @@
 import json
 from confluent_kafka import Consumer, KafkaError
+import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 
+class MetricsEventListener:
 
-class KcConsumer:
-
-    def __init__(self, kafka_env = 'LOCAL', kafka_brokers = "", kafka_apikey = "", topic_name = "",autocommit = True):
-        self.kafka_env = kafka_env
-        self.kafka_brokers = kafka_brokers
-        self.kafka_apikey = kafka_apikey
-        self.topic_name = topic_name
-        self.kafka_auto_commit = autocommit
+    def __init__(self):
+        self.currentRuntime = EventBackboneConfiguration.getCurrentRuntimeEnvironment()
+        self.brokers = EventBackboneConfiguration.getBrokerEndPoints()
+        self.apikey = EventBackboneConfiguration.getEndPointAPIKey()
+        self.topic_name = "containerMetrics"
+        self.kafka_auto_commit = True
+        self.prepareConsumer()
 
     # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
     def prepareConsumer(self, groupID = "reefermetricsconsumer"):
         options ={
-                'bootstrap.servers':  self.kafka_brokers,
+                'bootstrap.servers':  self.brokers,
                 'group.id': groupID,
                  'auto.offset.reset': 'earliest',
                 'enable.auto.commit': self.kafka_auto_commit,
         }
-        if (self.kafka_env != 'LOCAL' and self.kafka_env != 'MINIKUBE'):
+        if (self.currentRuntime != 'LOCAL' and self.currentRuntime != 'MINIKUBE'):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
-            options['sasl.password'] = self.kafka_apikey
+            options['sasl.password'] = self.apikey
         print(options)
         self.consumer = Consumer(options)
         self.consumer.subscribe([self.topic_name])
@@ -34,7 +35,7 @@ class KcConsumer:
                     .format(msg.topic(), msg.partition(), msg.offset(), str(msg.key()), msgStr ))
         return msgStr
 
-    def pollNextEvent(self, callback):
+    def processEvents(self, callback):
         gotIt = False
         anEvent = {}
         while not gotIt:

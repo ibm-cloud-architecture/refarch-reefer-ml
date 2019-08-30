@@ -12,7 +12,7 @@ class PredictService:
     Wrapper interface in front of the ML trained model
     '''
 
-    model = pickle.load(open("model_logistic_regression.pkl","rb"),encoding='latin1')
+    model = pickle.load(open("domain/model_logistic_regression.pkl","rb"),encoding='latin1')
     
     
     def predict(self,metricEvent):

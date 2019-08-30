@@ -1,1 +1,1 @@
-APP_CONFIG=config.py
+APP_CONFIG=infrastructure.webappconfig.py

@@ -3,8 +3,10 @@ from scoring.predictservice import PredictService
 import scoring.ScoringApp as ScoringApp
 
 class TestScoreMetric(unittest.TestCase):
-    def testCreation(self):
+
+    def testServiceCreation(self):
         serv = PredictService()
+        self.assertNotIsInstance(serv)
 
     def testPredict(self):
         serv = PredictService()
@@ -13,10 +15,11 @@ class TestScoreMetric(unittest.TestCase):
         record=header+"\n"+event
         self.assertTrue(serv.predict(record)>=0)
 
-    def testValidateValues(self):
-        v=ScoringApp.dataAreValid("('2019-08-25 T23:08 Z', 'c100', 3.6762064797334673, 4.4, 11.186957573693714, 4.822553994902155, 5, (6,), -0.5235016159318118, (5.036643236673223,), 0, 4)")
+    def testValidateMetricsValues(self):
+        # some integer has bad character in string: see (6,) for a 6
+        v=ScoringApp.assessDataAreValid("('2019-08-25 T23:08 Z', 'c100', 3.6762064797334673, 4.4, 11.186957573693714, 4.822553994902155, 5, (6,), -0.5235016159318118, (5.036643236673223,), 0, 4)")
         self.assertFalse(v)
-        v=ScoringApp.dataAreValid("('2019-08-25 T23:08 Z', 'c100', 3.6762064797334673, 4.4, 11.186957573693714, 4.822553994902155, 5, 6, -0.5235016159318118, 5.036643236673223, 0, 4)")
+        v=ScoringApp.assessDataAreValid("('2019-08-25 T23:08 Z', 'c100', 3.6762064797334673, 4.4, 11.186957573693714, 4.822553994902155, 5, 6, -0.5235016159318118, 5.036643236673223, 0, 4)")
         self.assertTrue(v)
 
 if __name__ == '__main__':

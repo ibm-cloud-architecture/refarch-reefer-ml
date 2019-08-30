@@ -1,35 +1,18 @@
 from flask import Flask, request, jsonify, abort
 import os, time
 from datetime import datetime
-from KcProducer import KafkaProducer 
+from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from reefer_simulator import ReeferSimulator
-
-try:
-    KAFKA_BROKERS = os.environ['KAFKA_BROKERS']
-except KeyError:
-    KAFKA_BROKERS = "localhost:9092"
-
-try:
-    KAFKA_APIKEY = os.environ['KAFKA_APIKEY']
-except KeyError:
-    print("The KAFKA_APIKEY environment variable not set... assume local deployment")
-
-try:
-    KAFKA_ENV = os.environ['KAFKA_ENV']
-except KeyError:
-    KAFKA_ENV = 'LOCAL'
 
 POWEROFF_SIMUL = "poweroff"
 CO2_SIMUL = "co2sensor"
 VERSION = "Reefer Container simulator v0.0.3"
 application = Flask(__name__)
 
-kp = KafkaProducer(KAFKA_ENV,KAFKA_BROKERS,KAFKA_APIKEY)
-kp.prepareProducer("ReeferMetricsSimulator")
+kp = MetricsEventsProducer()
 
 @application.route("/")
 def hello():
-    print(KAFKA_BROKERS)
     return VERSION
     
 @application.route("/control", methods = ['POST'])
@@ -52,11 +35,11 @@ def runSimulator():
                 "timestamp": int(time.mktime(ts)),
                 "type":"ContainerMetric",
                 "payload": str(metric)}
-        kp.publishEvent('containerMetrics',evt,"containerID")
+        kp.publishEvent(evt,"containerID")
     return "Simulation started"
     
 
 if __name__ == "__main__":
     print(VERSION)
-    application.run(debug=True)
+    application.run()
     
