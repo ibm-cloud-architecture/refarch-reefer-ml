@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, abort
 import os, time
 from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
-from reefer_simulator import ReeferSimulator
+from domain.reefer_simulator import ReeferSimulator
 
 POWEROFF_SIMUL = "poweroff"
 CO2_SIMUL = "co2sensor"
