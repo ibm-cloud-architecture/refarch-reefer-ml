@@ -1,6 +1,10 @@
 simulator/scripts/setenv.sh
 simulator/__pycache__/
+simulator/domain/__pycache__/
+simulator/infrastructure/__pycache__
 scoring/__pycache__/
+scoring/infrastructure/__pycache__
+scoring/domain/__pycache__
 consumer/__pycache__/
 site/
 scripts/setenv.sh
