@@ -44,7 +44,7 @@ def parseArguments():
             elif arg == "--cid":
                 cid = sys.argv[idx + 1]
             elif arg == "--records":
-                nb_records = sys.argv[idx + 1]
+                nb_records = int(sys.argv[idx + 1])
             elif arg == "--temp":
                 tgood = int(sys.argv[idx + 1])
             elif arg == "--file":
@@ -60,9 +60,9 @@ if __name__ == "__main__":
     (cid, simulation_type, nb_records, tgood, fname,flag) = parseArguments()
     print(cid, simulation_type, nb_records, tgood, fname,flag)
     simulator = ReeferSimulator()
-    if simulation_type == ReeferSimulator.POWEROFF_SIMUL:
+    if simulation_type == ReeferSimulator.SIMUL_POWEROFF:
         df=simulator.generatePowerOff(cid,nb_records,tgood)
-    elif  simulation_type == ReeferSimulator.CO2_SIMUL:
+    elif  simulation_type == ReeferSimulator.SIMUL_CO2:
         df=simulator.generateCo2(cid,nb_records,tgood)
     else:
         print("Not a valid simulation")

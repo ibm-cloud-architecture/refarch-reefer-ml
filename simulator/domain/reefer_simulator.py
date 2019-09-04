@@ -13,8 +13,7 @@ This code could be refactored to avoid code duplication.
 
 '''
 # Define constants for average
-POWEROFF_SIMUL="poweroff"
-CO2_SIMUL="co2sensor"
+
 CO2_LEVEL = 4 # in %
 O2_LEVEL = 21 # in %
 NITROGEN_LEVEL = 0.78 # in %
@@ -24,7 +23,8 @@ MAX_RECORDS = 1000
 DEFROST_LEVEL = 7
 
 class ReeferSimulator:
-
+    SIMUL_POWEROFF="poweroff"
+    SIMUL_CO2="co2sensor"
     # Some method use pandas dataframe
     def defineDataFrame(self):
         return pd.DataFrame(columns=['Timestamp', 'ID', 'Temperature(celsius)', 'Target_Temperature(celsius)', 'Power', 'PowerConsumption', 'ContentType', 'O2', 'CO2', 'Time_Door_Open', 

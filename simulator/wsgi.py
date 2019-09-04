@@ -4,8 +4,6 @@ from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 
-POWEROFF_SIMUL = "poweroff"
-CO2_SIMUL = "co2sensor"
 VERSION = "Reefer Container simulator v0.0.3"
 application = Flask(__name__)
 
@@ -22,9 +20,9 @@ def runSimulator():
         abort(400) 
     control = request.json
     simulator = ReeferSimulator()
-    if control["simulation"] == POWEROFF_SIMUL:
+    if control["simulation"] == ReeferSimulator.SIMUL_POWEROFF:
         metrics=simulator.generatePowerOffTuples(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
-    elif  control["simulation"]  == CO2_SIMUL:
+    elif  control["simulation"]  == ReeferSimulator.SIMUL_CO2:
         metrics=simulator.generateCo2Tuples(control["containerID"],int(control["nb_of_records"]),float(control["good_temperature"]))
     else:
         return "Wrong simulation controller data"
