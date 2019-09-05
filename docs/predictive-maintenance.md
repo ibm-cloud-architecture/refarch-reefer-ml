@@ -22,6 +22,8 @@ Organizations contracting to ship perishable products often specify the permissi
 
 ## Predictive maintenance problem statement
 
+If you want a good understanding of the problem space for predictive maintenance read, [Yana Ageeva's article in toward data science](https://towardsdatascience.com/predictive-maintenance-scheduling-with-ibm-data-science-experience-and-decision-optimization-25bc5f1b1b99).
+
 The success of predictive maintenance models depend on three main components: 
 
 * having the right data
