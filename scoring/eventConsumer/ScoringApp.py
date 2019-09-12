@@ -1,10 +1,11 @@
 from domain.predictservice import PredictService
-import  json, time
+import  json, time, os
 from infrastructure.MetricsEventListener import MetricsEventListener
 from infrastructure.ContainerEventsProducer import ContainerEventsProducer
 
 predictService = PredictService()
 containerEventsProducer = ContainerEventsProducer()
+
 
 def assessPredictiveMaintenance(msg):
     header="""Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"""
@@ -54,5 +55,6 @@ def startReeferMetricsEventListener():
 
 if __name__ == "__main__":
     print("Reefer Container Predictive Maintenance Scoring Service v0.0.3")
+    print(os.curdir)
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

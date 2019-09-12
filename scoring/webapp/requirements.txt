@@ -1,0 +1,7 @@
+numpy
+pandas
+scipy
+sklearn
+confluent_kafka
+gunicorn
+Flask

@@ -171,6 +171,6 @@ class ReeferSimulator:
                         o2,  # O2
                         co2, # CO2
                         tdoor, # Time_Door_Open
-                        0,    # maintenance required
+                        0,    # maintenance not required
                         random.randrange(DEFROST_LEVEL)))
         return records

@@ -1,8 +1,8 @@
 export KAFKA_BROKERS=broker-3-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093,broker-1-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093,broker-0-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093,broker-5-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093,broker-2-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093,broker-4-1fz6f8v6q69xp392.kafka.svc01.us-south.eventstreams.cloud.ibm.com:9093
 export KAFKA_APIKEY=""
-export KAFKA_ENV=IBMCLOUD
-
-if [[ $# -eq 1 ]]
+export KAFKA_ENV=$1
+export KAFKA_INTERNAL_PATH="/opt/bitnami/kafka/"
+if [[ $# -eq 2 ]]
 then
     if [[ "$1" != "NOSET" ]]
     then
@@ -13,6 +13,13 @@ then
             oc set env dc/reefersimulator KAFKA_ENV=$KAFKA_ENV
             oc set env dc/reefersimulator KAFKA_APIKEY=$KAFKA_APIKEY
         fi
+    fi
+    if [[ "$KAFKA_ENV" == "LOCAL"  ]]
+    then
+        export KAFKA_BROKERS=kafka1:9092
+        export KAFKA_ENV=LOCAL
+        export KAFKA_INTERNAL_PATH="/opt/bitnami/kafka/"
+        export DOCKER_NET=docker-default
     fi
 fi
 

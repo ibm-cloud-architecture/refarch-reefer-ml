@@ -10,11 +10,12 @@ try:
     KAFKA_APIKEY = os.environ['KAFKA_APIKEY']
 except KeyError:
     print("The KAFKA_APIKEY environment variable not set... assume local deployment")
+    KAFKA_APIKEY = ""
 
 try:
     KAFKA_ENV = os.environ['KAFKA_ENV']
 except KeyError:
-    KAFKA_ENV='LOCAL'
+    KAFKA_ENV = 'LOCAL'
 
 
 def getBrokerEndPoints():

@@ -1,0 +1,12 @@
+{ "timestamp": "2019-09-04 T15:31 Z",
+  "containerID": "C100",
+  "temperature": 4,
+  "target_temp": 4.4,
+   "power": 7.2,
+   "accumulated_power": 35,
+   "content_type" : 1,
+   "o2" : 10,
+   "co2" : 14,
+   "time_door_open" : 0,
+   "defrost_level" : 4
+}

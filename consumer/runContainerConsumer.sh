@@ -1,7 +1,24 @@
 #!/bin/bash
-source ../scripts/setenv.sh NOSET
-docker run -e KAFKA_BROKERS=$KAFKA_BROKERS \
+if [[ $# -ne 2 ]]
+then
+    echo "Usage: runContainConsumer.sh [LOCAL | IBMCLOUD] containerid"
+    exit 1
+fi
+source ../scripts/setenv.sh $1 NOSET
+
+if [[ -z "$DOCKER_NET" ]]
+then
+    docker run -e KAFKA_BROKERS=$KAFKA_BROKERS \
+    -network $DOCKER_NET \
     -e KAFKA_APIKEY=$KAFKA_APIKEY \
     -e KAFKA_ENV=$KAFKA_ENV \
-    -v $(pwd)/..:/home -ti ibmcase/python \
-    bash -c "cd /home/consumer && export PYTHONPATH=/home && python TraceContainerEventsApp.py $1"
+    -ti ibmcase/containerconsumer \
+    bash -c "export PYTHONPATH=/server && python TraceContainerEventsApp.py $2"
+
+else
+    docker run -e KAFKA_BROKERS=$KAFKA_BROKERS \
+    -e KAFKA_APIKEY=$KAFKA_APIKEY \
+    -e KAFKA_ENV=$KAFKA_ENV \
+    -ti ibmcase/containerconsumer \
+    bash -c "export PYTHONPATH=/server && python TraceContainerEventsApp.py $2"
+fi

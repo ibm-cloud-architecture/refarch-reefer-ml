@@ -1,7 +1,6 @@
 import pickle
 import pandas as pd
-import sklearn
-import sys
+import sys, os
 if sys.version_info[0] < 3: 
     from StringIO import StringIO
 else:
@@ -17,8 +16,9 @@ class PredictService:
     
     def predict(self,metricEvent):
         '''
-        Predict the maintenance from the metric sent. The metric is a string of comma separated values.
-        See the feature column names and order 
+        Predict the maintenance from the telemetry sent. The telemetry is a string of comma separated values.
+        See the feature column names and order below.
+        return 0 if no maintenance is needed, 1 otherwise
         '''
         feature_cols = ['Temperature(celsius)','Target_Temperature(celsius)','Power','PowerConsumption','ContentType','O2','CO2','Time_Door_Open','Maintenance_Required','Defrost_Cycle']
         # Do some simple data transformation and reading to build X
