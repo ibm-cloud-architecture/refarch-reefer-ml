@@ -15,6 +15,6 @@ ENV KAFKA_BROKERS kafka1:9092
 ENV KAFKA_ENV LOCAL
 EXPOSE 8080
 # Runs container API when started
-CMD ["python", "wsgi.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080" , "wsgi"]
 
 

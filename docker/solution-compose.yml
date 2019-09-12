@@ -6,23 +6,23 @@ services:
         ports:
             - "8080:8080"
         environment:
-            KAFKA_ENV: ${KAFKA_ENV}
-            KAFKA_BROKERS: ${KAFKA_BROKERS}
-            KAFKA_APIKEY: ${KAFKA_APIKEY}
+            KAFKA_ENV: LOCAL
+            KAFKA_BROKERS: kafka1:9092
+            KAFKA_APIKEY: ""
     containerconsumer:
         image: ibmcase/containerconsumer:latest
         hostname: containerconsumer
         environment:
-            KAFKA_ENV: ${KAFKA_ENV}
-            KAFKA_BROKERS: ${KAFKA_BROKERS}
-            KAFKA_APIKEY: ${KAFKA_APIKEY}
+            KAFKA_ENV: LOCAL
+            KAFKA_BROKERS: kafka1:9092
+            KAFKA_APIKEY: ""
     scoring:
         image: ibmcase/predictivescoring:latest
         hostname: scori
         environment:
-            KAFKA_ENV: ${KAFKA_ENV}
-            KAFKA_BROKERS: ${KAFKA_BROKERS}
-            KAFKA_APIKEY: ${KAFKA_APIKEY}
+            KAFKA_ENV: LOCAL
+            KAFKA_BROKERS: kafka1:9092
+            KAFKA_APIKEY: ""
     scoringweb:
         image: ibmcase/predictivescoringweb:latest
         hostname: scoringweb

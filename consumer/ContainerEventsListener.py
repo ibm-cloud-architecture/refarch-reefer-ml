@@ -51,8 +51,8 @@ class ContainerEventsListener:
                 continue
             msgStr = self.traceResponse(msg)
             anEvent = json.loads(msgStr)
-            if (anEvent["payload"]["containerID"] == keyID):
-                gotIt = True
+            # if (anEvent["payload"]["containerID"] == keyID):
+            #    gotIt = True
         return anEvent
     
     def close(self):

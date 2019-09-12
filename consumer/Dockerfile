@@ -17,4 +17,3 @@ ENV KAFKA_API ""
 # Runs container API when started
 CMD ["python", "TraceContainerEventsApp.py"]
 
-
