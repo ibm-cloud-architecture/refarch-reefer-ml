@@ -71,13 +71,7 @@ In the service credentials creates new credentials to get the Kafka broker list,
 
 #### Run kafka on your laptop
 
-Under the `docker` folder, we have added a docker compose file named `backbone-compose.yml` that start one broker and one zookeeper docker image. To start them run:
-
-```
-docker-compose -f backbone-compose.yml up`
-```
-
-You need docker and docker-compose on your laptop.
+To run kafka and the solution on your laptop, for development purpose, see this [readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
 
 ## Machine Learning Work
 
@@ -173,20 +167,6 @@ The POST operation in on the /control url. The control object, to generate 1000 
     }
 ```
 
-### Run it locally
-
-To build the simulator using the [s2i CLI](https://github.com/openshift/source-to-image):
-
-```
-s2i build --copy .  centos/python-36-centos7 ibmcase/reefersimulator
-```
-
-Then to run it locally, use the local script `./runReeferSimulator.sh ` or after setting the environment variables for kafka launch the docker container like:
-
-```
-docker run -p 8080:8080 -e KAFKA_ENV=$KAFKA_ENV -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY ibmcase/reefersimulator
-```
-
 ### Simulator: Build and run on OpentShift
 
 To deploy the code to an openshift cluster do the following:
@@ -211,7 +191,7 @@ To deploy the code to an openshift cluster do the following:
     oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
     ```
 
-    Then to track the build progress:
+    Then to track the build progress, look at the logs of the build pod:
     ```
     oc logs -f bc/reefersimulator
     ```

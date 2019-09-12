@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# the following setting is when creating topics in kafka running locally via docker compose
+export KAFKA_INTERNAL_PATH="/opt/bitnami/kafka/"
 
 if [[ $# -ne 1 ]];then
  echo "Usage createTopics.sh [LOCAL  | IBMCLOUD ]"
