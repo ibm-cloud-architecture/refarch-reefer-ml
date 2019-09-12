@@ -1,15 +1,15 @@
 import unittest
-from scoring.predictservice import PredictService
-import scoring.ScoringApp as ScoringApp
+from domain.predictservice import PredictService
+import ScoringApp as ScoringApp
 
-class TestScoreMetric(unittest.TestCase):
+class TestScoring(unittest.TestCase):
 
     def testServiceCreation(self):
         serv = PredictService()
-        self.assertNotIsInstance(serv)
+        self.assertIsNotNone(serv)
 
     def testPredict(self):
-        serv = PredictService()
+        serv = PredictService("domain/model_logistic_regression.pkl")
         header="Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"
         event="2019-04-01 T16:29 Z,1813, 101, 4.291843460900875,4.4,0,10.273342381017777,3,4334.920958996634,4.9631508046318755,1,0,6"
         record=header+"\n"+event

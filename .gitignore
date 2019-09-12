@@ -2,9 +2,12 @@ simulator/scripts/setenv.sh
 simulator/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
-scoring/__pycache__/
-scoring/infrastructure/__pycache__
-scoring/domain/__pycache__
+scoring/webapp/__pycache__/
+scoring/webapp/infrastructure/__pycache__
+scoring/webapp/domain/__pycache__
 consumer/__pycache__/
+scoring/eventConsumer/__pycache__/
+scoring/eventConsumer/infrastructure/__pycache__
+scoring/eventConsumer/domain/__pycache__
 site/
 scripts/setenv.sh

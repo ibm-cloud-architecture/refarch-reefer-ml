@@ -1,6 +1,6 @@
 import unittest
 import datetime
-from simulator.reefer_simulator import ReeferSimulator 
+from domain.reefer_simulator import ReeferSimulator 
 
 
 class TestReeferSimulator(unittest.TestCase):

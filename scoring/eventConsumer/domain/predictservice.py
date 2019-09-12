@@ -10,8 +10,8 @@ class PredictService:
     '''
     Wrapper interface in front of the ML trained model
     '''
-
-    model = pickle.load(open("domain/model_logistic_regression.pkl","rb"),encoding='latin1')
+    def __init__(self,filename = "domain/model_logistic_regression.pkl"):
+        self.model = pickle.load(open(filename,"rb"),encoding='latin1')
     
     
     def predict(self,metricEvent):

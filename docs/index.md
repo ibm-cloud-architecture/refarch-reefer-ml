@@ -273,7 +273,7 @@ The script `sendSimulControl.sh` is used for that.
     refarch-reefer-ml
 
     cd scripts
-    ./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor
+    ./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C101
 
     ```
 
@@ -290,6 +290,17 @@ The script `sendSimulControl.sh` is used for that.
 
     We will see how those events are processed in the next section.
 
+## Unit test the Simulator
+
+The test coverage is not yet great. To run them
+
+```
+cd simulator
+./startPythonEnv
+root@1de81b16f940:/# export PYTHONPATH=/home/simulator
+root@1de81b16f940:/# cd /home/simulator
+root@1de81b16f940:/# python tests/TestSimulator.py 
+```
 
 ## The predictive scoring microservice
 
@@ -299,7 +310,7 @@ Applying a TDD approach we start by a TestScoring.py class.
 
 ```python
 import unittest
-from scoring.predictservice import PredictService
+from domain.predictservice import PredictService
 
 class TestScoreMetric(unittest.TestCase):
     def testCreation(self):
@@ -313,8 +324,9 @@ Use the same python environment with docker:
 
 ```
 ./startPythonEnv
-root@1de81b16f940:/# cd /home/scoring/
-root@1de81b16f940:/home/scoring# python TestScoring.py 
+root@1de81b16f940:/# export PYTHONPATH=/home/scoring/eventConsumer
+root@1de81b16f940:/# cd /home/scoring/eventConsumer
+root@1de81b16f940:/home/scoring/eventConsumer# python tests/TestScoring.py 
 ```
 
 Test fails, so let add the scoring service with a constructor, and load the serialized pickle model (which was copied from the ml folder).
@@ -323,7 +335,9 @@ Test fails, so let add the scoring service with a constructor, and load the seri
 import pickle
 
 class PredictService:
-    model = pickle.load(open("model_logistic_regression.pkl","rb"),encoding='latin1')
+    def __init__(self,filename = "domain/model_logistic_regression.pkl"):
+        self.model = pickle.load(open(filename,"rb"),encoding='latin1')
+    
     
     def predict(self,metricEvent):
         TESTDATA = StringIO(metricEvent)
@@ -390,7 +404,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
 
 ```
-./os-setenv.sh
+./scripts/setenv.sh SET
 ```
 
 The list of running pods should show the build pods for this application:
