@@ -280,9 +280,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-running" title="Be sure to have Event Stream or kafka running" class="md-nav__link">
-    Be sure to have Event Stream or kafka running
+  <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or Kafka running somewhere
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-kafka-on-your-laptop" title="Run kafka on your laptop" class="md-nav__link">
+    Run kafka on your laptop
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -354,13 +367,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-it-locally" title="Run it locally" class="md-nav__link">
-    Run it locally
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
     Simulator: Build and run on OpentShift
   </a>
@@ -375,6 +381,13 @@
         <li class="md-nav__item">
   <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
     Test sending a simulation control to the POST api
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
+    Unit test the Simulator
   </a>
   
 </li>
@@ -484,9 +497,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-running" title="Be sure to have Event Stream or kafka running" class="md-nav__link">
-    Be sure to have Event Stream or kafka running
+  <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or Kafka running somewhere
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-kafka-on-your-laptop" title="Run kafka on your laptop" class="md-nav__link">
+    Run kafka on your laptop
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -558,13 +584,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-it-locally" title="Run it locally" class="md-nav__link">
-    Run it locally
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
     Simulator: Build and run on OpentShift
   </a>
@@ -579,6 +598,13 @@
         <li class="md-nav__item">
   <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
     Test sending a simulation control to the POST api
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
+    Unit test the Simulator
   </a>
   
 </li>
@@ -664,16 +690,23 @@
 </pre></div>
 
 <h3 id="building-the-python-environment-as-docker-image">Building the python environment as docker image</h3>
-<p>To avoid impacting our environment, we use a dockerfile to get the basic of python 3.7.x and other needed modules like kafka, http requests, pytest... So to build your python image with all the needed libraries, use the following commands:</p>
+<p>To avoid impacting our environment, we use a dockerfile to get the basic of python 3.7.x and other needed modules like kafka, http requests, pandas, sklearn, pytest... necessary to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:</p>
 <div class="codehilite"><pre><span></span>cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 </pre></div>
 
-<h3 id="be-sure-to-have-event-stream-or-kafka-running">Be sure to have Event Stream or kafka running</h3>
-<p>Create the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/">here</a>.</p>
+<p>To use this python environment you can use the script: <code>startPythonEnv</code> or </p>
+<div class="codehilite"><pre><span></span>docker run -v $(pwd):/home -ti ibmcase/python bash
+</pre></div>
+
+<h3 id="be-sure-to-have-event-stream-or-kafka-running-somewhere">Be sure to have Event Stream or Kafka running somewhere</h3>
+<p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/">here</a>. </p>
+<p>As an alternate you could run kafka on your laptop, see next section for instructions.</p>
 <p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
 <p><img alt="" src="images/es-topics.png" /></p>
 <p>In the service credentials creates new credentials to get the Kafka broker list, the admin URL and the api_key needed to authenticate the consumers or producers.</p>
+<h4 id="run-kafka-on-your-laptop">Run kafka on your laptop</h4>
+<p>To run kafka and the solution on your laptop, for development purpose, see this <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">readme</a>.</p>
 <h2 id="machine-learning-work">Machine Learning Work</h2>
 <p>To review the problem of predictive maintenance read <a href="predictive-maintenance/">this article.</a></p>
 <h3 id="generate-data-with-the-reefer-simulator">Generate data with the Reefer simulator</h3>
@@ -749,15 +782,6 @@ The POST operation in on the /control url. The control object, to generate 1000 
     <span class="p">}</span>
 </pre></div>
 
-<h3 id="run-it-locally">Run it locally</h3>
-<p>To build the simulator using the <a href="https://github.com/openshift/source-to-image">s2i CLI</a>:</p>
-<div class="codehilite"><pre><span></span>s2i build --copy .  centos/python-36-centos7 ibmcase/reefersimulator
-</pre></div>
-
-<p>Then to run it locally, use the local script <code>./runReeferSimulator.sh</code> or after setting the environment variables for kafka launch the docker container like:</p>
-<div class="codehilite"><pre><span></span>docker run -p 8080:8080 -e KAFKA_ENV=$KAFKA_ENV -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY ibmcase/reefersimulator
-</pre></div>
-
 <h3 id="simulator-build-and-run-on-opentshift">Simulator: Build and run on OpentShift</h3>
 <p>To deploy the code to an openshift cluster do the following:</p>
 <ol>
@@ -779,7 +803,7 @@ The POST operation in on the /control url. The control object, to generate 1000 
 <div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
 </pre></div>
 
-<p>Then to track the build progress:
+<p>Then to track the build progress, look at the logs of the build pod:
 <div class="codehilite"><pre><span></span>oc logs -f bc/reefersimulator
 </pre></div>
 The dependencies are loaded, the build is scheduled and executed, the image is uploaded to the registry, and started.</p>
@@ -846,7 +870,7 @@ pwd
 refarch-reefer-ml
 
 cd scripts
-./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor
+./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C101
 
 ```
 
@@ -865,11 +889,20 @@ We will see how those events are processed in the next section.
 </pre></div>
 
 
+<h2 id="unit-test-the-simulator">Unit test the Simulator</h2>
+<p>The test coverage is not yet great. To run them</p>
+<div class="codehilite"><pre><span></span><span class="n">cd</span> <span class="n">simulator</span>
+<span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">python</span> <span class="n">tests</span><span class="o">/</span><span class="n">TestSimulator</span><span class="p">.</span><span class="n">py</span> 
+</pre></div>
+
 <h2 id="the-predictive-scoring-microservice">The predictive scoring microservice</h2>
 <p>Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that call the serialized analytic model. The code in the <code>scoring</code> folder.</p>
 <p>Applying a TDD approach we start by a TestScoring.py class.</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">scoring.predictservice</span> <span class="kn">import</span> <span class="n">PredictService</span>
+<span class="kn">from</span> <span class="nn">domain.predictservice</span> <span class="kn">import</span> <span class="n">PredictService</span>
 
 <span class="k">class</span> <span class="nc">TestScoreMetric</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">testCreation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -881,15 +914,18 @@ We will see how those events are processed in the next section.
 
 <p>Use the same python environment with docker:</p>
 <div class="codehilite"><pre><span></span><span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="o">/</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="err">#</span> <span class="n">python</span> <span class="n">TestScoring</span><span class="p">.</span><span class="n">py</span> 
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="o">/</span><span class="n">eventConsumer</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="o">/</span><span class="n">eventConsumer</span>
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">scoring</span><span class="o">/</span><span class="n">eventConsumer</span><span class="err">#</span> <span class="n">python</span> <span class="n">tests</span><span class="o">/</span><span class="n">TestScoring</span><span class="p">.</span><span class="n">py</span> 
 </pre></div>
 
 <p>Test fails, so let add the scoring service with a constructor, and load the serialized pickle model (which was copied from the ml folder).</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="k">class</span> <span class="nc">PredictService</span><span class="p">:</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;model_logistic_regression.pkl&quot;</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">),</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;domain/model_logistic_regression.pkl&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">),</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+
 
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">metricEvent</span><span class="p">):</span>
         <span class="n">TESTDATA</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">metricEvent</span><span class="p">)</span>
@@ -937,7 +973,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 </pre></div>
 
 <p>but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:</p>
-<div class="codehilite"><pre><span></span>./os-setenv.sh
+<div class="codehilite"><pre><span></span>./scripts/setenv.sh SET
 </pre></div>
 
 <p>The list of running pods should show the build pods for this application:</p>
