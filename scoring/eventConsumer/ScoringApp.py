@@ -55,6 +55,5 @@ def startReeferMetricsEventListener():
 
 if __name__ == "__main__":
     print("Reefer Container Predictive Maintenance Scoring Service v0.0.3")
-    print(os.curdir)
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

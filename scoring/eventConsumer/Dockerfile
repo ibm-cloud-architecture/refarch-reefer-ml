@@ -12,6 +12,7 @@ RUN  pip install --trusted-host pypi.python.org -r requirements.txt
 # Define environment variable
 ENV KAFKA_BROKERS kafka1:9092
 ENV KAFKA_ENV LOCAL
+ENV KAFKA_API ""
 
 CMD ["python", "ScoringApp.py"]
 
