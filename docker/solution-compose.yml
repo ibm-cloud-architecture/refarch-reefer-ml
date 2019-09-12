@@ -25,3 +25,10 @@ services:
             KAFKA_ENV: ${KAFKA_ENV}
             KAFKA_BROKERS: ${KAFKA_BROKERS}
             KAFKA_APIKEY: ${KAFKA_APIKEY}
+    scoringweb:
+        image: ibmcase/predictivescoringweb:latest
+        hostname: scoringweb
+        ports:
+            - "8082:8083"
+        environment:
+            PREDICT_WEB_PORT: "8083"

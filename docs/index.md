@@ -44,22 +44,40 @@ git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 
 ### Building the python environment as docker image
 
-To avoid impacting our environment, we use a dockerfile to get the basic of python 3.7.x and other needed modules like kafka, http requests, pytest... So to build your python image with all the needed libraries, use the following commands:
+To avoid impacting our environment, we use a dockerfile to get the basic of python 3.7.x and other needed modules like kafka, http requests, pandas, sklearn, pytest... necessary to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:
 
 ```
 cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 ```
 
-### Be sure to have Event Stream or kafka running
+To use this python environment you can use the script: `startPythonEnv` or 
 
-Create the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described [here](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/).
+```
+docker run -v $(pwd):/home -ti ibmcase/python bash
+```
+
+### Be sure to have Event Stream or Kafka running somewhere
+
+We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described [here](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/). 
+
+As an alternate you could run kafka on your laptop, see next section for instructions.
 
 The following diagram illustrates the topics configured in IBM Cloud Event Stream service:
 
 ![](images/es-topics.png)
 
 In the service credentials creates new credentials to get the Kafka broker list, the admin URL and the api_key needed to authenticate the consumers or producers.
+
+#### Run kafka on your laptop
+
+Under the `docker` folder, we have added a docker compose file named `backbone-compose.yml` that start one broker and one zookeeper docker image. To start them run:
+
+```
+docker-compose -f backbone-compose.yml up`
+```
+
+You need docker and docker-compose on your laptop.
 
 ## Machine Learning Work
 

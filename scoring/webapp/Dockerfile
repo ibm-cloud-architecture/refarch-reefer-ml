@@ -9,8 +9,9 @@ COPY . /server
 # Install any needed packages specified in requirements.txt
 RUN  pip install --trusted-host pypi.python.org -r requirements.txt
 
-EXPOSE 8080
+ENV PREDICT_WEB_PORT 8083
+EXPOSE ${PREDICT_WEB_PORT}
 
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "wsgi"]
+CMD ["gunicorn", "-b", "0.0.0.0:" + ${PREDICT_WEB_PORT}, "wsgi"]
 
 
