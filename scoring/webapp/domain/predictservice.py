@@ -1,10 +1,18 @@
 import pickle
+import requests
 import pandas as pd
 import sys, os
 if sys.version_info[0] < 3: 
     from StringIO import StringIO
 else:
     from io import StringIO
+
+# this is use in case we want to have the model running on a remote server instead of using 
+# the one embedded. 
+try:
+    SCORING_URL = os.environ['SCORING_URL']
+except KeyError:
+    SCORING_URL=''  # be sure to keep it empty
 
 class PredictService:
     '''
@@ -27,6 +35,9 @@ class PredictService:
         data.columns = data.columns.to_series().apply(lambda x: x.strip())
         X = data[feature_cols]
         # Return 1 if maintenance is required, 0 otherwise
-        return self.model.predict(X)
+        if (SCORING_URL != ''):
+            return requests.post(url=SCORING_URL, data= X)
+        else:
+            return self.model.predict(X)
 
     

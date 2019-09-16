@@ -1,4 +1,5 @@
 numpy
 pandas
 sklearn
+requests
 confluent_kafka

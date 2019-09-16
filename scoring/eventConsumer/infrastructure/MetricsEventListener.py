@@ -20,7 +20,7 @@ class MetricsEventListener:
                  'auto.offset.reset': 'earliest',
                 'enable.auto.commit': self.kafka_auto_commit,
         }
-        if (self.currentRuntime != 'LOCAL' and self.currentRuntime != 'MINIKUBE'):
+        if (self.apikey != ''):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'

@@ -59,15 +59,17 @@ docker run -v $(pwd):/home -ti ibmcase/python bash
 
 ### Be sure to have Event Stream or Kafka running somewhere
 
-We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described [here](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/). 
-
-As an alternate you could run kafka on your laptop, see next section for instructions.
+We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/). 
 
 The following diagram illustrates the topics configured in IBM Cloud Event Stream service:
 
 ![](images/es-topics.png)
 
-In the service credentials creates new credentials to get the Kafka broker list, the admin URL and the api_key needed to authenticate the consumers or producers.
+With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.
+
+For Openshift deployment click to the `connect to the cluster` get broker URL and generate API key, for all topics.
+
+![](images/es/cluster-access.png)
 
 #### Run kafka on your laptop
 
@@ -404,7 +406,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
 
 ```
-./scripts/setenv.sh SET
+../scripts/setenv.sh SET
 ```
 
 The list of running pods should show the build pods for this application:
