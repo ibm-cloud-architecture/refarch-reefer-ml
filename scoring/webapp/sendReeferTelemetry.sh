@@ -3,8 +3,9 @@
 if [[ $# -ne 1 ]];then
     echo "Usage: Need one argument:  sendReeferTelemetry.sh hostname"
     echo "Let use default settings"
-    # CSP one: hostn="reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local/"
-    hostn="localhost:8080"
+    # CSP one: 
+    hostn="scoringwebapp-route-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local"
+    # hostn="localhost:8080"
 else
     hostn=$1
 fi
