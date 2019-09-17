@@ -656,7 +656,10 @@
                 
                 
                 <h1 id="reefer-predictive-maintenance-solution">Reefer Predictive Maintenance Solution</h1>
-<p>This project is to demonstrate how to perform real time analytics, like predictive maintenance scoring from Reefer container metric event stream. The runtime environment in production may look like in the following diagram:</p>
+<p>This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. </p>
+<p>!!! note:
+        This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a>  to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a>.</p>
+<p>The runtime environment in production may look like in the following diagram:</p>
 <p><img alt="" src="images/RT-analytics.png" /></p>
 <p>The Reefer container is a IoT device, which emits container metrics every 15 minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the metrics message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on openshift, can consume and publish messages.</p>
 <p>For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and build model.</p>
@@ -680,7 +683,7 @@
 <p>A curl script will do the post of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
 </li>
 <li>The metrics events are sent to the <code>containerMetrics</code> topic in Kafka.</li>
-<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/#the-predictive-scoring-microservice">See the note</a> for details.</li>
+<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/#the-predictive-scoring-agent">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
 <li>The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="">following repository</a> is the microservice we could use on as this component, but we have a simple consumer in the <code>consumer</code> folder.</li>
 </ol>
@@ -705,7 +708,7 @@ docker build -f docker-python-tools -t ibmcase/python .
 <p><img alt="" src="images/es-topics.png" /></p>
 <p>With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.</p>
 <p>For Openshift deployment click to the <code>connect to the cluster</code> get broker URL and generate API key, for all topics.</p>
-<p><img alt="" src="images/es/cluster-access.png" /></p>
+<p><img alt="" src="images/cluster-access.png" /></p>
 <h4 id="run-kafka-on-your-laptop">Run kafka on your laptop</h4>
 <p>To run kafka and the solution on your laptop, for development purpose, see this <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">readme</a>.</p>
 <h2 id="machine-learning-work">Machine Learning Work</h2>
@@ -735,23 +738,24 @@ docker build -f docker-python-tools -t ibmcase/python .
      --append [yes | no]  (reuse the data file)
 </pre></div>
 
-<div class="codehilite"><pre><span></span>    <span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">python</span> <span class="n">reefer_simulator_tool</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="mi">101</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">--</span><span class="n">temp</span> <span class="mi">4</span> <span class="o">--</span><span class="n">file</span> <span class="p">..</span><span class="o">/</span><span class="n">ml</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">metrics</span><span class="p">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">append</span> <span class="n">yes</span>
-
-    <span class="n">Generating</span>  <span class="mi">1000</span>  <span class="n">poweroff</span> <span class="n">metrics</span>
-
-    <span class="n">Timestamp</span>   <span class="n">ID</span>  <span class="n">Temperature</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span> <span class="n">Target_Temperature</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span>      <span class="n">Power</span>  <span class="n">PowerConsumption</span> <span class="n">ContentType</span>  <span class="n">O2</span> <span class="n">CO2</span>  <span class="n">Time_Door_Open</span> <span class="n">Maintenance_Required</span> <span class="n">Defrost_Cycle</span>
-    <span class="mf">1.000000</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">3.416766</span>                           <span class="mi">4</span>  <span class="mf">17.698034</span>          <span class="mf">6.662044</span>           <span class="mi">1</span>  <span class="mi">11</span>   <span class="mi">1</span>        <span class="mf">8.735273</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-    <span class="mf">1.001001</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">4.973630</span>                           <span class="mi">4</span>   <span class="mf">3.701072</span>          <span class="mf">8.457314</span>           <span class="mi">1</span>  <span class="mi">13</span>   <span class="mi">3</span>        <span class="mf">5.699655</span>                    <span class="mi">0</span>             <span class="mi">6</span>
-    <span class="mf">1.002002</span>  <span class="mi">2019</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">30</span> <span class="nl">T15</span><span class="p">:</span><span class="mi">43</span> <span class="n">Z</span>  <span class="mi">101</span>              <span class="mf">1.299275</span>                           <span class="mi">4</span>   <span class="mf">7.629094</span> 
+<div class="codehilite"><pre><span></span>    <span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">python</span> <span class="n">reefer_simulator_tool</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="mi">101</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">--</span><span class="n">temp</span> <span class="mi">4</span> <span class="o">--</span><span class="n">file</span> <span class="p">..</span><span class="o">/</span><span class="n">ml</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">metrics</span><span class="p">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">append</span> <span class="n">no</span>
 </pre></div>
 
+<p>The results looks like:
+<div class="codehilite"><pre><span></span>    Generating  1000  poweroff metrics
+
+    Timestamp   ID  Temperature(celsius) Target_Temperature(celsius)      Power  PowerConsumption ContentType  O2 CO2  Time_Door_Open Maintenance_Required Defrost_Cycle
+    1.000000  2019-06-30 T15:43 Z  101              3.416766                           4  17.698034          6.662044           1  11   1        8.735273                    0             6
+    1.001001  2019-06-30 T15:43 Z  101              4.973630                           4   3.701072          8.457314           1  13   3        5.699655                    0             6
+    1.002002  2019-06-30 T15:43 Z  101              1.299275                           4   7.629094 
+</pre></div></p>
 <h4 id="generate-co2-sensor-malfunction-in-same-file">Generate Co2 sensor malfunction in same file</h4>
 <p>In the same way as above the simulator can generate data for Co2 sensor malfunction using the command:</p>
 <div class="codehilite"><pre><span></span>python reefer_simulator_tool.py --stype co2sensor --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append yes
 </pre></div>
 
 <div class="admonition note">
-<p class="admonition-title">Note<p>The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a <code>containers</code> topic.</p>
+<p class="admonition-title">Note<p>The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a <code>containers</code> topic (this consumer code is in the <code>scoring/eventConsumer</code> folder).</p>
 </p>
 </div>
 <h3 id="create-the-model">Create the model</h3>
