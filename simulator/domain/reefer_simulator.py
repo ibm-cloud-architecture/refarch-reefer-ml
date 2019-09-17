@@ -10,8 +10,8 @@ Each simulation type is a different method.
 The variables that changes are Co2, O2, power and temperature
 
 '''
-# Define constants for average
 
+# Define constants for "normal" values of columns
 CO2_LEVEL = 4 # in percent
 O2_LEVEL = 21 # in percent
 NITROGEN_LEVEL = 0.78 # in percent
@@ -20,18 +20,22 @@ NB_RECORDS_IMPACTED = 7
 MAX_RECORDS = 1000
 DEFROST_LEVEL = 7
 
+
 def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
     Generate a timestamp column for a dataframe of results.
 
     Arguments:
         nb_records: Number of rows to generate
-        start_time: Timestamp of first row. By convention, each subsequent
-            row will be exactly 15 minutes later.
+        start_time: Timestamp of first row, or None to use the current time.
+            By convention, each subsequent row will be exactly 15 minutes later.
 
     Returns a Pandas Series object, suitable for use as a column or index
     '''
+    if start_time is None:
+        start_time = datetime.datetime.today() 
     return pd.date_range(start_time, periods=nb_records, freq="15min")
+
 
 def _generateStationaryCols(nb_records: int, cid: str, content_type: int,
                             tgood: float):
@@ -154,7 +158,8 @@ class ReeferSimulator:
                          cid: str = "101", 
                          nb_records: int = MAX_RECORDS, 
                          tgood: float = 4.4,
-                         content_type: int = None):
+                         content_type: int = None,
+                         start_time: datetime.datetime = None):
         '''
         Generate n records for training and test set for the power off 
         simulation.
@@ -166,13 +171,16 @@ class ReeferSimulator:
             tgood: Mean temperature to generate when power is NOT off
             content_type: ID of the type of stuff in the container, or None
                 to choose a random number
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
 
         Returns a Pandas dataframe.
         '''
         #print("Generating ",nb_records, " poweroff metrics")
 
         df = _generateStationaryCols(nb_records, cid, content_type, tgood)
-        df["Timestamp"] = _generateTimestamps(nb_records, datetime.datetime.today())
+        df["Timestamp"] = _generateTimestamps(nb_records, start_time)
 
         # Run a state machine to simulate the power-off events.
         state_machine_results = _simulatePowerOff(nb_records, tgood) 
@@ -187,7 +195,8 @@ class ReeferSimulator:
                                cid: str = "101",
                                nb_records: int = MAX_RECORDS,
                                tgood: float = 4.4,
-                               content_type: int = None):
+                               content_type: int = None,
+                               start_time: datetime.datetime = None):
         '''
         Generate an array of tuples with reefer container values
 
@@ -197,6 +206,9 @@ class ReeferSimulator:
             tgood: Mean temperature to generate when power is NOT off
             content_type: ID of the type of stuff in the container, or None
                 to choose a random number
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
 
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
@@ -216,7 +228,8 @@ class ReeferSimulator:
                     cid: str = "101", 
                     nb_records: int = MAX_RECORDS, 
                     tgood: float = 4.4,
-                    content_type: int = None):
+                    content_type: int = None,
+                    start_time: datetime.datetime = None):
         '''
         Generate a dataframe of training data for CO2 sensor malfunctions.
 
@@ -226,14 +239,18 @@ class ReeferSimulator:
             tgood: Mean temperature to generate when power is NOT off
             content_type: ID of the type of stuff in the container, or None
                 to choose a random number
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
 
         Returns a Pandas dataframe with the schema given in 
         ReeferSimulator.COLUMN_ORDER.
         '''
         df = _generateStationaryCols(nb_records, cid, content_type, tgood)
-        df["Timestamp"] = _generateTimestamps(nb_records, datetime.datetime.today())
+        df["Timestamp"] = _generateTimestamps(nb_records, start_time)
         df["PowerConsumption"] = df["Power"].cumsum()
-        df["Maintenance_Required"] = ((df["CO2"] > CO2_LEVEL) | (df["CO2"] < 0)).astype(np.int)
+        df["Maintenance_Required"] = ((df["CO2"] > CO2_LEVEL) 
+                                      | (df["CO2"] < 0)).astype(np.int)
         return df[ReeferSimulator.COLUMN_ORDER]
 
 
@@ -241,7 +258,8 @@ class ReeferSimulator:
                     cid: str = "101", 
                     nb_records: int = MAX_RECORDS, 
                     tgood: float = 4.4,
-                    content_type: int = None):
+                    content_type: int = None,
+                    start_time: datetime.datetime = None):
         '''
         Generate a dataframe of training data for CO2 sensor malfunctions.
 
@@ -251,11 +269,14 @@ class ReeferSimulator:
             tgood: Mean temperature to generate when power is NOT off
             content_type: ID of the type of stuff in the container, or None
                 to choose a random number
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
 
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = generateCo2(cid, nb_records, tgood, content_type)
+        df = generateCo2(cid, nb_records, tgood, content_type, start_time)
 
         # Original code always generated 0 for the "maintenance required" field
         # when generating tuples.
@@ -265,3 +286,4 @@ class ReeferSimulator:
         # schema information out of the Numpy record array returned by
         # DataFrame.to_records().
         return list(df.to_records(index=False))
+
