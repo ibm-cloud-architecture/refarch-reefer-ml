@@ -201,7 +201,7 @@ class ReeferSimulator:
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = generatePowerOff(cid, nb_records, tgood, content_type)
+        df = self.generatePowerOff(cid, nb_records, tgood, content_type)
 
         # Original code always generated 0 for the "maintenance required" field
         # when generating tuples.
@@ -255,7 +255,7 @@ class ReeferSimulator:
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = generateCo2(cid, nb_records, tgood, content_type)
+        df = self.generateCo2(cid, nb_records, tgood, content_type)
 
         # Original code always generated 0 for the "maintenance required" field
         # when generating tuples.

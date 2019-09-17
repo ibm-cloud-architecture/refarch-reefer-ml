@@ -25,6 +25,8 @@ class MetricsEventListener:
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
             options['sasl.password'] = self.apikey
+        if (self.currentRuntime == 'ICP'):
+            options['ssl.ca.location'] = 'es-cert.pem'
         print(options)
         self.consumer = Consumer(options)
         self.consumer.subscribe([self.topic_name])

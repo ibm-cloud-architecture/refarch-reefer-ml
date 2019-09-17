@@ -20,12 +20,11 @@ class ContainerEventsListener:
                  'auto.offset.reset': 'earliest',
                 'enable.auto.commit': self.kafka_auto_commit,
         }
-        if (self.currentRuntime != 'LOCAL' ):
+        if (self.apikey != '' ):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
             options['sasl.password'] = self.apikey
-        if (self.currentRuntime == 'ICP'):
             options['ssl.ca.location'] = 'es-cert.pem'
         print(options)
         self.consumer = Consumer(options)
@@ -37,7 +36,7 @@ class ContainerEventsListener:
                     .format(msg.topic(), msg.partition(), msg.offset(), str(msg.key()), msgStr ))
         return msgStr
 
-    def processEvents(self,keyID):
+    def processEvents(self,keyID="c100"):
         gotIt = False
         anEvent = {}
         while not gotIt:

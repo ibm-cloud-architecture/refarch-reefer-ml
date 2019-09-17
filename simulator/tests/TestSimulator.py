@@ -34,13 +34,6 @@ class TestReeferSimulator(unittest.TestCase):
         values = simul.generateCo2Tuples(cid="103",nb_records = 5, tgood=4)
         print(values)
 
-    def testGenerateRecordSpecificValues(self):
-        simul = ReeferSimulator()
-        Today= datetime.datetime.today()
-        for i in range(10):
-            (timestamp,pwr,pwrc, co2,o2,tdoor) = simul.generateRecordSpecificValues(Today,i,0)
-            print((timestamp,pwr,pwrc, co2,o2,tdoor))
-
 if __name__ == '__main__':
     unittest.main()
 

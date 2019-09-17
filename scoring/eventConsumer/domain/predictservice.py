@@ -26,7 +26,7 @@ class PredictService:
     
     def predict(self,metricEvent):
         '''
-        Predict the maintenance from the telemetry sent. The telemetry is a string of comma separated values.
+        Predict the maintenance from the telemetry event received. The telemetry is a string of comma separated values.
         See the feature column names and order below.
         return 0 if no maintenance is needed, 1 otherwise
         '''

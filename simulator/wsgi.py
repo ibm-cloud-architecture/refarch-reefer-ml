@@ -7,7 +7,7 @@ from domain.reefer_simulator import ReeferSimulator
 VERSION = "Reefer Container simulator v0.0.4"
 application = Flask(__name__)
 
-kp = MetricsEventsProducer()
+metricsProducer = MetricsEventsProducer()
 
 @application.route("/")
 def hello():
@@ -15,6 +15,7 @@ def hello():
     
 @application.route("/control", methods = ['POST'])
 def runSimulator():
+    print("post received: ")
     print(request.json)
     if not 'containerID' in request.json:
         abort(400) 
@@ -28,12 +29,11 @@ def runSimulator():
         return "Wrong simulation controller data"
     
     for metric in metrics:
-        ts=time.strptime(metric[0],"%Y-%m-%d T%H:%M Z")
         evt = {"containerID": control["containerID"],
-                "timestamp": int(time.mktime(ts)),
+                "timestamp": str(metric[0]),
                 "type":"ContainerMetric",
                 "payload": str(metric)}
-        kp.publishEvent(evt,"containerID")
+        metricsProducer.publishEvent(evt,"containerID")
     return "Simulation started"
     
 
