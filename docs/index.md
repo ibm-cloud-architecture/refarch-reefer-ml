@@ -56,7 +56,7 @@ cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 ```
 
-To use this python environment you can use the script: `startPythonEnv` or 
+To use this python environment you can use the script: `startPythonEnv` or the following command:
 
 ```
 docker run -v $(pwd):/home -ti ibmcase/python bash
@@ -72,13 +72,13 @@ The following diagram illustrates the topics configured in IBM Cloud Event Strea
 
 With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.
 
-For Openshift deployment click to the `connect to the cluster` get broker URL and generate API key, for all topics.
+For Event Streams on Openshift deployment, click to the `connect to the cluster` button to get the broker URL and to generate the API key: select the option to generate the key for all topics.
 
 ![](images/cluster-access.png)
 
 #### Run kafka on your laptop
 
-To run kafka and the solution on your laptop, for development purpose, see this [readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
+For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read [this readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
 
 ## Machine Learning Work
 

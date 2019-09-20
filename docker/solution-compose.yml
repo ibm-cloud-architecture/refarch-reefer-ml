@@ -18,7 +18,7 @@ services:
             KAFKA_APIKEY: ""
     scoring:
         image: ibmcase/predictivescoring:latest
-        hostname: scori
+        hostname: scoring
         environment:
             KAFKA_ENV: LOCAL
             KAFKA_BROKERS: kafka1:9092
@@ -27,6 +27,6 @@ services:
         image: ibmcase/predictivescoringweb:latest
         hostname: scoringweb
         ports:
-            - "8082:8083"
+            - "8082:8080"
         environment:
-            PREDICT_WEB_PORT: "8083"
+            PREDICT_WEB_PORT: "8080"
