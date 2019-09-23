@@ -143,6 +143,7 @@ class ReeferSimulator:
     # Constants used elsewhere in the application
     SIMUL_POWEROFF="poweroff"
     SIMUL_CO2="co2sensor"
+    NORMAL="normal"
 
     # Order of columns in returned dataframes
     COLUMN_ORDER = ["Timestamp", "ID", "Temperature(celsius)", 
@@ -150,7 +151,7 @@ class ReeferSimulator:
                     "ContentType", "O2", "CO2", "Time_Door_Open", 
                     "Maintenance_Required", "Defrost_Cycle"]
 
-    def generatePowerOff(self,
+    def generatePowerOffRecords(self,
                          cid: str = "101", 
                          nb_records: int = MAX_RECORDS, 
                          tgood: float = 4.4,
@@ -212,7 +213,7 @@ class ReeferSimulator:
         # DataFrame.to_records().
         return list(df.to_records(index=False))
 
-    def generateCo2(self,
+    def generateCo2Records(self,
                     cid: str = "101", 
                     nb_records: int = MAX_RECORDS, 
                     tgood: float = 4.4,

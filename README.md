@@ -7,6 +7,9 @@ The content is presented [in a book view](https://ibm-cloud-architecture.github.
 ![](docs/images/mvp-runtime.png)
 
 
+## Run local
+
+For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read [this readme](./docker/README.md).
 
 ## Building this booklet locally
 

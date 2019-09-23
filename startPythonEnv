@@ -1,7 +1,10 @@
-source ./scripts/setenv.sh LOCAL NOSET
-
+source ./scripts/setenv.sh 
+# --network container:local-postgres \
 docker run -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
      -e KAFKA_ENV=$KAFKA_ENV  \
+     -e POSTGRESQL_URL=$POSTGRESQL_URL \
+     -e POSTGRESQL_DBNANE=$POSTGRESQL_DBNANE \
+     -e POSTGRESQL_SSL_PEM=$POSTGRESQL_SSL_PEM\
      -ti ibmcase/python bash
 #docker run -v $(pwd):/home  -ti image bash

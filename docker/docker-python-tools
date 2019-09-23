@@ -4,6 +4,14 @@ ENV PYTHONPATH=/home
 ENV KAFKA_APIKEY=""
 ENV KAFKA_BROKERS=""
 ENV KAFKA_ENV="IBMCLOUD"
+ENV POSTGRES_PWD="postgres"
+ENV POSTGRES_USER="postgres"
+ENV POSTGRESQL_HOST="localhost"
+ENV POSTGRESQL_DBNANE="postgres"
+ENV POSTGRESQL_PORT=5432
+
+WORKDIR /home
+
 RUN pip install --upgrade pip \
   && pip install --user pipenv requests black sklearn pytest numpy psycopg2 pandas confluent_kafka asyncio flask scipy matplotlib
 CMD bash
