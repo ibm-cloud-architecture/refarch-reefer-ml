@@ -11,3 +11,10 @@ scoring/eventConsumer/infrastructure/__pycache__
 scoring/eventConsumer/domain/__pycache__
 site/
 scripts/setenv.sh
+
+# Jupyter temp files
+**/.ipynb_checkpoints
+
+# Vim temp files
+**/.*.swp
+
