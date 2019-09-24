@@ -1,18 +1,31 @@
 import pickle
 import pandas as pd
 import sys, os
+from minio import Minio
+import re
 if sys.version_info[0] < 3: 
     from StringIO import StringIO
 else:
     from io import StringIO
+    
+bucket_name = os.getenv('BUCKET_NAME', 'training-data')
+model_path = os.getenv('MODEL_PATH', 'model_logistic_regression.pkl')
+S3_ENDPOINT = os.getenv('S3_ENDPOINT', 'minio-service.kubeflow:9000')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'minio')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', 'minio123')
 
 class PredictService:
     '''
     Wrapper interface in front of the ML trained model
     '''
+    url = re.compile(r"https?://")
+    cos = Minio(url.sub('', S3_ENDPOINT),
+                access_key=AWS_ACCESS_KEY_ID,
+                secret_key=AWS_SECRET_ACCESS_KEY,
+                secure=False)
+    cos.fget_object(bucket_name, model_path, 'domain/model_logistic_regression.pkl')
 
     model = pickle.load(open("domain/model_logistic_regression.pkl","rb"),encoding='latin1')
-    
     
     def predict(self,metricEvent):
         '''
