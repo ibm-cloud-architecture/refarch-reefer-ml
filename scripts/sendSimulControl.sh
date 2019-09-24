@@ -22,7 +22,11 @@ url="http://$hostn/control"
 echo ""
 echo "Send $fname to $url"
 sed "s/co2sensor/${stype}/g" $fname > new.json
-sed -i "s/C100/${cid}/g" new.json
+if [[ $(uname) == "Darwin" ]] ; then
+  sed -i '' "s/C100/${cid}/g" new.json
+else
+  sed -i "s/C100/${cid}/g" new.json
+fi
 
 echo "POST the following data:"
 cat new.json
