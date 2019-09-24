@@ -8,7 +8,7 @@ def parseArguments():
     print("The arguments are: " , str(sys.argv))
 
 if __name__ == '__main__':
-    parseArguments()
+    print("Containers listener just to trace the topic v0.0.1")
     consumer = ContainerEventsListener()
-    consumer.processEvents(CID)
+    consumer.processEvents()
     consumer.close()

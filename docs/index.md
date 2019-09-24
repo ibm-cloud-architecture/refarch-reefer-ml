@@ -1,6 +1,11 @@
 # Reefer Predictive Maintenance Solution
 
-This project is to demonstrate how to perform real time analytics, like predictive maintenance scoring from Reefer container metric event stream. The runtime environment in production may look like in the following diagram:
+This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. 
+
+!!! note:
+        This project is part of the [reference implementation solution](https://ibm-cloud-architecture.github.io/refarch-kc/)  to demonstrate the IBM [event driven reference architecture](https://ibm-cloud-architecture.github.io/refarch-eda).
+
+The runtime environment in production may look like in the following diagram:
 
 ![](images/RT-analytics.png)
 
@@ -30,7 +35,7 @@ While for the minimum viable demonstration the components looks like in the figu
 
 1. A curl script will do the post of this json object. [See this paragraph.](#test-sending-a-simulation-control-to-the-post-api)
 1. The metrics events are sent to the `containerMetrics` topic in Kafka.
-1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/#the-predictive-scoring-microservice) for details.
+1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/#the-predictive-scoring-agent) for details.
 1. The maintenance requirement is an event in the `containers` topic.
 1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use on as this component, but we have a simple consumer in the `consumer` folder.
 
@@ -51,7 +56,7 @@ cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 ```
 
-To use this python environment you can use the script: `startPythonEnv` or 
+To use this python environment you can use the script: `startPythonEnv` or the following command:
 
 ```
 docker run -v $(pwd):/home -ti ibmcase/python bash
@@ -59,19 +64,21 @@ docker run -v $(pwd):/home -ti ibmcase/python bash
 
 ### Be sure to have Event Stream or Kafka running somewhere
 
-We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream in cloud private deployment as described [here](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/). 
-
-As an alternate you could run kafka on your laptop, see next section for instructions.
+We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/). 
 
 The following diagram illustrates the topics configured in IBM Cloud Event Stream service:
 
 ![](images/es-topics.png)
 
-In the service credentials creates new credentials to get the Kafka broker list, the admin URL and the api_key needed to authenticate the consumers or producers.
+With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.
+
+For Event Streams on Openshift deployment, click to the `connect to the cluster` button to get the broker URL and to generate the API key: select the option to generate the key for all topics.
+
+![](images/cluster-access.png)
 
 #### Run kafka on your laptop
 
-To run kafka and the solution on your laptop, for development purpose, see this [readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
+For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read [this readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
 
 ## Machine Learning Work
 
@@ -115,8 +122,11 @@ usage reefer_simulator-tool --stype [poweroff | co2sensor | atsea]
 ```
  
 ```
-    root@03721594782f: python reefer_simulator_tool.py --stype poweroff --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append yes
+    root@03721594782f: python reefer_simulator_tool.py --stype poweroff --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append no
+```
 
+The results looks like:
+```
     Generating  1000  poweroff metrics
 
     Timestamp   ID  Temperature(celsius) Target_Temperature(celsius)      Power  PowerConsumption ContentType  O2 CO2  Time_Door_Open Maintenance_Required Defrost_Cycle
@@ -134,7 +144,7 @@ python reefer_simulator_tool.py --stype co2sensor --cid 101 --records 1000 --tem
 ```
 
 !!! note
-        The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a `containers` topic.
+        The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a `containers` topic (this consumer code is in the `scoring/eventConsumer` folder).
 
 ### Create the model
 
@@ -245,7 +255,7 @@ To deploy the code to an openshift cluster do the following:
     ```
 
     !!! note
-            The first time the container start, it may crash as he environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/setenv.sh SET` command to create the needed environment variable.
+            The first time the container start, it may crash as the environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/setenv.sh SET` command to create the needed environment variable.
 
 1. To make it visible externally, you need to add a route for this deployment:
 
@@ -277,7 +287,7 @@ The script `sendSimulControl.sh` is used for that.
 
     ```
 
-    If you use no argument for this script, it will send poweroff control to the service running on our openshift cluster on IBM Cloud.
+    If you use no argument for this script, it will send co2sensor control to the service running on our openshift cluster on IBM Cloud.
 
     Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
 
@@ -302,9 +312,9 @@ root@1de81b16f940:/# cd /home/simulator
 root@1de81b16f940:/# python tests/TestSimulator.py 
 ```
 
-## The predictive scoring microservice
+## The predictive scoring agent
 
-Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that call the serialized analytic model. The code in the `scoring` folder.
+Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that calls the serialized analytical model. The code in the `scoring\eventConsumer` folder.
 
 Applying a TDD approach we start by a TestScoring.py class.
 
@@ -361,26 +371,20 @@ Next we need to test a predict on an event formated as a csv string. The test lo
 
 So the scoring works, now we need to code the scoring application that will be deployed to Openshift cluster, and which acts as a consumer of container metrics events and a producer container events. 
 
-The Scoring App code of this app is [ScoringApp.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring/ScoringApp.py) module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.
+The Scoring Agent code of this app is [ScoringAgent.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring/ScoringAgent.py) module. It starts a consumer to get messages from Kafka. And when a message is received, it needs to do some data extraction and transformation and then use the predictive service.
 
 During the tests we have issue in the data quality, so it is always a good practice to add a validation function to assess if all the records are good. For production, this code needs to be enhanced for better error handling an reporting.
 
 ### Run locally
 
-Under `scoring` folder, set the environment variables for KAFKA using the commands
+Under `scoring\eventConsumer` folder, set the environment variables for KAFKA using the commands
 
 ```
 export KAFKA_BROKERS=broker-3.eventstreams.cloud.ibm.com:9093,broker-1.eventstreams.cloud.ibm.com:9093,broker-0.eventstreams.cloud.ibm.com:9093,broker-5.eventstreams.cloud.ibm.com:9093,broker-2.eventstreams.cloud.ibm.com:9093,broker-4.eventstreams.cloud.ibm.com:9093
 export KAFKA_APIKEY=""
 export KAFKA_ENV=IBMCLOUD
 
-docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV -v $(pwd)/..:/home -ti ibmcase/python bash -c "cd /home/scoring && export PYTHONPATH=/home && python ScoringApp.py"
-```
-
-The following script does these things for you:
-
-```
-./runScoringApp.sh 
+docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV -v $(pwd)/..:/home -ti ibmcase/python bash -c "cd /home/scoring && export PYTHONPATH=/home && python ScoringAgent.py"
 ```
 
 ### Scoring: Build and run on Openshift
@@ -388,7 +392,7 @@ The following script does these things for you:
 The first time we need to add the application to the existing project, run the following command:
 
 ```
-oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=scoring --name reeferpredictivescoring
+oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=scoring/eventConsumer --name reeferpredictivescoring
 ```
 
 This command will run a source to image, build all the needed yaml files for the kubernetes deployment and start the application in a pod. It use the `--context` flag to define what to build and run. With this capability we can use the same github repository for different sub component.
@@ -404,7 +408,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
 
 ```
-./scripts/setenv.sh SET
+../scripts/setenv.sh SET
 ```
 
 The list of running pods should show the build pods for this application:

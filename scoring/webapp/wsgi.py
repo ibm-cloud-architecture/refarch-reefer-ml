@@ -19,9 +19,9 @@ def hello():
 def predictContainerTelemetry():
     metricValue = transformToCSV(request.json)
     metric = header+"\n"+metricValue
-    print(metric)
+    print("Predict with this parameter " + metric)
     score=str(predictService.predict(metric))
-    print(score)
+    print("return prediction:" + score)
     return score
    
 

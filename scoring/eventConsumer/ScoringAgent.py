@@ -3,11 +3,23 @@ import  json, time, os
 from infrastructure.MetricsEventListener import MetricsEventListener
 from infrastructure.ContainerEventsProducer import ContainerEventsProducer
 
+'''
+Scoring agent is a event consumer getting Reefer telemetry or metrics. For each event
+received it assesses if there is a need to do a maintenance on this reefer due to strange
+metrices
+'''
+
 predictService = PredictService()
 containerEventsProducer = ContainerEventsProducer()
 
 
 def assessPredictiveMaintenance(msg):
+    '''
+    Call back used by the event consumer to process the event. 
+
+    Argument the message as dict / json format to preocess.
+    In the case of maintenance needed, generate an event to the containers topic
+    '''
     header="""Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"""
 
     print(msg['payload'])
@@ -19,6 +31,7 @@ def assessPredictiveMaintenance(msg):
     print(score)
     if score == 1:
         print("Go to maintenance " + msg['containerID'])
+        # TODO do not send a maintenance event if already done in the current travel.
         tstamp = int(time.time())
         data = {"timestamp": tstamp,
                 "type": "ContainerMaintenance",
@@ -54,6 +67,9 @@ def startReeferMetricsEventListener():
     
 
 if __name__ == "__main__":
-    print("Reefer Container Predictive Maintenance Scoring Service v0.0.3")
+    '''
+    Just start the event listener
+    '''
+    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.4")
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

@@ -147,6 +147,7 @@ class ReeferSimulator:
     # Constants used elsewhere in the application
     SIMUL_POWEROFF="poweroff"
     SIMUL_CO2="co2sensor"
+    NORMAL="normal"
 
     # Order of columns in returned dataframes
     COLUMN_ORDER = ["Timestamp", "ID", "Temperature(celsius)", 
@@ -154,7 +155,7 @@ class ReeferSimulator:
                     "ContentType", "O2", "CO2", "Time_Door_Open", 
                     "Maintenance_Required", "Defrost_Cycle"]
 
-    def generatePowerOff(self,
+    def generatePowerOffRecords(self,
                          cid: str = "101", 
                          nb_records: int = MAX_RECORDS, 
                          tgood: float = 4.4,
@@ -213,7 +214,7 @@ class ReeferSimulator:
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = generatePowerOff(cid, nb_records, tgood, content_type)
+        df = self.generatePowerOff(cid, nb_records, tgood, content_type)
 
         # Original code always generated 0 for the "maintenance required" field
         # when generating tuples.
@@ -224,7 +225,7 @@ class ReeferSimulator:
         # DataFrame.to_records().
         return list(df.to_records(index=False))
 
-    def generateCo2(self,
+    def generateCo2Records(self,
                     cid: str = "101", 
                     nb_records: int = MAX_RECORDS, 
                     tgood: float = 4.4,
@@ -261,7 +262,8 @@ class ReeferSimulator:
                     content_type: int = None,
                     start_time: datetime.datetime = None):
         '''
-        Generate a dataframe of training data for CO2 sensor malfunctions.
+        Generate an array of tuples containing training data for CO2 sensor 
+        malfunctions.
 
         Arguments:
             cid: Container ID
@@ -276,7 +278,8 @@ class ReeferSimulator:
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = generateCo2(cid, nb_records, tgood, content_type, start_time)
+        df = self.generateCo2Records(cid, nb_records, tgood, content_type,
+                                     start_time)
 
         # Original code always generated 0 for the "maintenance required" field
         # when generating tuples.

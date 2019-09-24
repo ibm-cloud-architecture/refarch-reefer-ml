@@ -17,7 +17,7 @@ class MetricsEventsProducer:
                 'group.id': groupID
         }
         # We need this test as local kafka does not expect SSL protocol.
-        if (self.currentRuntime != 'LOCAL'):
+        if (self.apikey != ''):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
