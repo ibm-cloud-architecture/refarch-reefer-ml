@@ -5,3 +5,4 @@ sklearn
 confluent_kafka
 gunicorn
 Flask
+Minio
