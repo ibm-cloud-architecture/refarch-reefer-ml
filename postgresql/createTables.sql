@@ -8,10 +8,11 @@ CREATE TABLE reefers (
 
 CREATE TABLE products (
     product_id varchar(64) NOT NULL PRIMARY KEY,
-    decription varchar(100),
+    description varchar(100),
     target_temperature REAL,
     target_humidity_level REAL
 );
+
 
 CREATE TABLE reefer_telemetries (
     container_id varchar(64) NOT NULL,
@@ -21,17 +22,19 @@ CREATE TABLE reefer_telemetries (
     target_temperature REAL,
     ambiant_temperature REAL, 
     kilowatts REAL,
-    kilowatt_hours REAL,
+    time_door_open REAL,
     content_type INT,
+    defrost_cycle INT,
     oxygen_level REAL,
-    nitrogen REAL,
+    nitrogen_level REAL,
+    carbon_dioxide_level REAL,
+    humidity_level REAL,
     vent_1 BOOLEAN,
     vent_2 BOOLEAN,
     vent_3 BOOLEAN,
     carbon_dioxide_level REAL,
-    time_door_open REAL,
     location POINT,
-    defrost_cycle INT,
+    maintenance_required INT,
     primary key (container_id, measurement_time), -- Duplicate measurements not allowed
     foreign key (container_id) references Reefers(container_id),
     foreign key (product_id) references Products(product_id)

@@ -32,6 +32,7 @@ def assessPredictiveMaintenance(msg):
     if score == 1:
         print("Go to maintenance " + msg['containerID'])
         # TODO do not send a maintenance event if already done in the current travel.
+        # This will lead to a stateful agent...
         tstamp = int(time.time())
         data = {"timestamp": tstamp,
                 "type": "ContainerMaintenance",

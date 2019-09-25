@@ -62,6 +62,16 @@ To use this python environment you can use the script: `startPythonEnv` or the f
 docker run -v $(pwd):/home -ti ibmcase/python bash
 ```
 
+### Build the docker image for Jupyter notebook
+
+We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook.
+
+```
+cd docker 
+docker build -f docker-jupyter-tool -t ibmcase/notebook .
+```
+
+
 ### Be sure to have Event Stream or Kafka running somewhere
 
 We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/). 
@@ -95,34 +105,51 @@ We have implemented a simulator to create those metrics to be used to build the 
 #### Start python env
 
 ```
- ./startPythonEnv 
+ ./startPythonEnv IBMCLOUD or LOCAL
 
 root@03721594782f: cd /home/simulator
 ```
 
-From this shell, first specify where python should find the new modules, by setting the environment variable PYTHONPATH:
+In the Dockerfile we set the first PYTHONPATH to /home to specify where python should find the new modules.
 
 ```
-root@03721594782f:/# export PYTHONPATH=/home
+root@03721594782f:/home # 
 ```
 
 #### Generate power off metrics
 
-When the reefer containers lose power at some time, the temperature within the container starts raising.
+When the reefer containers lose power at some time, then restart and reloose it, it may become an issue.
 
-The simulator accepts different arguments: 
+The simulator accepts different arguments as specified below 
 
 ```
-usage reefer_simulator-tool --stype [poweroff | co2sensor | atsea]
-	 --cid <container ID>
+usage reefer_simulator-tool 
+     --stype [poweroff | co2sensor | normal]
+	  --cid [C01 | C02 | C03 | C04]
+	 --product_id [ P01 | P02 | P03 | P04 ]
 	 --records <the number of records to generate>
-	 --temp <expected temperature for the goods>
-	 --file <the filename to create (without .csv)>
-	 --append [yes | no]  (reuse the data file)
+	 --file <the filename to create>
+	 --append
+	 --db
 ```
- 
+
+* The `cid` is for the container id. As the simulator is taking some data from internal datasource you can use only one of those values
+* `product_id` is also one of the value, as the simulator will derive the target temperature and humidity
+    ('P01','Carrots',1,4,0.4),
+    ('P02','Banana',2,6,0.6),
+    ('P03','Salad',1,4,0.4),
+    ('P04','Avocado',2,6,0.4);
+* `--db` is when you want to save in a postgresql DB. In this case be sure to set the credentials and URL in the `scripts/setenv.sh` script (see the `scripts/setenv-tmp.sh` template file)
+* `--file` is to specify a csv file to write the data
+* `--append` is used to append to an existing file
+
+* Recreate a new file. It is an important step to get the header as first row.
 ```
-    root@03721594782f: python reefer_simulator_tool.py --stype poweroff --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append no
+root@0372: python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records 1000 --product_id P02 --file telemetries.csv 
+```
+* append to existing file
+```
+python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file telemetries.csv --stype poweroff --append
 ```
 
 The results looks like:
@@ -135,26 +162,82 @@ The results looks like:
     1.002002  2019-06-30 T15:43 Z  101              1.299275                           4   7.629094 
 ```     
 
+From the two previous commands you should have 2001 rows (one gor the header which will be used in the model creation):
+```
+wc -l telemetries.csv 
+2001 telemetries.csv
+```
+
 #### Generate Co2 sensor malfunction in same file
 
 In the same way as above the simulator can generate data for Co2 sensor malfunction using the command:
 
 ```
-python reefer_simulator_tool.py --stype co2sensor --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append yes
+python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype poweroff --append
 ```
+
 
 !!! note
         The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a `containers` topic (this consumer code is in the `scoring/eventConsumer` folder).
+
+#### Saving to database
+
+The same tool can be used to save to a postgresql database. First be sure to set at least the following environment variables in the setenv.sh file
+
+```
+POSTGRES_URL,  POSTGRES_DBNAME,
+```
+
+If you want to use `psql` then you need to set all POSGRES* environment variables.
+
+If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as `cert.pem` under the `simulator` folder, or set `POSTGRES_SSL_PEM` to the path where to find this file.
+
+!!! note
+        For Postgresql on IBM cloud, go to the service credential and look at the "composed": elements. And to get the certificate, do the following commands:
+        ```
+        ibmcloud login
+        ibmcloud cdb cacert <database deployment name>
+        ```  
+Run the ReeferRepository.py tool to create the database and to add the reference data:
+
+```
+./startPythonEnv IBMCLOUD
+> python simulater/infrastructure/ReeferRepository.py
+```
+
+You should see:
+```
+
+```
+
+Once done run the simulator with the --db argument like below:
+
+```
+python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000  --stype poweroff --db
+```
+
+To verify the data loaded into the database we use `psql` with the following script:
+```
+./postgresql/startPsql.sh IBMCLOUD
+```
+Then in the CLI:
+```
+# get the list of tables
+ibmclouddb> \d
+
+ibmclouddb> SELECT * FROM reefers;
+ibmclouddb> SELECT * FROM products;
+ibmclouddb> SELECT * FROM reefer_telemetries;
+```
 
 ### Create the model
 
 Now we will use a local version of **Jupyter** notebook to load the logistic regression nodebook in the `ml` folder. 
 
-1. Start a jupyter server using a docker image:
+1. Start a jupyter server using our docker image and a postgresql in IBM cloud.
 
     ```
-    cd ml
-    docker run --rm -p 10000:8888 -v "$PWD":/home/jovyan/work jupyter/datascience-notebook
+    ./startJupyterNotebook IBMCLOUD
     ```
 
 1. Then open a web browser to `http://localhost:10000` and then open the `model_logistic_regression.ipynb` and run it step by step. The notebook includes comments to explain how the model is done. We use logistic regression to build a binary classification (maintenance required or not), as the data are simulated, and the focus is not in the model building, but more on the end to end process.

@@ -33,7 +33,7 @@ services:
             - zookeeper1
     postgresql1:
         image: postgres
-        hostname: postgres
+        hostname: postgreshost
         restart: always
         ports:
             - "5432:5432"
@@ -41,3 +41,4 @@ services:
             - ./postgres-data:/var/lib/postgresql/data
         environment:
             POSTGRES_PASSWORD: supersecret
+            POSTGRES_USER: postgres

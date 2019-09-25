@@ -46,7 +46,7 @@ createTopic(){
 }
  
 createTopic "containers" 
-createTopic "containerMetrics" 
+createTopic "reeferTelemetries" 
 rm topics
 
 

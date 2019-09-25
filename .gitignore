@@ -1,4 +1,5 @@
 simulator/scripts/setenv.sh
+ml/.ipynb_checkpoints
 simulator/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
@@ -13,8 +14,12 @@ scoring/eventConsumer/__pycache__/
 scoring/eventConsumer/infrastructure/__pycache__
 scoring/eventConsumer/domain/__pycache__
 site/
+docker/postgres-data/
 scripts/setenv.sh
 simulator/cert.pem
+.vscode/
+.postgresql/
+.local/
 
 # Jupyter temp files
 **/.ipynb_checkpoints
