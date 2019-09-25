@@ -280,6 +280,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#build-the-docker-image-for-jupyter-notebook" title="Build the docker image for Jupyter notebook" class="md-nav__link">
+    Build the docker image for Jupyter notebook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
     Be sure to have Event Stream or Kafka running somewhere
   </a>
@@ -504,6 +511,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#build-the-docker-image-for-jupyter-notebook" title="Build the docker image for Jupyter notebook" class="md-nav__link">
+    Build the docker image for Jupyter notebook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
     Be sure to have Event Stream or Kafka running somewhere
   </a>
@@ -716,6 +730,12 @@ docker build -f docker-python-tools -t ibmcase/python .
 <div class="codehilite"><pre><span></span>docker run -v $(pwd):/home -ti ibmcase/python bash
 </pre></div>
 
+<h3 id="build-the-docker-image-for-jupyter-notebook">Build the docker image for Jupyter notebook</h3>
+<p>We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook.</p>
+<div class="codehilite"><pre><span></span>cd docker 
+docker build -f docker-jupyter-tool -t ibmcase/notebook .
+</pre></div>
+
 <h3 id="be-sure-to-have-event-stream-or-kafka-running-somewhere">Be sure to have Event Stream or Kafka running somewhere</h3>
 <p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation <a href="https://ibm.github.io/event-streams/installing/installing-openshift/">here</a>. </p>
 <p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
@@ -837,9 +857,8 @@ ibmclouddb&gt; SELECT * FROM reefer_telemetries;
 <p>Now we will use a local version of <strong>Jupyter</strong> notebook to load the logistic regression nodebook in the <code>ml</code> folder. </p>
 <ol>
 <li>
-<p>Start a jupyter server using a docker image:</p>
-<div class="codehilite"><pre><span></span>cd ml
-docker run --rm -p 10000:8888 -v &quot;$PWD&quot;:/home/jovyan/work ibmcase/notebook
+<p>Start a jupyter server using our docker image and a postgresql in IBM cloud.</p>
+<div class="codehilite"><pre><span></span>./startJupyterNotebook IBMCLOUD
 </pre></div>
 
 </li>
