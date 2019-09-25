@@ -2,6 +2,9 @@ from confluent_kafka import Producer
 import json
 import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 
+# CONSTANTS
+TELEMETRY_TOPIC="reeferTelemetries"
+
 class MetricsEventsProducer:
 
     def __init__(self):
@@ -37,7 +40,7 @@ class MetricsEventsProducer:
 
     def publishEvent(self, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
-        self.producer.produce("containerMetrics",
+        self.producer.produce(TELEMETRY_TOPIC,
                             key=eventToSend[keyName],
                             value=dataStr.encode('utf-8'), 
                             callback=self.delivery_report)

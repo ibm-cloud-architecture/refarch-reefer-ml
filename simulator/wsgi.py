@@ -31,7 +31,7 @@ def runSimulator():
     for metric in metrics:
         evt = {"containerID": control["containerID"],
                 "timestamp": str(metric[0]),
-                "type":"ContainerMetric",
+                "type":"ReeferTelemetries",
                 "payload": str(metric)}
         metricsProducer.publishEvent(evt,"containerID")
     return "Simulation started"
