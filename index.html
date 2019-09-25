@@ -341,6 +341,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#saving-to-database" title="Saving to database" class="md-nav__link">
+    Saving to database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -558,6 +565,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#saving-to-database" title="Saving to database" class="md-nav__link">
+    Saving to database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -698,7 +712,7 @@
 docker build -f docker-python-tools -t ibmcase/python .
 </pre></div>
 
-<p>To use this python environment you can use the script: <code>startPythonEnv</code> or </p>
+<p>To use this python environment you can use the script: <code>startPythonEnv</code> or the following command:</p>
 <div class="codehilite"><pre><span></span>docker run -v $(pwd):/home -ti ibmcase/python bash
 </pre></div>
 
@@ -707,10 +721,10 @@ docker build -f docker-python-tools -t ibmcase/python .
 <p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
 <p><img alt="" src="images/es-topics.png" /></p>
 <p>With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.</p>
-<p>For Openshift deployment click to the <code>connect to the cluster</code> get broker URL and generate API key, for all topics.</p>
+<p>For Event Streams on Openshift deployment, click to the <code>connect to the cluster</code> button to get the broker URL and to generate the API key: select the option to generate the key for all topics.</p>
 <p><img alt="" src="images/cluster-access.png" /></p>
 <h4 id="run-kafka-on-your-laptop">Run kafka on your laptop</h4>
-<p>To run kafka and the solution on your laptop, for development purpose, see this <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">readme</a>.</p>
+<p>For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">this readme</a>.</p>
 <h2 id="machine-learning-work">Machine Learning Work</h2>
 <p>To review the problem of predictive maintenance read <a href="predictive-maintenance/">this article.</a></p>
 <h3 id="generate-data-with-the-reefer-simulator">Generate data with the Reefer simulator</h3>
@@ -718,29 +732,49 @@ docker build -f docker-python-tools -t ibmcase/python .
 <p>The historical data need to represent failure, and represent the characteristics of a Reefer container. We can imagine it includes a lot of sensors to get interesting correlated or independant features.</p>
 <p>We have implemented a simulator to create those metrics to be used to build the model inside Jupiter notebook and with sklearn or tensorflow library. </p>
 <h4 id="start-python-env">Start python env</h4>
-<div class="codehilite"><pre><span></span> <span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span> 
+<div class="codehilite"><pre><span></span> <span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span> <span class="n">IBMCLOUD</span> <span class="n">or</span> <span class="n">LOCAL</span>
 
 <span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
 </pre></div>
 
-<p>From this shell, first specify where python should find the new modules, by setting the environment variable PYTHONPATH:</p>
-<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:/</span><span class="err">#</span> <span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span>
+<p>In the Dockerfile we set the first PYTHONPATH to /home to specify where python should find the new modules.</p>
+<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:/</span><span class="n">home</span> <span class="err">#</span> 
 </pre></div>
 
 <h4 id="generate-power-off-metrics">Generate power off metrics</h4>
-<p>When the reefer containers lose power at some time, the temperature within the container starts raising.</p>
-<p>The simulator accepts different arguments: </p>
-<div class="codehilite"><pre><span></span>usage reefer_simulator-tool --stype [poweroff | co2sensor | atsea]
-     --cid &lt;container ID&gt;
+<p>When the reefer containers lose power at some time, then restart and reloose it, it may become an issue.</p>
+<p>The simulator accepts different arguments as specified below </p>
+<div class="codehilite"><pre><span></span>usage reefer_simulator-tool 
+     --stype [poweroff | co2sensor | normal]
+      --cid [C01 | C02 | C03 | C04]
+     --product_id [ P01 | P02 | P03 | P04 ]
      --records &lt;the number of records to generate&gt;
-     --temp &lt;expected temperature for the goods&gt;
-     --file &lt;the filename to create (without .csv)&gt;
-     --append [yes | no]  (reuse the data file)
+     --file &lt;the filename to create&gt;
+     --append
+     --db
 </pre></div>
 
-<div class="codehilite"><pre><span></span>    <span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">python</span> <span class="n">reefer_simulator_tool</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="mi">101</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">--</span><span class="n">temp</span> <span class="mi">4</span> <span class="o">--</span><span class="n">file</span> <span class="p">..</span><span class="o">/</span><span class="n">ml</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">metrics</span><span class="p">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">append</span> <span class="n">no</span>
-</pre></div>
-
+<ul>
+<li>The <code>cid</code> is for the container id. As the simulator is taking some data from internal datasource you can use only one of those values</li>
+<li><code>product_id</code> is also one of the value, as the simulator will derive the target temperature and humidity
+    ('P01','Carrots',1,4,0.4),
+    ('P02','Banana',2,6,0.6),
+    ('P03','Salad',1,4,0.4),
+    ('P04','Avocado',2,6,0.4);</li>
+<li><code>--db</code> is when you want to save in a postgresql DB. In this case be sure to set the credentials and URL in the <code>scripts/setenv.sh</code> script (see the <code>scripts/setenv-tmp.sh</code> template file)</li>
+<li><code>--file</code> is to specify a csv file to write the data</li>
+<li>
+<p><code>--append</code> is used to append to an existing file</p>
+</li>
+<li>
+<p>Recreate a new file. It is an important step to get the header as first row.
+<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mo">@0372</span><span class="o">:</span> <span class="n">python</span> <span class="n">simulator</span><span class="o">/</span><span class="n">reefer_simulator_tool</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="n">C01</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">--</span><span class="n">product_id</span> <span class="n">P02</span> <span class="o">--</span><span class="n">file</span> <span class="n">telemetries</span><span class="p">.</span><span class="n">csv</span> 
+</pre></div></p>
+</li>
+<li>append to existing file
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file telemetries.csv --stype poweroff --append
+</pre></div></li>
+</ul>
 <p>The results looks like:
 <div class="codehilite"><pre><span></span>    Generating  1000  poweroff metrics
 
@@ -749,22 +783,63 @@ docker build -f docker-python-tools -t ibmcase/python .
     1.001001  2019-06-30 T15:43 Z  101              4.973630                           4   3.701072          8.457314           1  13   3        5.699655                    0             6
     1.002002  2019-06-30 T15:43 Z  101              1.299275                           4   7.629094 
 </pre></div></p>
+<p>From the two previous commands you should have 2001 rows (one gor the header which will be used in the model creation):
+<div class="codehilite"><pre><span></span>wc -l telemetries.csv 
+2001 telemetries.csv
+</pre></div></p>
 <h4 id="generate-co2-sensor-malfunction-in-same-file">Generate Co2 sensor malfunction in same file</h4>
 <p>In the same way as above the simulator can generate data for Co2 sensor malfunction using the command:</p>
-<div class="codehilite"><pre><span></span>python reefer_simulator_tool.py --stype co2sensor --cid 101 --records 1000 --temp 4 --file ../ml/data/metrics.csv --append yes
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype poweroff --append
 </pre></div>
 
 <div class="admonition note">
 <p class="admonition-title">Note<p>The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a <code>containers</code> topic (this consumer code is in the <code>scoring/eventConsumer</code> folder).</p>
 </p>
 </div>
+<h4 id="saving-to-database">Saving to database</h4>
+<p>The same tool can be used to save to a postgresql database. First be sure to set at least the following environment variables in the setenv.sh file</p>
+<div class="codehilite"><pre><span></span>POSTGRES_URL,  POSTGRES_DBNAME,
+</pre></div>
+
+<p>If you want to use <code>psql</code> then you need to set all POSGRES* environment variables.</p>
+<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as <code>cert.pem</code> under the <code>simulator</code> folder, or set <code>POSTGRES_SSL_PEM</code> to the path where to find this file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note<p>For Postgresql on IBM cloud, go to the service credential and look at the "composed": elements. And to get the certificate, do the following commands:
+<div class="codehilite"><pre><span></span>ibmcloud login
+ibmcloud cdb cacert &lt;database deployment name&gt;
+</pre></div></p>
+</p>
+</div>
+<p>Run the ReeferRepository.py tool to create the database and to add the reference data:</p>
+<div class="codehilite"><pre><span></span>./startPythonEnv IBMCLOUD
+&gt; python simulater/infrastructure/ReeferRepository.py
+</pre></div>
+
+<p>You should see:
+<div class="codehilite"><pre><span></span>
+</pre></div></p>
+<p>Once done run the simulator with the --db argument like below:</p>
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000  --stype poweroff --db
+</pre></div>
+
+<p>To verify the data loaded into the database we use <code>psql</code> with the following script:
+<div class="codehilite"><pre><span></span>./postgresql/startPsql.sh IBMCLOUD
+</pre></div>
+Then in the CLI:
+<div class="codehilite"><pre><span></span># get the list of tables
+ibmclouddb&gt; \d
+
+ibmclouddb&gt; SELECT * FROM reefers;
+ibmclouddb&gt; SELECT * FROM products;
+ibmclouddb&gt; SELECT * FROM reefer_telemetries;
+</pre></div></p>
 <h3 id="create-the-model">Create the model</h3>
 <p>Now we will use a local version of <strong>Jupyter</strong> notebook to load the logistic regression nodebook in the <code>ml</code> folder. </p>
 <ol>
 <li>
 <p>Start a jupyter server using a docker image:</p>
 <div class="codehilite"><pre><span></span>cd ml
-docker run --rm -p 10000:8888 -v &quot;$PWD&quot;:/home/jovyan/work jupyter/datascience-notebook
+docker run --rm -p 10000:8888 -v &quot;$PWD&quot;:/home/jovyan/work ibmcase/notebook
 </pre></div>
 
 </li>
