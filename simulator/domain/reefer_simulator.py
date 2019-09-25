@@ -28,17 +28,20 @@ products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':0.4},
             'P02': {'d':'Banana','type':2,'T':6,'H':0.6},
             'P03': {'d':'Salad','type':1,'T':4,'H':0.4},
             'P04': {'d':'Avocado','type':2,'T':6,'H':0.4}}
+
 def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
     Generate a timestamp column for a dataframe of results.
 
     Arguments:
         nb_records: Number of rows to generate
-        start_time: Timestamp of first row. By convention, each subsequent
-            row will be exactly METRIC_FREQUENCY minutes later.
+        start_time: Timestamp of first row, or None to use the current time.
+            By convention, each subsequent row will be exactly METRIC_FREQUENCY minutes later..
 
     Returns a Pandas Series object, suitable for use as a column or index
     '''
+    if start_time is None:
+        start_time = datetime.datetime.today() 
     return pd.date_range(start_time, periods=nb_records, freq=METRIC_FREQUENCY)
 
 def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
@@ -110,9 +113,10 @@ class ReeferSimulator:
                 "vent_1", "vent_2", "vent_3", "maintenance_required"]
 
 
-    def generateNormalRecords(self, cid: str = "101", 
+    def generateNormalRecords(self, cid: str = "C01", 
                          nb_records: int = MAX_RECORDS, 
-                         product_id: str = 'P02'
+                         product_id: str = 'P02',
+                         start_time: datetime.datetime = None
                          ):
         """
         Generate n records using clean telemetries
@@ -121,19 +125,23 @@ class ReeferSimulator:
             cid: Container ID
             nb_records: Number of records to generate
             product_id: product identified from the table above
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
         Returns a Pandas dataframe.
         """
         print("Generating records for normal behavior")
         df = _generateStationaryCols(nb_records, cid, product_id )
-        df["measurement_time"] = _generateTimestamps(nb_records, datetime.datetime.today())
+        df["measurement_time"] = _generateTimestamps(nb_records, start_time)
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
 
     def generatePowerOffRecords(self,
-                        cid: str = "101", 
+                        cid: str = "C01", 
                         nb_records: int = MAX_RECORDS, 
-                        product_id: str = 'P02'):
+                        product_id: str = 'P02',
+                        start_time: datetime.datetime = None):
         '''
         Generate n records for training and test set for the power off 
         simulation.
@@ -145,32 +153,36 @@ class ReeferSimulator:
             tgood: Mean temperature to generate when power is NOT off
             content_type: ID of the type of stuff in the container, or None
                 to choose a random number
-
+            start_time: Timestamp of first row, or None to use the current time.
+                By convention, each subsequent row will be exactly 15 minutes 
+                later.
         Returns a Pandas dataframe.
         '''
         print("Generating records for some poweroff")
-        df = self.generateNormalRecords(cid,nb_records, product_id)
+        df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,40,2,"kilowatts",0,0)
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
     def generatePowerOffTuples(self,
-                               cid: str = "101",
-                               nb_records: int = MAX_RECORDS,
-                              product_id: str = 'P02'):
+                            cid: str = "C01",
+                            nb_records: int = MAX_RECORDS,
+                            product_id: str = 'P02',
+                            start_time: datetime.datetime = None):
         '''
         Generate an array of tuples with reefer container values
 
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_NAMES.
         '''
-        df = self.generatePowerOffRecords(cid, nb_records, product_id)
+        df = self.generatePowerOffRecords(cid, nb_records, product_id,start_time)
         return list(df.to_records(index=False))
 
     def generateCo2Records(self,
-                    cid: str = "101", 
+                    cid: str = "C01", 
                     nb_records: int = MAX_RECORDS, 
-                    product_id: str = 'P02'):
+                    product_id: str = 'P02',
+                    start_time: datetime.datetime = None):
         '''
         Generate a dataframe of training data for CO2 sensor malfunctions.
 
@@ -178,7 +190,7 @@ class ReeferSimulator:
         ReeferSimulator.COLUMN_NAMES.
         '''
         print("Generating records for co2 sensor issue")
-        df = self.generateNormalRecords(cid,nb_records, product_id)
+        df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,40,2,"carbon_dioxide_level", 3*CO2_LEVEL, 2*SIGMA_BASE)
         for i in range(0, df['carbon_dioxide_level'].size):
             currentCO2 = df.at[i,"carbon_dioxide_level"]
@@ -187,9 +199,10 @@ class ReeferSimulator:
 
 
     def generateCo2Tuples(self,
-                    cid: str = "101", 
+                    cid: str = "C01", 
                     nb_records: int = MAX_RECORDS, 
-                    product_id: str = 'P02'):
+                    product_id: str = 'P02',
+                    start_time: datetime.datetime = None):
         '''
         Generate a dataframe of training data for CO2 sensor malfunctions.
 
@@ -198,7 +211,7 @@ class ReeferSimulator:
         Returns an array of Python tuples, where the order of fields in the tuples
         the same as that in ReeferSimulator.COLUMN_ORDER.
         '''
-        df = self.generateCo2Records(cid, nb_records, product_id)
+        df = self.generateCo2Records(cid, nb_records, product_id, start_time)
         return list(df.to_records(index=False))
 
 
