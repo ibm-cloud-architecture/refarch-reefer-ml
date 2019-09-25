@@ -2,7 +2,7 @@
 
 This project presents an approach to develop a predictive maintenance model from Reefer container metrics events and integrate it in real time.
 
-The content is presented [in a book view](https://ibm-cloud-architecture.github.io/refarch-reefer-ml), and the goal is to run all those components together, and build the logistic regression model, deployed as a service.
+The content of this repository is presented [in a book view](https://ibm-cloud-architecture.github.io/refarch-reefer-ml), and the goal is to run all those components together, and build the logistic regression model, deployed as a scoring service or scoring agent listening to real time events.
 
 ![](docs/images/mvp-runtime.png)
 
