@@ -62,6 +62,16 @@ To use this python environment you can use the script: `startPythonEnv` or the f
 docker run -v $(pwd):/home -ti ibmcase/python bash
 ```
 
+### Build the docker image for Jupyter notebook
+
+We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook.
+
+```
+cd docker 
+docker build -f docker-jupyter-tool -t ibmcase/notebook .
+```
+
+
 ### Be sure to have Event Stream or Kafka running somewhere
 
 We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/iks/#event-streams-service-on-ibm-cloud) on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/). 
@@ -224,11 +234,10 @@ ibmclouddb> SELECT * FROM reefer_telemetries;
 
 Now we will use a local version of **Jupyter** notebook to load the logistic regression nodebook in the `ml` folder. 
 
-1. Start a jupyter server using a docker image:
+1. Start a jupyter server using our docker image and a postgresql in IBM cloud.
 
     ```
-    cd ml
-    docker run --rm -p 10000:8888 -v "$PWD":/home/jovyan/work ibmcase/notebook
+    ./startJupyterNotebook IBMCLOUD
     ```
 
 1. Then open a web browser to `http://localhost:10000` and then open the `model_logistic_regression.ipynb` and run it step by step. The notebook includes comments to explain how the model is done. We use logistic regression to build a binary classification (maintenance required or not), as the data are simulated, and the focus is not in the model building, but more on the end to end process.
