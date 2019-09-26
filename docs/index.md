@@ -148,4 +148,4 @@ The `scoring` folder includes an `eventConsumer` folder for the agent implementa
 
 In this solution we use the agent implementation.
 
-So 
+So you need to copy the generated pickle file to the `eventConsumer/domain` folder.
