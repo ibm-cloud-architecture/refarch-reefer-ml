@@ -18,6 +18,7 @@ CO2_LEVEL = 4 # in percent
 O2_LEVEL = 21 # in percent - below 12 it is bad
 NITROGEN_LEVEL = 78 # in percent
 POWER_LEVEL= 2.7 # in kW
+HUMIDITY_LEVEL = 30 # in percent
 
 MAX_RECORDS = 1000
 NB_WRONG_RECORDS = 30
@@ -27,10 +28,10 @@ DEFROST_LEVEL = 7   # Common timing periods were 6, 8, 12 and 24 hours.
 METRIC_FREQUENCY = "5min"
 
 SIGMA_BASE = 1
-products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':0.4},
-            'P02': {'d':'Banana','type':2,'T':6,'H':0.6},
-            'P03': {'d':'Salad','type':1,'T':4,'H':0.4},
-            'P04': {'d':'Avocado','type':2,'T':6,'H':0.4}}
+products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':40},
+            'P02': {'d':'Banana','type':2,'T':6,'H':60},
+            'P03': {'d':'Salad','type':1,'T':4,'H':40},
+            'P04': {'d':'Avocado','type':2,'T':6,'H':40}}
 
 def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
@@ -77,7 +78,7 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     cols["oxygen_level"] = np.random.normal(O2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["carbon_dioxide_level"] = np.random.normal(CO2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["nitrogen_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
-    cols["humidity_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
+    cols["humidity_level"] = np.random.normal(products[product_id]['H'], SIGMA_BASE, size=nb_records)
     cols["vent_1"] = np.repeat(True,nb_records)
     cols["vent_2"] = np.repeat(True,nb_records)
     cols["vent_3"] = np.repeat(True,nb_records)
@@ -179,6 +180,12 @@ class ReeferSimulator:
             NB_WRONG_RECORDS,
             NB_WRONG_RECORD_SERIE,
             "kilowatts", 0, 0)
+        for i in range(0, df['kilowatts'].size - 1):
+            if (df.at[i,"kilowatts"] <= 0  and df.at[i + 1 ,"kilowatts"] <= 0):
+                df.at[i,"maintenance_required"] = 1
+                df.at[i,"vent_1"] = False
+                df.at[i,"vent_2"] = False
+                df.at[i,"vent_3"] = False
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
@@ -216,7 +223,7 @@ class ReeferSimulator:
                 3*CO2_LEVEL, 2*SIGMA_BASE)
         for i in range(0, df['carbon_dioxide_level'].size):
             currentCO2 = df.at[i,"carbon_dioxide_level"]
-            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 3*CO2_LEVEL) or (currentCO2 < 0)) else 0
+            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 2.7 * CO2_LEVEL) or (currentCO2 < 0)) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
 

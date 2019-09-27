@@ -3,7 +3,7 @@ repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
   - Introduction: index.md
   - Collect data: collect-data.md
-  - Define the predictive scoring model: /#define-the-predictive-scoring-model
+  - Define the predictive scoring model: /#2-define-the-predictive-scoring-model
   - Build and run the solution on Openshift: build-run.md
   - Run integration tests: integration-tests.md
   - Reefer predictive maintenance problem: predictive-maintenance.md

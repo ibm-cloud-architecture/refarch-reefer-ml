@@ -1,11 +1,12 @@
 FROM jupyter/datascience-notebook
-ENV POSTGRES_PWD="postgres"
-ENV POSTGRES_USER="postgres"
-ENV POSTGRES_HOST="localhost"
 ENV POSTGRES_URL="postgres://prostgres:supersecret@localhost:5432/postgres"
 ENV POSTGRES_DBNANE="postgres"
 ENV POSTGRES_PORT=5432
+ENV KAFKA_APIKEY=""
+ENV KAFKA_BROKERS=""
 
+# Add kafka or postegresql ssl certificates
 
-RUN pip install --upgrade pip && pip install --user pipenv  psycopg2-binary confluent_kafka && \
-    if test -f "./cert.pem"; then cp ./cert.pem /home/jovyan/cert.pem; fi
+ADD ./*.pem /home/jovyan/
+
+RUN pip install --upgrade pip && pip install --user pipenv  psycopg2-binary confluent_kafka

@@ -161,6 +161,14 @@ We have two types of notebook
 
     For more information on using the Jupyter notebook, here is a [product documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/index.html).
 
+    * The co2 sensor plot over time shows the training data with some sporadic behavior:
+
+    ![](images/co2sensor-plot.png)
+
+    * The confusion matrix shows very little false positive and false negative:
+
+    ![](images/confusion-mtx.png)
+
 1. Use the model in another notebook: We can use a second notebook to test the model with one telemetry record using the pickle serialized model. The notebook is named `predictMaintenance.ipynb`.
 
 ### 3- Deploy the model
@@ -174,6 +182,8 @@ The `scoring` folder includes an `eventConsumer` folder for the agent implementa
 
 In this solution we use the agent implementation.
 
-So you need to copy the generated pickle file to the `eventConsumer/domain` folder.
+So you need to copy the generated pickle file to the `eventConsumer/domain` folder and if you use the webapp too, copy it to `webapp/domain`.
 
 ### 4- Deploy each service
+
+See [this detailed note](build-run.md) to deploy each service on openshift.

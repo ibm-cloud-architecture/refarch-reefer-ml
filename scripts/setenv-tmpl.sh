@@ -13,7 +13,7 @@ case "$kcenv" in
         export KAFKA_ENV="IBMCLOUD"
         export POSTGRES_URL="postgres://<user>:<pwd>@<host>:32347/ibmclouddb?sslmode=verify-full"
         export POSTGRES_DBNAME="ibmclouddb"
-        export POSTGRES_SSL_PEM="./cert.pem"
+        export POSTGRES_SSL_PEM="./postgres.pem"
         export POSTGRES_USER=""
         export POSTGRES_PWD=""
         export POSTGRES_HOST="databases.appdomain.cloud"

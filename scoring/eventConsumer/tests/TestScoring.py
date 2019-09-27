@@ -1,6 +1,6 @@
 import unittest
 from domain.predictservice import PredictService
-import ScoringApp as ScoringApp
+import ScoringAgent as ScoringAgent
 
 class TestScoring(unittest.TestCase):
 
@@ -10,8 +10,9 @@ class TestScoring(unittest.TestCase):
 
     def testPredict(self):
         serv = PredictService("domain/model_logistic_regression.pkl")
-        header="Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"
-        event="2019-04-01 T16:29 Z,1813, 101, 4.291843460900875,4.4,0,10.273342381017777,3,4334.920958996634,4.9631508046318755,1,0,6"
+        header = "measurement_time,container_id, product_id,temperature,target_temperature, ambiant_temperature, kilowatts, time_door_open, content_type, defrost_cycle,oxygen_level, nitrogen_level, humidity_level, carbon_dioxide_level, vent_1, vent_2, vent_3"
+        # poweroff event
+        event="2019-09-25 02:42:33.573934, C01, P02, 6.369165267938210,	6, 21.40990035369160, 2.5141340338482900,	0.9917395739148560,	2,	5, 21.163197304339900,  1.3625605808523400, 25, 4.59426338168222, TRUE, TRUE,TRUE"
         record=header+"\n"+event
         self.assertTrue(serv.predict(record)>=0)
 
