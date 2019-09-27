@@ -112,12 +112,6 @@ If you want to use `psql` then you need to set all POSGRES* environment variable
 
 If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as `cert.pem` under the `simulator` folder, or set `POSTGRES_SSL_PEM` to the path where to find this file.
 
-!!! note
-        For Postgresql on IBM cloud, go to the service credential and look at the "composed": elements. And use the following commands to get the certificate:
-        ```
-        ibmcloud login
-        ibmcloud cdb cacert <database deployment name>
-        ```  
 The `cert.pem` file needs to be in the simulator folder.
 
 Run the ReeferRepository.py tool to create the database and to add the reference data:

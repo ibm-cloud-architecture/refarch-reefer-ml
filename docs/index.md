@@ -17,7 +17,7 @@ Data scientists can run Jupyter lab on OpenShift and build a model to be deploye
 
 ## Component view
 
-While for the minimum viable demonstration the components looks like in the figure below:
+For the minimum viable demonstration the runtime components looks like in the figure below:
 
 ![](images/mvp-runtime.png)
 
@@ -39,6 +39,14 @@ While for the minimum viable demonstration the components looks like in the figu
 1. The maintenance requirement is an event in the `containers` topic.
 1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use on as this component, but we have a simple consumer in the `consumer` folder.
 
+For the machine learning environment we can use csv file as input data or postgresql database. The environment looks like in the figure below:
+
+![](images/data-collect.png)
+
+The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.
+
+![](images/postgres-credential.png)
+
 ## Pre-requisites to build and run this solution
 
 Start by cloning this project using the command:
@@ -46,31 +54,6 @@ Start by cloning this project using the command:
 ```
 git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 ```
-
-### Building a python development environment as docker image
-
-To avoid impacting our environment, we use a dockerfile to get the basic of python 3.7.x and other needed modules like kafka, http requests, pandas, sklearn, pytest... necessary to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:
-
-```
-cd docker
-docker build -f docker-python-tools -t ibmcase/python .
-```
-
-To use this python environment you can use the script: `startPythonEnv` or the following command:
-
-```
-docker run -v $(pwd):/home -ti ibmcase/python bash
-```
-
-### Build the docker image for Jupyter notebook
-
-We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook.
-
-```
-cd docker 
-docker build -f docker-jupyter-tool -t ibmcase/notebook .
-```
-
 
 ### Be sure to have Event Stream or Kafka running somewhere
 
@@ -86,11 +69,52 @@ For Event Streams on Openshift deployment, click to the `connect to the cluster`
 
 ![](images/cluster-access.png)
 
+### Provision a Postgresql service
+
+Use the [product documentation](https://cloud.ibm.com/docs/services/databases-for-postgresql) to provision your own service. Define service credential and use the `composed` url, the database name and the SSL certificate. Use the following commands to get the certificate:
+        
+```shell
+ibmcloud login
+ibmcloud cdb cacert <database deployment name>
+```  
+
 ### Set environment variables
 
-As part of the [12 factors practice](https://12factor.net/), we externalize the end points configuration in environment variables. We are providing a script template (`scripts/setenv-tmp.sh`) to set those variables for your local development. Rename this file as `setenv.sh`. This file is git ignored, to do not share keys and passwords.
+As part of the [12 factors practice](https://12factor.net/), we externalize the end points configuration in environment variables. We are providing a script template (`scripts/setenv-tmp.sh`) to set those variables for your local development. Rename this file as `setenv.sh`. This file is git ignored, to do not share keys and passwords in public domain.
 
-The variables help to access a kafka broker cluster and Postgresql service on the cloud cluster.
+The variables help the different code in the solition to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.
+
+### Building a python development environment as docker image
+
+To avoid impacting our laptop environment (specially macbook which use python), we use a dockerfile to get the basic of python 3.7.x and the python modules like kafka, http requests, pandas, sklearn, pytest... we need to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:
+
+```
+cd docker
+docker build -f docker-python-tools -t ibmcase/python .
+```
+
+To use this python environment you can use the script: `startPythonEnv`. If you run with Event Stream on the cloud and Postgresql  on your laptopn use the LOCAL argument, use  IBMCLOUD otherwise:
+
+```
+# refarch-reefer-ml project folder
+./startPythonEnv.sh IBMCLOUD
+```
+
+### Build the docker image for Jupyter notebook
+
+We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook. The Dockerfile may use a `cert.pem` file, which contains the postgres certificate so the notebook can connect to postgresql service wiith SSL connection. 
+
+```
+cd docker 
+docker build -f docker-jupyter-tool -t ibmcase/jupyter .
+```
+
+To run this jupyter server run:
+
+```
+# refarch-reefer-ml project folder
+./startJupyterServer.sh IBMCLOUD
+```
 
 ## Project approach
 
@@ -100,44 +124,46 @@ As a major step of developing a machine learning or analytics model, it is impor
 
 We encourage you to read [this article](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/lightweight/) for more insight on the methodology.
 
-### Collect data
+### 1- Collect data
 
 We are using a simulator to generate data and go over the detail of how to collect data in [this article](collect-data.md).
 
-If you use files to get the data for training and test sets, put this .csv file under the `ml/data/` folder.
+If you generate the training and test sets as file, put this .csv file under the `ml/data/` folder.
 
-If you use postgresql as data source be sure to have set the environment variables for that in the `setenv.sh` script.
+If you use postgresql as data source be sure to have set the POSTGRES environment variables in the `setenv.sh` script.
 
-### Define the predictive scoring model 
+### 2- Define the predictive scoring model 
 
-Predictive maintenance or anomaly detection are complex problems to address. We do not pretent to support those complex problem in this repository, but we are more focusing in putting in place the end to end creation and deployment of the model. To review the problem of predictive maintenance read [this article.](predictive-maintenance.md)
+Predictive maintenance and anomaly detection are complex problems to address. We do not pretend to address those complex problems in this repository, as we focus in putting in place the end to end creation and deployment of the model. To review the problem of predictive maintenance read [this article.](predictive-maintenance.md)
 
-To build the model and work on the data, we will use a local version of **Jupyter** notebook to load the logistic regression nodebook in the `ml` folder. 
+*If you want to contribute to build a better model, we are looking for contributors*.
 
-We have two types 
+To build the model and work on the data, we will use a local version of **Jupyter** notebook to load the logistic regression nodebook from the `ml` folder. 
+
+We have two types of notebook
 
 1. Start a jupyter server using our docker image and a postgresql in IBM cloud.
 
     ```
     pwd
 
-    ./startJupyterNotebook IBMCLOUD  or LOCAL
+    ./startJupyterServer IBMCLOUD  or LOCAL
     ```
 
-1. Then open a web browser to `http://localhost:10000?token=<sometoken>` go under `work/ml` 
-1. open one of the models:
-    * the `model_logistic_regression.ipynb` for working on data set saved in the `ml/data/telemetries.csv` file. 
-    * the `model_logistic_regression-pg.ipynb` to work on data saved in postgresql.
+1. Then open a web browser to `http://localhost:8888?token=<sometoken>` go under `work/ml` folder.
+1. Open one of the model:
+    * the `model_logistic_regression.ipynb` to work on data set saved in the `ml/data/telemetries.csv` file. 
+    * the `model_logistic_regression-pg.ipynb` to work on data saved in postgresql running on IBM Cloud.
     
     The notebooks include comments to explain how the model is done. We use logistic regression to build a binary classification (maintenance required or not), as the data are simulated, and the focus is not in the model building, but more on the end to end process.
 
-    The notebook persists the trained model as a pickle file so it can be loaded by a python module or another model.
+    The notebook persists the trained model as a pickle file so it can be loaded by a python module or another notebook.
 
     For more information on using the Jupyter notebook, here is a [product documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/index.html).
 
 1. Use the model in another notebook: We can use a second notebook to test the model with one telemetry record using the pickle serialized model. The notebook is named `predictMaintenance.ipynb`.
 
-### Deploy the model
+### 3- Deploy the model
 
 We have two types of deployment:
 
@@ -149,3 +175,5 @@ The `scoring` folder includes an `eventConsumer` folder for the agent implementa
 In this solution we use the agent implementation.
 
 So you need to copy the generated pickle file to the `eventConsumer/domain` folder.
+
+### 4- Deploy each service

@@ -1,4 +1,5 @@
 simulator/scripts/setenv.sh
+docker/cert.pem
 ml/.ipynb_checkpoints
 simulator/__pycache__/
 simulator/domain/__pycache__/

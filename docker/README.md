@@ -9,14 +9,14 @@
     docker build . -t ibmcase/reefersimulator
     ```
 
-* For container tracer listening to maintenance events
+* For container tracer listening to reefer maintenance events
 
     ```
     cd consumer
     docker build . -t ibmcase/containerconsumer
     ```
 
-* For scoring as web app
+* For scoring as web app (optional)
 
     ```
     cd scoring/webapp

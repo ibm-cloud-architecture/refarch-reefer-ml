@@ -6,4 +6,6 @@ ENV POSTGRES_URL="postgres://prostgres:supersecret@localhost:5432/postgres"
 ENV POSTGRES_DBNANE="postgres"
 ENV POSTGRES_PORT=5432
 
-RUN pip install --upgrade pip && pip install --user pipenv  psycopg2-binary confluent_kafka
+
+RUN pip install --upgrade pip && pip install --user pipenv  psycopg2-binary confluent_kafka && \
+    if test -f "./cert.pem"; then cp ./cert.pem /home/jovyan/cert.pem; fi
