@@ -584,7 +584,7 @@ The dependencies are loaded, the build is scheduled and executed, the image is u
 </pre></div>
 
 <p>Get all environment variables set for a given pod: (det the pod id with <code>oc get pod</code>)</p>
-<div class="codehilite"><pre><span></span>oc set env pod/reefersimulator-4-tq27j --list
+<div class="codehilite"><pre><span></span>oc get env pod/reefersimulator-4-tq27j --list
 </pre></div>
 
 <p><img alt="" src="../images/env-variables.png" /></p>
@@ -709,7 +709,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 </pre></div>
 
 <p>but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:</p>
-<div class="codehilite"><pre><span></span><span class="cp">../scripts/setenv.sh SET</span>
+<div class="codehilite"><pre><span></span><span class="cp">../scripts/defEnvVarInOpenShift.sh </span>
 </pre></div>
 
 <p>The list of running pods should show the build pods for this application:</p>

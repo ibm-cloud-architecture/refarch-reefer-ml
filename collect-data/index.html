@@ -308,6 +308,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#delete-records-in-database" title="Delete records in database" class="md-nav__link">
+    Delete records in database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -445,6 +452,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#delete-records-in-database" title="Delete records in database" class="md-nav__link">
+    Delete records in database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -522,7 +536,7 @@
 </li>
 <li>
 <p>(Re)create a new file. It is an important step to get the header as first row.
-<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mo">@0372</span><span class="o">:</span> <span class="n">python</span> <span class="n">simulator</span><span class="o">/</span><span class="n">reefer_simulator_tool</span><span class="p">.</span><span class="n">py</span> <span class="o">--</span><span class="n">stype</span> <span class="n">poweroff</span> <span class="o">--</span><span class="n">cid</span> <span class="n">C01</span> <span class="o">--</span><span class="n">records</span> <span class="mi">1000</span> <span class="o">--</span><span class="n">product_id</span> <span class="n">P02</span> <span class="o">--</span><span class="n">file</span> <span class="n">telemetries</span><span class="p">.</span><span class="n">csv</span> 
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records 1000 --product_id P02 --file telemetries.csv 
 </pre></div></p>
 </li>
 <li>append to existing file
@@ -560,8 +574,8 @@
 </pre></div>
 
 <p>If you want to use <code>psql</code> then you need to set all POSGRES* environment variables.</p>
-<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as <code>cert.pem</code> under the <code>simulator</code> folder, or set <code>POSTGRES_SSL_PEM</code> to the path where to find this file.</p>
-<p>The <code>cert.pem</code> file needs to be in the simulator folder.</p>
+<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as <code>postgres.pem</code> under the <code>simulator</code> folder, or set <code>POSTGRES_SSL_PEM</code> to the path where to find this file.</p>
+<p>The <code>postgres.pem</code> file needs to be in the simulator folder.</p>
 <p>Run the ReeferRepository.py tool to create the database and to add the reference data:</p>
 <div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
 &gt; python simulator/infrastructure/ReeferRepository.py
@@ -604,6 +618,7 @@ ibmclouddb&gt; SELECT * FROM reefers;
 ibmclouddb&gt; SELECT * FROM products;
 ibmclouddb&gt; SELECT * FROM reefer_telemetries;
 </pre></div></p>
+<h4 id="delete-records-in-database">Delete records in database</h4>
 <p>Next step is to build the model... </p>
                 
                   
