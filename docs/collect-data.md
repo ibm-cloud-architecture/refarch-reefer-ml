@@ -65,7 +65,7 @@ usage reefer_simulator-tool
 
 * (Re)create a new file. It is an important step to get the header as first row.
 ```
-root@0372: python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records 1000 --product_id P02 --file telemetries.csv 
+python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records 1000 --product_id P02 --file telemetries.csv 
 ```
 * append to existing file
 ```
@@ -116,9 +116,9 @@ POSTGRES_URL,  POSTGRES_DBNAME,
 
 If you want to use `psql` then you need to set all POSGRES* environment variables.
 
-If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as `cert.pem` under the `simulator` folder, or set `POSTGRES_SSL_PEM` to the path where to find this file.
+If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as `postgres.pem` under the `simulator` folder, or set `POSTGRES_SSL_PEM` to the path where to find this file.
 
-The `cert.pem` file needs to be in the simulator folder.
+The `postgres.pem` file needs to be in the simulator folder.
 
 Run the ReeferRepository.py tool to create the database and to add the reference data:
 
@@ -173,6 +173,10 @@ ibmclouddb> SELECT * FROM reefers;
 ibmclouddb> SELECT * FROM products;
 ibmclouddb> SELECT * FROM reefer_telemetries;
 ```
+
+#### Delete records in database
+
+
 
 Next step is to build the model... 
 

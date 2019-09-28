@@ -49,11 +49,11 @@ def assessDataAreValid(metricStr):
     try:
         metric = eval(metricStr)
     except json.decoder.JSONDecodeError:
+        print("Not able to decode")
         return False
     try:
         for i in range(0,9):
-            float(metric[2 + i])
-            
+            float(metric[3 + i])
     except TypeError or ValueError:
         return False
     return True
@@ -70,6 +70,6 @@ if __name__ == "__main__":
     '''
     Just start the event listener
     '''
-    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.4")
+    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.5 09/27")
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

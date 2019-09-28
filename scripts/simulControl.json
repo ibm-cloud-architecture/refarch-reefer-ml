@@ -1,5 +1,5 @@
 { "containerID": "C02",
     "simulation": "co2sensor",
     "nb_of_records": 200,
-    "good_temperature":  3
+    "product_id":  "P02"
 }

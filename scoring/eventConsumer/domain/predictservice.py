@@ -30,11 +30,12 @@ class PredictService:
         See the feature column names and order below.
         return 0 if no maintenance is needed, 1 otherwise
         '''
-        # Do some simple data transformation and reading to build X
+        # Do some simple data transformation to build X
         TESTDATA = StringIO(metricEvent)
         data = pd.read_csv(TESTDATA, sep=",")
         data.columns = data.columns.to_series().apply(lambda x: x.strip())
         X = data[FEATURES_NAMES]
+        print(X)
         # Return 1 if maintenance is required, 0 otherwise
         return self.model.predict(X)
 

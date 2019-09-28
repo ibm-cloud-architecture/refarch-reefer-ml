@@ -75,7 +75,7 @@ To deploy the code to an openshift cluster do the following:
     Get all environment variables set for a given pod: (det the pod id with `oc get pod`)
 
     ```
-    oc set env pod/reefersimulator-4-tq27j --list
+    oc get env pod/reefersimulator-4-tq27j --list
     ```
 
     ![](images/env-variables.png)
@@ -235,7 +235,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
 
 ```
-../scripts/setenv.sh SET
+../scripts/defEnvVarInOpenShift.sh 
 ```
 
 The list of running pods should show the build pods for this application:
