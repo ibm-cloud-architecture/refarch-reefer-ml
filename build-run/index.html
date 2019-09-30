@@ -579,11 +579,11 @@ The dependencies are loaded, the build is scheduled and executed, the image is u
 <p>For apikey:
 <div class="codehilite"><pre><span></span>oc set env dc/reefersimulator KAFKA_APIKEY=&quot;&quot;
 </pre></div></p>
-<p>For the kafka runtime env: </p>
-<div class="codehilite"><pre><span></span> oc set env dc/reefersimulator KAFKA_ENV=&quot;IBM_CLOUD&quot;
+<p>If you connect to event stream or kafka with SSL specify where to find the SSL certificate: </p>
+<div class="codehilite"><pre><span></span> oc set env dc/reefersimulator KAFKA_CERT=&quot;es-cert.pem&quot;
 </pre></div>
 
-<p>Get all environment variables set for a given pod: (det the pod id with <code>oc get pod</code>)</p>
+<p>Get all environment variables set for a given pod: (get the pod id with <code>oc get pod</code>)</p>
 <div class="codehilite"><pre><span></span>oc get env pod/reefersimulator-4-tq27j --list
 </pre></div>
 
