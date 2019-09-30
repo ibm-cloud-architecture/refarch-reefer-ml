@@ -66,13 +66,13 @@ To deploy the code to an openshift cluster do the following:
     oc set env dc/reefersimulator KAFKA_APIKEY=""
     ```
 
-    For the kafka runtime env: 
+    If you connect to event stream or kafka with SSL specify where to find the SSL certificate: 
 
     ```
-     oc set env dc/reefersimulator KAFKA_ENV="IBM_CLOUD"
+     oc set env dc/reefersimulator KAFKA_CERT="es-cert.pem"
     ```
 
-    Get all environment variables set for a given pod: (det the pod id with `oc get pod`)
+    Get all environment variables set for a given pod: (get the pod id with `oc get pod`)
 
     ```
     oc get env pod/reefersimulator-4-tq27j --list
