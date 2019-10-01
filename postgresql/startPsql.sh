@@ -1,7 +1,7 @@
 
 #!/bin/bash
 if [[ $# -ne 1 ]];then
- echo "Usage createPGtables.sh [LOCAL  | IBMCLOUD ]"
+ echo "Usage startPsql.sh [LOCAL  | IBMCLOUD ]"
  exit 1
 fi
 

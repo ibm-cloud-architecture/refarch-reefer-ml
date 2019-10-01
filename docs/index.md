@@ -34,10 +34,10 @@ For the minimum viable demonstration the runtime components looks like in the fi
     See [this section to build and deploy](#the-simulator-as-webapp) the simulator web app.
 
 1. A curl script will do the post of this json object. [See this paragraph.](#test-sending-a-simulation-control-to-the-post-api)
-1. The metrics events are sent to the `containerMetrics` topic in Kafka.
-1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/#the-predictive-scoring-agent) for details.
+1. The metrics events are sent to the `reeferTelemetries` topic in Kafka.
+1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/##2-define-the-predictive-scoring-model) for details.
 1. The maintenance requirement is an event in the `containers` topic.
-1. The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use on as this component, but we have a simple consumer in the `consumer` folder.
+1. The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use for this component, but as of now we have a simple consumer in the `consumer` folder.
 
 For the machine learning environment we can use csv file as input data or postgresql database. The environment looks like in the figure below:
 
@@ -71,18 +71,21 @@ For Event Streams on Openshift deployment, click to the `connect to the cluster`
 
 ### Provision a Postgresql service
 
-Use the [product documentation](https://cloud.ibm.com/docs/services/databases-for-postgresql) to provision your own service. Define service credential and use the `composed` url, the database name and the SSL certificate. Use the following commands to get the certificate:
+If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the [product documentation](https://cloud.ibm.com/docs/services/databases-for-postgresql) to provision your own service. Define service credential and use the `composed` url, the database name and the SSL certificate. Use the following commands to get the certificate:
         
 ```shell
 ibmcloud login
 ibmcloud cdb cacert <database deployment name>
 ```  
 
+Save this file as `postgres.pem` under the simulator folder.
+
 ### Set environment variables
 
 As part of the [12 factors practice](https://12factor.net/), we externalize the end points configuration in environment variables. We are providing a script template (`scripts/setenv-tmp.sh`) to set those variables for your local development. Rename this file as `setenv.sh`. This file is git ignored, to do not share keys and passwords in public domain.
 
 The variables help the different code in the solition to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.
+
 
 ### Building a python development environment as docker image
 
@@ -115,6 +118,83 @@ To run this jupyter server run:
 # refarch-reefer-ml project folder
 ./startJupyterServer.sh IBMCLOUD
 ```
+
+### Create the postgresql database
+
+If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as postgres.pem under the simulator folder, or set POSTGRES_SSL_PEM to the path where to find this file.
+
+The postgres.pem file needs to be in the simulator folder.
+
+Run the ReeferRepository.py tool to create the database and to add the reference data:
+
+```
+./startPythonEnv.sh IBMCLOUD
+> python simulator/infrastructure/ReeferRepository.py
+```
+
+You should see:
+
+```
+Connect remote with ssl
+('PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit',)
+[
+    {
+        "container_id": "C01",
+        "last_maintenance_date": null,
+        "reefer_model": "20RF"
+    },
+    {
+        "container_id": "C02",
+        "last_maintenance_date": null,
+        "reefer_model": "20RF"
+    },
+    {
+        "container_id": "C03",
+        "last_maintenance_date": null,
+        "reefer_model": "40RH"
+    },
+    {
+        "container_id": "C04",
+        "last_maintenance_date": null,
+        "reefer_model": "45RW"
+    }
+]
+[
+    {
+        "content_type": 1,
+        "description": "Carrots",
+        "product_id": "P01",
+        "target_humidity_level": 0.4,
+        "target_temperature": 4.0
+    },
+    {
+        "content_type": 2,
+        "description": "Banana",
+        "product_id": "P02",
+        "target_humidity_level": 0.6,
+        "target_temperature": 6.0
+    },
+    {
+        "content_type": 1,
+        "description": "Salad",
+        "product_id": "P03",
+        "target_humidity_level": 0.4,
+        "target_temperature": 4.0
+    },
+    {
+        "content_type": 2,
+        "description": "Avocado",
+        "product_id": "P04",
+        "target_humidity_level": 0.4,
+        "target_temperature": 6.0
+    }
+]
+('public', 'reefers', 'ibm-cloud-base-user', None, True, False, True, False)
+('public', 'products', 'ibm-cloud-base-user', None, True, False, True, False)
+('public', 'reefer_telemetries', 'ibm-cloud-base-user', None, True, False, True, False)
+```
+
+For generating the telemetry records see the collect data section below.
 
 ## Project approach
 
@@ -187,3 +267,7 @@ So you need to copy the generated pickle file to the `eventConsumer/domain` fold
 ### 4- Deploy each service
 
 See [this detailed note](build-run.md) to deploy each service on openshift.
+
+## Further Readings
+
+* []()

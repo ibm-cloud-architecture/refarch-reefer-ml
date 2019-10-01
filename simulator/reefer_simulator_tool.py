@@ -67,7 +67,10 @@ def parseArguments():
 
 if __name__ == "__main__":
     (cid, simulation_type, nb_records, product_id, fname,append, useDB) = parseArguments()
-    print(cid, simulation_type, nb_records, product_id, fname, append, useDB)
+    if useDB:
+        print(cid, simulation_type, nb_records, product_id)
+    else:
+        print(cid, simulation_type, nb_records, product_id, fname, append)
     simulator = ReeferSimulator()
     if simulation_type == ReeferSimulator.SIMUL_POWEROFF:
         df=simulator.generatePowerOffRecords(cid,nb_records,product_id)
