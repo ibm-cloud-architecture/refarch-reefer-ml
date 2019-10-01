@@ -307,6 +307,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#create-the-postgresql-database" title="Create the postgresql database" class="md-nav__link">
+    Create the postgresql database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -353,6 +360,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#further-readings" title="Further Readings" class="md-nav__link">
+    Further Readings
+  </a>
+  
+</li>
+      
       
       
       
@@ -382,7 +396,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/#2-define-the-predictive-scoring-model" title="Define the predictive scoring model" class="md-nav__link">
+    <a href="https://ibm-cloud-architecture.github.io/refarch-reefer-ml/#2-define-the-predictive-scoring-model" title="Define the predictive scoring model" class="md-nav__link">
       Define the predictive scoring model
     </a>
   </li>
@@ -506,6 +520,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#create-the-postgresql-database" title="Create the postgresql database" class="md-nav__link">
+    Create the postgresql database
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -549,6 +570,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-readings" title="Further Readings" class="md-nav__link">
+    Further Readings
+  </a>
   
 </li>
       
@@ -598,10 +626,10 @@
 <li>
 <p>A curl script will do the post of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
 </li>
-<li>The metrics events are sent to the <code>containerMetrics</code> topic in Kafka.</li>
-<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/#the-predictive-scoring-agent">See the note</a> for details.</li>
+<li>The metrics events are sent to the <code>reeferTelemetries</code> topic in Kafka.</li>
+<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/##2-define-the-predictive-scoring-model">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
-<li>The last element is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="">following repository</a> is the microservice we could use on as this component, but we have a simple consumer in the <code>consumer</code> folder.</li>
+<li>The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="">following repository</a> is the microservice we could use for this component, but as of now we have a simple consumer in the <code>consumer</code> folder.</li>
 </ol>
 <p>For the machine learning environment we can use csv file as input data or postgresql database. The environment looks like in the figure below:</p>
 <p><img alt="" src="images/data-collect.png" /></p>
@@ -620,11 +648,12 @@
 <p>For Event Streams on Openshift deployment, click to the <code>connect to the cluster</code> button to get the broker URL and to generate the API key: select the option to generate the key for all topics.</p>
 <p><img alt="" src="images/cluster-access.png" /></p>
 <h3 id="provision-a-postgresql-service">Provision a Postgresql service</h3>
-<p>Use the <a href="https://cloud.ibm.com/docs/services/databases-for-postgresql">product documentation</a> to provision your own service. Define service credential and use the <code>composed</code> url, the database name and the SSL certificate. Use the following commands to get the certificate:</p>
+<p>If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the <a href="https://cloud.ibm.com/docs/services/databases-for-postgresql">product documentation</a> to provision your own service. Define service credential and use the <code>composed</code> url, the database name and the SSL certificate. Use the following commands to get the certificate:</p>
 <div class="codehilite"><pre><span></span>ibmcloud login
 ibmcloud cdb cacert &lt;database deployment name&gt;
 </pre></div>
 
+<p>Save this file as <code>postgres.pem</code> under the simulator folder.</p>
 <h3 id="set-environment-variables">Set environment variables</h3>
 <p>As part of the <a href="https://12factor.net/">12 factors practice</a>, we externalize the end points configuration in environment variables. We are providing a script template (<code>scripts/setenv-tmp.sh</code>) to set those variables for your local development. Rename this file as <code>setenv.sh</code>. This file is git ignored, to do not share keys and passwords in public domain.</p>
 <p>The variables help the different code in the solition to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.</p>
@@ -650,6 +679,75 @@ docker build -f docker-jupyter-tool -t ibmcase/jupyter .
 ./startJupyterServer.sh IBMCLOUD
 </pre></div>
 
+<h3 id="create-the-postgresql-database">Create the postgresql database</h3>
+<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as postgres.pem under the simulator folder, or set POSTGRES_SSL_PEM to the path where to find this file.</p>
+<p>The postgres.pem file needs to be in the simulator folder.</p>
+<p>Run the ReeferRepository.py tool to create the database and to add the reference data:</p>
+<div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
+&gt; python simulator/infrastructure/ReeferRepository.py
+</pre></div>
+
+<p>You should see:</p>
+<div class="codehilite"><pre><span></span>Connect remote with ssl
+(&#39;PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit&#39;,)
+[
+    {
+        &quot;container_id&quot;: &quot;C01&quot;,
+        &quot;last_maintenance_date&quot;: null,
+        &quot;reefer_model&quot;: &quot;20RF&quot;
+    },
+    {
+        &quot;container_id&quot;: &quot;C02&quot;,
+        &quot;last_maintenance_date&quot;: null,
+        &quot;reefer_model&quot;: &quot;20RF&quot;
+    },
+    {
+        &quot;container_id&quot;: &quot;C03&quot;,
+        &quot;last_maintenance_date&quot;: null,
+        &quot;reefer_model&quot;: &quot;40RH&quot;
+    },
+    {
+        &quot;container_id&quot;: &quot;C04&quot;,
+        &quot;last_maintenance_date&quot;: null,
+        &quot;reefer_model&quot;: &quot;45RW&quot;
+    }
+]
+[
+    {
+        &quot;content_type&quot;: 1,
+        &quot;description&quot;: &quot;Carrots&quot;,
+        &quot;product_id&quot;: &quot;P01&quot;,
+        &quot;target_humidity_level&quot;: 0.4,
+        &quot;target_temperature&quot;: 4.0
+    },
+    {
+        &quot;content_type&quot;: 2,
+        &quot;description&quot;: &quot;Banana&quot;,
+        &quot;product_id&quot;: &quot;P02&quot;,
+        &quot;target_humidity_level&quot;: 0.6,
+        &quot;target_temperature&quot;: 6.0
+    },
+    {
+        &quot;content_type&quot;: 1,
+        &quot;description&quot;: &quot;Salad&quot;,
+        &quot;product_id&quot;: &quot;P03&quot;,
+        &quot;target_humidity_level&quot;: 0.4,
+        &quot;target_temperature&quot;: 4.0
+    },
+    {
+        &quot;content_type&quot;: 2,
+        &quot;description&quot;: &quot;Avocado&quot;,
+        &quot;product_id&quot;: &quot;P04&quot;,
+        &quot;target_humidity_level&quot;: 0.4,
+        &quot;target_temperature&quot;: 6.0
+    }
+]
+(&#39;public&#39;, &#39;reefers&#39;, &#39;ibm-cloud-base-user&#39;, None, True, False, True, False)
+(&#39;public&#39;, &#39;products&#39;, &#39;ibm-cloud-base-user&#39;, None, True, False, True, False)
+(&#39;public&#39;, &#39;reefer_telemetries&#39;, &#39;ibm-cloud-base-user&#39;, None, True, False, True, False)
+</pre></div>
+
+<p>For generating the telemetry records see the collect data section below.</p>
 <h2 id="project-approach">Project approach</h2>
 <p>As a major step of developing a machine learning or analytics model, it is important to have good data. In this project we are adopting a lightweight approach to develop this minimum viable product. The activities are summarized in this diagram:</p>
 <p><img alt="" src="images/lightweight-process-model-figure2.png" /></p>
@@ -708,6 +806,10 @@ docker build -f docker-jupyter-tool -t ibmcase/jupyter .
 <p>So you need to copy the generated pickle file to the <code>eventConsumer/domain</code> folder and if you use the webapp too, copy it to <code>webapp/domain</code>.</p>
 <h3 id="4-deploy-each-service">4- Deploy each service</h3>
 <p>See <a href="build-run/">this detailed note</a> to deploy each service on openshift.</p>
+<h2 id="further-readings">Further Readings</h2>
+<ul>
+<li><a href=""></a></li>
+</ul>
                 
                   
                 
