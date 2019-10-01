@@ -20,8 +20,7 @@ def assessPredictiveMaintenance(msg):
     Argument the message as dict / json format to preocess.
     In the case of maintenance needed, generate an event to the containers topic
     '''
-    header="""Timestamp, ID, Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"""
-
+    header = """container_id,temperature,target_temperature, ambiant_temperature, kilowatts, time_door_open, content_type, defrost_cycle,oxygen_level, nitrogen_level, humidity_level, carbon_dioxide_level, vent_1, vent_2, vent_3"""
     print(msg['payload'])
     score = 0
     if assessDataAreValid(msg['payload']):
@@ -50,11 +49,11 @@ def assessDataAreValid(metricStr):
     try:
         metric = eval(metricStr)
     except json.decoder.JSONDecodeError:
+        print("Not able to decode")
         return False
     try:
         for i in range(0,9):
-            float(metric[2 + i])
-            
+            float(metric[3 + i])
     except TypeError or ValueError:
         return False
     return True
@@ -71,6 +70,6 @@ if __name__ == "__main__":
     '''
     Just start the event listener
     '''
-    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.4")
+    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.5 09/27")
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

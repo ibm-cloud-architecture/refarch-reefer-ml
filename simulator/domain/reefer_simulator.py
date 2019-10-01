@@ -15,19 +15,23 @@ The variables that changes are Co2, O2, power and temperature
 # Define constants
 
 CO2_LEVEL = 4 # in percent
-O2_LEVEL = 21 # in percent
-NITROGEN_LEVEL = 0.78 # in percent
+O2_LEVEL = 21 # in percent - below 12 it is bad
+NITROGEN_LEVEL = 78 # in percent
 POWER_LEVEL= 2.7 # in kW
-NB_RECORDS_IMPACTED = 7
+HUMIDITY_LEVEL = 30 # in percent
+
 MAX_RECORDS = 1000
+NB_WRONG_RECORDS = 30
+NB_WRONG_RECORD_SERIE = 3
+
 DEFROST_LEVEL = 7   # Common timing periods were 6, 8, 12 and 24 hours.
 METRIC_FREQUENCY = "5min"
 
 SIGMA_BASE = 1
-products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':0.4},
-            'P02': {'d':'Banana','type':2,'T':6,'H':0.6},
-            'P03': {'d':'Salad','type':1,'T':4,'H':0.4},
-            'P04': {'d':'Avocado','type':2,'T':6,'H':0.4}}
+products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':40},
+            'P02': {'d':'Banana','type':2,'T':6,'H':60},
+            'P03': {'d':'Salad','type':1,'T':4,'H':40},
+            'P04': {'d':'Avocado','type':2,'T':6,'H':40}}
 
 def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
@@ -74,7 +78,7 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     cols["oxygen_level"] = np.random.normal(O2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["carbon_dioxide_level"] = np.random.normal(CO2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["nitrogen_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
-    cols["humidity_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
+    cols["humidity_level"] = np.random.normal(products[product_id]['H'], SIGMA_BASE, size=nb_records)
     cols["vent_1"] = np.repeat(True,nb_records)
     cols["vent_2"] = np.repeat(True,nb_records)
     cols["vent_3"] = np.repeat(True,nb_records)
@@ -89,9 +93,20 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
 
 
 def _generateFaultyValue(df: pd.DataFrame, 
-            nb_wrong_records:int = 10, nb_times:int = 2, 
+            nb_wrong_records:int = NB_WRONG_RECORDS, nb_times:int = NB_WRONG_RECORD_SERIE, 
             attribute:str = "kilowatts", 
             mean:float=0, sigma:float=1):
+        """
+        Generate nb_wrong_records records nb_times times in the data set on a specific column, 
+        named with the attribute value.
+
+        Arguments:
+        - dataframe containing the normal data
+        - number of wrong records to create in the given data set. The wrong records will be sequential
+        - number of time it needs to generate the wrong records.
+        - normal distribution mean : this mean can be 2 or 3 times higher than the normal mean
+        - normal distribution sigma: this could be 1 to 6 sigma
+        """
         initial_index = 0
         for time in range(0,nb_times):
             start_index = random.randint(initial_index, df[attribute].size - nb_wrong_records)
@@ -103,6 +118,7 @@ class ReeferSimulator:
     # Constants used elsewhere in the application
     SIMUL_POWEROFF="poweroff"
     SIMUL_CO2="co2sensor"
+    SIMUL_O2="o2sensor"
     NORMAL="normal"
     # try to match the name in the database too
     COLUMN_NAMES = ["container_id", "measurement_time", "product_id",
@@ -160,7 +176,16 @@ class ReeferSimulator:
         '''
         print("Generating records for some poweroff")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
-        _generateFaultyValue(df,40,2,"kilowatts",0,0)
+        _generateFaultyValue(df, 
+            NB_WRONG_RECORDS,
+            NB_WRONG_RECORD_SERIE,
+            "kilowatts", 0, 0)
+        for i in range(0, df['kilowatts'].size - 1):
+            if (df.at[i,"kilowatts"] <= 0  and df.at[i + 1 ,"kilowatts"] <= 0):
+                df.at[i,"maintenance_required"] = 1
+                df.at[i,"vent_1"] = False
+                df.at[i,"vent_2"] = False
+                df.at[i,"vent_3"] = False
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
@@ -191,10 +216,14 @@ class ReeferSimulator:
         '''
         print("Generating records for co2 sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
-        _generateFaultyValue(df,40,2,"carbon_dioxide_level", 3*CO2_LEVEL, 2*SIGMA_BASE)
+        _generateFaultyValue(df,
+                NB_WRONG_RECORDS, 
+                NB_WRONG_RECORD_SERIE,
+                "carbon_dioxide_level",
+                3*CO2_LEVEL, 2*SIGMA_BASE)
         for i in range(0, df['carbon_dioxide_level'].size):
             currentCO2 = df.at[i,"carbon_dioxide_level"]
-            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 3*CO2_LEVEL) or (currentCO2 < 0)) else 0
+            df.at[i,"maintenance_required"] = 1 if (( currentCO2 > 2.7 * CO2_LEVEL) or (currentCO2 < 0)) else 0
         return df[ReeferSimulator.COLUMN_NAMES]
 
 
@@ -214,6 +243,37 @@ class ReeferSimulator:
         df = self.generateCo2Records(cid, nb_records, product_id, start_time)
         return list(df.to_records(index=False))
 
+
+    def generateO2Records(self,
+                    cid: str = "C01", 
+                    nb_records: int = MAX_RECORDS, 
+                    product_id: str = 'P02',
+                    start_time: datetime.datetime = None):
+        '''
+        Generate a dataframe of training data for O2 sensor malfunctions.
+
+        Returns a Pandas dataframe with the schema given in 
+        ReeferSimulator.COLUMN_NAMES.
+        '''
+        print("Generating records for O2 sensor issue")
+        df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
+        _generateFaultyValue(df,
+                NB_WRONG_RECORDS, 
+                NB_WRONG_RECORD_SERIE,
+                "oxygen_level",
+                O2_LEVEL-10, 2*SIGMA_BASE)
+        for i in range(0, df['oxygen_level'].size):
+            currentO2 = df.at[i,"oxygen_level"]
+            df.at[i,"maintenance_required"] = 1 if ( currentO2 < 12) else 0
+        return df[ReeferSimulator.COLUMN_NAMES]
+
+    def generateO2Tuples(self,
+                    cid: str = "C01", 
+                    nb_records: int = MAX_RECORDS, 
+                    product_id: str = 'P02',
+                    start_time: datetime.datetime = None):
+        df = self.generateO2Records(cid, nb_records, product_id, start_time)
+        return list(df.to_records(index=False))
 
 if __name__ == '__main__':
     simul = ReeferSimulator()

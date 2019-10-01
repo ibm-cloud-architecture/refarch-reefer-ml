@@ -5,25 +5,21 @@ import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 class ContainerEventsProducer:
 
     def __init__(self):
-        self.currentRuntime = EventBackboneConfiguration.getCurrentRuntimeEnvironment()
-        self.brokers = EventBackboneConfiguration.getBrokerEndPoints()
-        self.apikey = EventBackboneConfiguration.getEndPointAPIKey()
-        self.topic_name = "containers"
+        self.topic_name = EventBackboneConfiguration.getContainerTopicName()
         self.prepareProducer("pythonproducers")
         
     def prepareProducer(self,groupID = "pythonproducers"):
         options ={
-                'bootstrap.servers':  self.brokers,
-                'group.id': groupID
+                'bootstrap.servers':  EventBackboneConfiguration.getBrokerEndPoints(),
+                'group.id': groupID,
         }
-        # We need this test as local kafka does not expect SSL protocol.
-        if (self.currentRuntime != 'LOCAL'):
+        if (EventBackboneConfiguration.hasAPIKey()):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
-            options['sasl.password'] = self.apikey
-        if (self.currentRuntime == 'ICP'):
-            options['ssl.ca.location'] = 'es-cert.pem'
+            options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
+        if (EventBackboneConfiguration.isEncrypted()):
+            options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
         print(options)
         self.producer = Producer(options)
 
@@ -37,7 +33,7 @@ class ContainerEventsProducer:
 
     def publishEvent(self, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
-        self.producer.produce("containers",
+        self.producer.produce(self.topic_name,
                             key=eventToSend[keyName],
                             value=dataStr.encode('utf-8'), 
                             callback=self.delivery_report)

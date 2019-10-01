@@ -37,7 +37,7 @@ def parseArguments():
     product_id = "P02"
     simulation_type = "normal"
     if len(sys.argv) == 1:
-        print("Usage reefer_simulator --stype [poweroff | co2sensor | normal]")
+        print("Usage reefer_simulator --stype [poweroff | co2sensor | o2sensor | normal]")
         print("\t --cid [C01 | C02 | C03 | C04]")
         print("\t --product_id [ P01 | P02 | P03 | P04 ]")
         print("\t --records <the number of records to generate>")
@@ -65,16 +65,19 @@ def parseArguments():
     return (cid, simulation_type, nb_records, product_id, fname, append, useDB)
 
 
-
-
 if __name__ == "__main__":
     (cid, simulation_type, nb_records, product_id, fname,append, useDB) = parseArguments()
-    print(cid, simulation_type, nb_records, product_id, fname, append, useDB)
+    if useDB:
+        print(cid, simulation_type, nb_records, product_id)
+    else:
+        print(cid, simulation_type, nb_records, product_id, fname, append)
     simulator = ReeferSimulator()
     if simulation_type == ReeferSimulator.SIMUL_POWEROFF:
         df=simulator.generatePowerOffRecords(cid,nb_records,product_id)
     elif  simulation_type == ReeferSimulator.SIMUL_CO2:
         df=simulator.generateCo2Records(cid,nb_records,product_id)
+    elif  simulation_type == ReeferSimulator.SIMUL_O2:
+        df=simulator.generateO2Records(cid,nb_records,product_id)
     elif  simulation_type == ReeferSimulator.NORMAL:
         df=simulator.generateNormalRecords(cid,nb_records,product_id)
     else:

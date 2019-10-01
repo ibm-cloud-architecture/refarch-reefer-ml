@@ -1,4 +1,5 @@
 simulator/scripts/setenv.sh
+docker/*.pem
 ml/.ipynb_checkpoints
 simulator/__pycache__/
 simulator/domain/__pycache__/
@@ -16,7 +17,6 @@ scoring/eventConsumer/domain/__pycache__
 site/
 docker/postgres-data/
 scripts/setenv.sh
-simulator/cert.pem
 .vscode/
 .postgresql/
 .local/

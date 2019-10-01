@@ -15,5 +15,5 @@ ENV KAFKA_BROKERS kafka1:9092
 ENV KAFKA_ENV LOCAL
 ENV KAFKA_API ""
 # Runs container API when started
-CMD ["python", "TraceContainerEventsApp.py"]
+CMD ["python", "TraceContainerEventsAgent.py"]
 

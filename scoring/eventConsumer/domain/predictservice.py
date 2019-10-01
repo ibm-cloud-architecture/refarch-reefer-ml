@@ -1,20 +1,20 @@
 import pickle
 import pandas as pd
 import requests
-import sys, os
+import sys
 if sys.version_info[0] < 3: 
     from StringIO import StringIO
 else:
     from io import StringIO
 
-
-# this is use in case we want to have the model running on a remote server instead of using 
-# the one embedded. 
-try:
-    SCORING_URL = os.environ['SCORING_URL']
-except KeyError:
-    SCORING_URL=''  # be sure to keep it empty
-
+# Attention it will be tempting to use the column names defined in the simulator, but in reality
+# those two codes are unrelated, and the definition comes from the data... Each services are coded
+# by different teams and they know about the data not the code. 
+FEATURES_NAMES = [ "temperature","target_temperature", "ambiant_temperature", 
+                "kilowatts", "time_door_open",
+                "content_type", "defrost_cycle",
+                "oxygen_level", "nitrogen_level", "humidity_level","carbon_dioxide_level", 
+                "vent_1", "vent_2", "vent_3"]
 
 class PredictService:
     '''
@@ -30,16 +30,13 @@ class PredictService:
         See the feature column names and order below.
         return 0 if no maintenance is needed, 1 otherwise
         '''
-        feature_cols = ['Temperature(celsius)','Target_Temperature(celsius)','Power','PowerConsumption','ContentType','O2','CO2','Time_Door_Open','Maintenance_Required','Defrost_Cycle']
-        # Do some simple data transformation and reading to build X
+        # Do some simple data transformation to build X
         TESTDATA = StringIO(metricEvent)
         data = pd.read_csv(TESTDATA, sep=",")
         data.columns = data.columns.to_series().apply(lambda x: x.strip())
-        X = data[feature_cols]
+        X = data[FEATURES_NAMES]
+        print(X)
         # Return 1 if maintenance is required, 0 otherwise
-        if (SCORING_URL != ''):
-            return requests.post(url=SCORING_URL, data= X)
-        else:
-            return self.model.predict(X)
+        return self.model.predict(X)
 
     

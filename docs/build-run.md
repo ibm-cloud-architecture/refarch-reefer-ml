@@ -22,15 +22,15 @@ To deploy the code to an openshift cluster do the following:
     oc login -u apikey -p <apikey> --server=https://...
     ```
 
-1. Create a project if not done already:
+1. Create a project if you did not create it already:
 
     ```
     oc  new-project reefershipmentsolution --description="A Reefer container shipment solution"
     ```
 
-    *Remember the project is mapped to a kubernestes namespace, but includes other componetns too*
+    *Remember the project is mapped to a kubernetes namespace, but includes other components too*
 
-1. Create an app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.
+1. The first deploy you need to create a new app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.
 
     ```
     oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
@@ -48,7 +48,7 @@ To deploy the code to an openshift cluster do the following:
     oc describe bc/reefersimulator
     ```
 
-1. To trigger a remote build (run on Openshift) from local source code do the following command:
+1. When you want to redeploy, trigger a remote build (run on Openshift) from local source code do the following command:
 
     ```
     oc start-build reefersimulator --from-file=.
@@ -66,16 +66,16 @@ To deploy the code to an openshift cluster do the following:
     oc set env dc/reefersimulator KAFKA_APIKEY=""
     ```
 
-    For the kafka runtime env: 
+    If you connect to event stream or kafka with SSL specify where to find the SSL certificate: 
 
     ```
-     oc set env dc/reefersimulator KAFKA_ENV="IBM_CLOUD"
+     oc set env dc/reefersimulator KAFKA_CERT="es-cert.pem"
     ```
 
-    Get all environment variables set for a given pod: (det the pod id with `oc get pod`)
+    Get all environment variables set for a given pod: (get the pod id with `oc get pod`)
 
     ```
-    oc set env pod/reefersimulator-4-tq27j --list
+    oc get env pod/reefersimulator-4-tq27j --list
     ```
 
     ![](images/env-variables.png)
@@ -90,15 +90,13 @@ To deploy the code to an openshift cluster do the following:
     ```
 
     !!! note
-            The first time the container start, it may crash as the environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/setenv.sh SET` command to create the needed environment variable.
+            The first time the container start, it may crash as the environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/defEnvVarInOpenShift.sh` command to create the needed environment variables.
 
-1. To make it visible externally, you need to add a route for this deployment:
-
-Use `Create Route` button on top right, 
+1. To make the webapp visible externally to the cluster, you need to add a `route` for this deployment. Login to the admin console and use `Create Route` button on top right of the screen, 
 
 ![](images/create-routes.png)
 
-The enter a name and select the existing service
+Then enter a name and select the existing service
 
 ![](images/simul-route-create.png)
 
@@ -112,26 +110,21 @@ Add the host name in your local /etc/hosts or be sure the hostname is defined in
 
 The script `sendSimulControl.sh` is used for that. 
 
-    ```
-    pwd
+```
+pwd
+refarch-reefer-ml
+./scripts/sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C01  
+```
 
-    refarch-reefer-ml
+If you use no argument for this script, it will send co2sensor control to the service running on our openshift cluster on IBM Cloud.
 
-    cd scripts
-    ./sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C101
+Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
 
-    ```
-
-    If you use no argument for this script, it will send co2sensor control to the service running on our openshift cluster on IBM Cloud.
-
-    Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can see something like:
-
-    ```
+```
      "POST /order HTTP/1.1" 404 232 "-" "curl/7.54.0"
     {'containerID': 'c100', 'simulation': 'co2sensor', 'nb_of_records': 10, 'good_temperature': 4.4}
     Generating  10  Co2 metrics
-
-    ```
+```
 
     We will see how those events are processed in the next section.
 
@@ -188,8 +181,7 @@ class PredictService:
         TESTDATA = StringIO(metricEvent)
         data = pd.read_csv(TESTDATA, sep=",")
         data.columns = data.columns.to_series().apply(lambda x: x.strip())
-        feature_cols = ['Temperature(celsius)','Target_Temperature(celsius)','Power','PowerConsumption','ContentType','O2','CO2','Time_Door_Open','Maintenance_Required','Defrost_Cycle']
-        X = data[feature_cols]
+        X = data[ X = data[FEATURES_NAMES]]
         return self.model.predict(X)
     
 ```
@@ -243,7 +235,7 @@ oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
 
 ```
-../scripts/setenv.sh SET
+../scripts/defEnvVarInOpenShift.sh 
 ```
 
 The list of running pods should show the build pods for this application:

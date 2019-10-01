@@ -5,31 +5,27 @@ import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 class MetricsEventListener:
 
     def __init__(self):
-        self.currentRuntime = EventBackboneConfiguration.getCurrentRuntimeEnvironment()
-        self.brokers = EventBackboneConfiguration.getBrokerEndPoints()
-        self.apikey = EventBackboneConfiguration.getEndPointAPIKey()
-        self.topic_name = "containerMetrics"
         self.kafka_auto_commit = True
         self.prepareConsumer()
 
     # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
     def prepareConsumer(self, groupID = "reefermetricsconsumer"):
         options ={
-                'bootstrap.servers':  self.brokers,
+                'bootstrap.servers':  EventBackboneConfiguration.getBrokerEndPoints(),
                 'group.id': groupID,
                  'auto.offset.reset': 'earliest',
                 'enable.auto.commit': self.kafka_auto_commit,
         }
-        if (self.apikey != ''):
+        if (EventBackboneConfiguration.hasAPIKey()):
             options['security.protocol'] = 'SASL_SSL'
             options['sasl.mechanisms'] = 'PLAIN'
             options['sasl.username'] = 'token'
-            options['sasl.password'] = self.apikey
-        if (self.currentRuntime == 'ICP'):
-            options['ssl.ca.location'] = 'es-cert.pem'
+            options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
+        if (EventBackboneConfiguration.isEncrypted()):
+            options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
         print(options)
         self.consumer = Consumer(options)
-        self.consumer.subscribe([self.topic_name])
+        self.consumer.subscribe([EventBackboneConfiguration.getTelemetryTopicName()])
     
     def traceResponse(self, msg):
         msgStr = msg.value().decode('utf-8')

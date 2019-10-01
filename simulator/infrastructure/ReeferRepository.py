@@ -204,7 +204,7 @@ if __name__ == '__main__':
         "maintenance_required": 0
     }
 
-    repo.addReeferTelemetry(telemetry)
+    # repo.addReeferTelemetry(telemetry)
     print(repo.getAllReeferTelemetries())
     # repo.dropTable("reefer_telemetries")
     # repo.dropTable("products")
