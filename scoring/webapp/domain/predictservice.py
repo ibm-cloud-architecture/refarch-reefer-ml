@@ -1,7 +1,6 @@
 import pickle
 import pandas as pd
 import sys, os
-import re
 if sys.version_info[0] < 3:
     from StringIO import StringIO
 else:
