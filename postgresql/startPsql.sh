@@ -1,5 +1,11 @@
-export POSTGRESQL_USER=postgres
-export POSTGRESQL_PWD=postgres
-export POSTGRESQL_HOST=localhost
 
-PGPASSWORD=$POSTGRESQL_PWD psql --host=$POSTGRESQL_HOST --port=5432 --username=$POSTGRESQL_USER  -d postgres
+#!/bin/bash
+if [[ $# -ne 1 ]];then
+ echo "Usage startPsql.sh [LOCAL  | IBMCLOUD ]"
+ exit 1
+fi
+
+source ./scripts/setenv.sh $1
+
+PGPASSWORD=$POSTGRES_PWD psql --host=$POSTGRES_HOST --port=$POSTGRES_PORT \
+--username=$POSTGRES_USER  -d $POSTGRES_DBNAME

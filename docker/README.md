@@ -9,30 +9,34 @@
     docker build . -t ibmcase/reefersimulator
     ```
 
-* For container tracer
+* For container tracer listening to reefer maintenance events
 
     ```
     cd consumer
     docker build . -t ibmcase/containerconsumer
     ```
 
-* For scoring as web app
+* For scoring as web app (optional)
+
     ```
     cd scoring/webapp
     docker build . -t ibmcase/predictivescoringweb
     ```
 
 * For scoring as kafka listener and producer
+
     ```
     cd scoring/eventConsumer
     docker build . -t ibmcase/predictivescoring
     ```
+
 
 ## Running the solution locally
 
 * Start the kafka and zookeeper
 
 Under the docker folder
+
 ```
 docker-compose -f backbone-compose.yml up &
 ```
@@ -42,6 +46,9 @@ docker-compose -f backbone-compose.yml up &
 ```
 ./scripts/createTopics.sh LOCAL
 ```
+
+* Prepare the Postgresql database
+
 
 * Start the solution 
 

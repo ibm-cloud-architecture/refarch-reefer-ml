@@ -1,21 +1,8 @@
-import os, sys
+import os
 
-try:
-    KAFKA_BROKERS = os.environ['KAFKA_BROKERS']
-except KeyError:
-    print("The KAFKA_BROKERS environment variable needs to be set.")
-    exit
-
-try:
-    KAFKA_APIKEY = os.environ['KAFKA_APIKEY']
-except KeyError:
-    print("The KAFKA_APIKEY environment variable not set... assume local deployment")
-
-try:
-    KAFKA_ENV = os.environ['KAFKA_ENV']
-except KeyError:
-    KAFKA_ENV='LOCAL'
-
+KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','localhost:9092')
+KAFKA_APIKEY = os.getenv('KAFKA_APIKEY','')
+KAFKA_CERT = os.getenv('KAFKA_CERT','')
 
 def getBrokerEndPoints():
     return KAFKA_BROKERS
@@ -23,5 +10,17 @@ def getBrokerEndPoints():
 def getEndPointAPIKey():
     return KAFKA_APIKEY
 
-def getCurrentRuntimeEnvironment():
-    return KAFKA_ENV
+def hasAPIKey():
+    return KAFKA_APIKEY != ''
+
+def isEncrypted():
+    return KAFKA_CERT != ""
+
+def getKafkaCertificate():
+    return KAFKA_CERT
+
+def getTelemetryTopicName():
+    return os.getenv("TELEMETRY_TOPIC","reeferTelemetries")
+
+def getContainerTopicName():
+    return os.getenv("CONTAINER_TOPIC","containers")

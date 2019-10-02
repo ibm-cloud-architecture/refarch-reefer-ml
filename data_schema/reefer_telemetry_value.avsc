@@ -1,0 +1,87 @@
+{
+    "namespace": "ibm.eda.reefer.telemetry.event",
+    "name": "telemetry_payload",
+    "type": "record",
+    "fields" : [
+        {
+            "name" : "container_id",
+            "type" : "string"
+        },
+        {
+            "name": "measurement_time",
+            "type": "string"
+        },
+        {
+            "name" : "product_id",
+            "type" : "string"
+        },
+        {
+            "name": "temperature",
+            "type": "float"
+        },
+        {
+            "name": "target_temperature",
+            "type": "float"
+        },
+        {
+            "name": "ambiant_temperature",
+            "type": "float"
+        },
+        {
+            "name": "kilowatts",
+            "type": "float"
+        },
+        {
+            "name" : "content_type",
+            "type" : "string"
+        },
+        {
+            "name": "oxygen_level",
+            "type": "float"
+        },
+        {
+            "name": "nitrogen_level",
+            "type": "float"
+        },
+        {
+            "name": "carbon_dioxide_level",
+            "type": "float"
+        },
+        {
+            "name": "humidity_level",
+            "type": "float"
+        },
+        {
+            "name" : "vent_1",
+            "type" : "boolean"
+        },
+        {
+            "name" : "vent_2",
+            "type" : "boolean"
+        },
+        {
+            "name" : "vent_3",
+            "type" : "boolean"
+        },
+        {
+            "name": "time_door_open",
+            "type": "int"
+        },
+        {
+            "name" : "latitude",
+            "type" : "float"
+        },
+        {
+            "name" : "longitude",
+            "type" : "float"
+        },
+        {
+            "name" : "defrost_cycle",
+            "type" : "int"
+        },
+        {
+            "name" : "maintenance_required",
+            "type" : "boolean"
+        }
+    ]
+ }
