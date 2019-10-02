@@ -601,8 +601,10 @@
                 
                 <h1 id="reefer-predictive-maintenance-solution">Reefer Predictive Maintenance Solution</h1>
 <p>This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. </p>
-<p>!!! note:
-            This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a>  to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a>  to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a>.</p>
+</div>
 <p>The runtime environment in production may look like in the following diagram:</p>
 <p><img alt="" src="images/RT-analytics.png" /></p>
 <p>The Reefer container is a IoT device, which emits container metrics every 15 minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the metrics message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on openshift, can consume and publish messages.</p>
