@@ -20,8 +20,10 @@ scripts/setenv.sh
 .vscode/
 .postgresql/
 .local/
+
 # Jupyter temp files
 **/.ipynb_checkpoints
 
 # Vim temp files
 **/.*.swp
+
