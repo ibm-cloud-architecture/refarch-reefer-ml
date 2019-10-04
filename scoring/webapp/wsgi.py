@@ -7,7 +7,7 @@ VERSION = "Reefer Container Predictive Scoring v0.0.2"
 # used by gunicorn
 application = Flask(__name__)
 predictService = PredictService()
-header="""Temperature(celsius), Target_Temperature(celsius), Power, PowerConsumption, ContentType, O2, CO2, Time_Door_Open, Maintenance_Required, Defrost_Cycle"""
+header="""temperature,target_temperature,ambiant_temperature,oxygen_level,carbon_dioxide_level,humidity_level,nitrogen_level,vent_1,vent_2,vent_3,kilowatts,content_type,time_door_open,defrost_cycle"""
 
 
 @application.route("/")
@@ -23,18 +23,23 @@ def predictContainerTelemetry():
     score=str(predictService.predict(metric))
     print("return prediction:" + score)
     return score
-   
+
 
 def transformToCSV(metricJson):
     return str(metricJson["temperature"]) + "," \
-        + str(metricJson["target_temp"]) + "," \
-        + str(metricJson["power"]) + "," \
-        + str(metricJson["accumulated_power"]) + "," \
+        + str(metricJson["target_temperature"]) + "," \
+        + str(metricJson["ambiant_temperature"]) + "," \
+        + str(metricJson["oxygen_level"]) + "," \
+        + str(metricJson["carbon_dioxide_level"]) + "," \
+        + str(metricJson["humidity_level"]) + "," \
+        + str(metricJson["nitrogen_level"]) + "," \
+        + str(metricJson["vent_1"]) + "," \
+        + str(metricJson["vent_2"]) + "," \
+        + str(metricJson["vent_3"]) + "," \
+        + str(metricJson["kilowatts"]) + "," \
         + str(metricJson["content_type"]) + "," \
-        + str(metricJson["o2"]) + "," \
-        + str(metricJson["co2"]) + "," \
-        + str(metricJson["time_door_open"]) + ",0," \
-        + str(metricJson["defrost_level"])
+        + str(metricJson["time_door_open"]) + "," \
+        + str(metricJson["defrost_cycle"])
 
 
 
@@ -42,4 +47,3 @@ def transformToCSV(metricJson):
 if __name__ == "__main__":
     print(VERSION)
     application.run()
- 
