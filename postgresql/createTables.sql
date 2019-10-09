@@ -32,7 +32,6 @@ CREATE TABLE reefer_telemetries (
     vent_1 BOOLEAN,
     vent_2 BOOLEAN,
     vent_3 BOOLEAN,
-    carbon_dioxide_level REAL,
     location POINT,
     maintenance_required INT,
     primary key (container_id, measurement_time), -- Duplicate measurements not allowed
