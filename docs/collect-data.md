@@ -18,7 +18,7 @@ As this is not production work, using this simulator, we should be able to get t
 
 The historical data need to represent failure, and represent the characteristics of a Reefer container. We can imagine it includes a lot of sensors to get interesting correlated or independant features.
 
-As of now our telemetry event structure can be seen in this [avro schema]().
+As of now our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema).
 
 We have implemented a simulator to create those metrics to be used to build the model inside Jupiter notebook and with sklearn or tensorflow library. 
 
