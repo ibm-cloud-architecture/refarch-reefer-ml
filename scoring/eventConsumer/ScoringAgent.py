@@ -20,7 +20,7 @@ def assessPredictiveMaintenance(msg):
     Argument the message as dict / json format to preocess.
     In the case of maintenance needed, generate an event to the containers topic
     '''
-    header = """container_id,temperature,target_temperature, ambiant_temperature, kilowatts, time_door_open, content_type, defrost_cycle,oxygen_level, nitrogen_level, humidity_level, carbon_dioxide_level, vent_1, vent_2, vent_3"""
+    header = """container_id, timestamp, product_id, temperature, target_temperature, ambiant_temperature, kilowatts, time_door_open, content_type, defrost_cycle, oxygen_level, nitrogen_level, humidity_level, carbon_dioxide_level, vent_1, vent_2, vent_3, maintenance_required"""
     print(msg['payload'])
     score = 0
     if assessDataAreValid(msg['payload']):
