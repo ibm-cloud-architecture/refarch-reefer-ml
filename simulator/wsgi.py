@@ -4,7 +4,7 @@ from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 
-VERSION = "Reefer Container simulator v0.0.5 09/27"
+VERSION = "Reefer Container simulator v0.0.6 10/21"
 application = Flask(__name__)
 
 metricsProducer = MetricsEventsProducer()

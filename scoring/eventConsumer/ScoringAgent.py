@@ -70,6 +70,6 @@ if __name__ == "__main__":
     '''
     Just start the event listener
     '''
-    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.5 09/27")
+    print("Reefer Container Predictive Maintenance Scoring Agent v0.0.6 10/21")
     metricsEventListener = startReeferMetricsEventListener()
     metricsEventListener.close()

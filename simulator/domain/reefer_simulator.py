@@ -21,7 +21,8 @@ POWER_LEVEL= 2.7 # in kW
 HUMIDITY_LEVEL = 30 # in percent
 
 MAX_RECORDS = 1000
-NB_WRONG_RECORDS = 30
+PER_NB_WRONG_RECORDS = .12
+NB_WRONG_RECORDS = int( MAX_RECORDS * PER_NB_WRONG_RECORDS)
 NB_WRONG_RECORD_SERIE = 3
 
 DEFROST_LEVEL = 7   # Common timing periods were 6, 8, 12 and 24 hours.
@@ -70,32 +71,33 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
 
     # Constant values
     cols["container_id"] = np.repeat(cid, nb_records)
+    cols["product_id"] =  np.repeat(product_id, nb_records)
+    cols["temperature"] = np.random.normal(products[product_id]['T'], SIGMA_BASE, size=nb_records)
+    cols["target_temperature"] = np.repeat( products[product_id]['T'], nb_records)
+    cols["ambiant_temperature"] = np.random.normal(20, SIGMA_BASE, size=nb_records)
+    cols["kilowatts"] = np.random.normal(POWER_LEVEL, SIGMA_BASE, size=nb_records)
+    cols["time_door_open"] = np.random.normal(1.0, SIGMA_BASE, size=nb_records)
     content_type = products[product_id]['type']
     cols["content_type"] = np.repeat(content_type, nb_records)
-    cols["target_temperature"] = np.repeat( products[product_id]['T'], nb_records)
-    cols["product_id"] =  np.repeat(product_id, nb_records)
+    cols["defrost_cycle"] = np.random.randint(3 ,DEFROST_LEVEL, size = nb_records)
     # Normally-distributed floating-point values
     cols["oxygen_level"] = np.random.normal(O2_LEVEL, SIGMA_BASE, size=nb_records)
-    cols["carbon_dioxide_level"] = np.random.normal(CO2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["nitrogen_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
     cols["humidity_level"] = np.random.normal(products[product_id]['H'], SIGMA_BASE, size=nb_records)
+    cols["carbon_dioxide_level"] = np.random.normal(CO2_LEVEL, SIGMA_BASE, size=nb_records)
     cols["vent_1"] = np.repeat(True,nb_records)
     cols["vent_2"] = np.repeat(True,nb_records)
     cols["vent_3"] = np.repeat(True,nb_records)
-    cols["time_door_open"] = np.random.normal(1.0, SIGMA_BASE, size=nb_records)
-    cols["temperature"] = np.random.normal(products[product_id]['T'], SIGMA_BASE, size=nb_records)
-    cols["ambiant_temperature"] = np.random.normal(20, SIGMA_BASE, size=nb_records)
-    cols["kilowatts"] = np.random.normal(POWER_LEVEL, SIGMA_BASE, size=nb_records)
     # Uniform values
-    cols["defrost_cycle"] = np.random.randint(3,DEFROST_LEVEL, size = nb_records)
     cols["maintenance_required"] = np.repeat(0, nb_records)
     return pd.DataFrame(data = cols)
 
-
 def _generateFaultyValue(df: pd.DataFrame, 
-            nb_wrong_records:int = NB_WRONG_RECORDS, nb_times:int = NB_WRONG_RECORD_SERIE, 
+            nb_wrong_records:int =int( NB_WRONG_RECORDS * PER_NB_WRONG_RECORDS), 
+            nb_times:int = NB_WRONG_RECORD_SERIE, 
             attribute:str = "kilowatts", 
             mean:float=0, sigma:float=1):
+        
         """
         Generate nb_wrong_records records nb_times times in the data set on a specific column, 
         named with the attribute value.
@@ -122,12 +124,15 @@ class ReeferSimulator:
     NORMAL="normal"
     # try to match the name in the database too
     COLUMN_NAMES = ["container_id", "measurement_time", "product_id",
-                "temperature","target_temperature", "ambiant_temperature", 
+                "temperature", "target_temperature", "ambiant_temperature", 
                 "kilowatts", "time_door_open",
                 "content_type", "defrost_cycle",
-                "oxygen_level", "nitrogen_level", "humidity_level","carbon_dioxide_level", 
+                "oxygen_level", 
+                "nitrogen_level", 
+                "humidity_level",
+                "carbon_dioxide_level", 
                 "vent_1", "vent_2", "vent_3", "maintenance_required"]
-
+    
 
     def generateNormalRecords(self, cid: str = "C01", 
                          nb_records: int = MAX_RECORDS, 
@@ -177,7 +182,7 @@ class ReeferSimulator:
         print("Generating records for some poweroff")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df, 
-            NB_WRONG_RECORDS,
+            int(nb_records * PER_NB_WRONG_RECORDS),
             NB_WRONG_RECORD_SERIE,
             "kilowatts", 0, 0)
         for i in range(0, df['kilowatts'].size - 1):
@@ -217,7 +222,7 @@ class ReeferSimulator:
         print("Generating records for co2 sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,
-                NB_WRONG_RECORDS, 
+                int(nb_records * PER_NB_WRONG_RECORDS), 
                 NB_WRONG_RECORD_SERIE,
                 "carbon_dioxide_level",
                 3*CO2_LEVEL, 2*SIGMA_BASE)
@@ -258,7 +263,7 @@ class ReeferSimulator:
         print("Generating records for O2 sensor issue")
         df = self.generateNormalRecords(cid,nb_records, product_id, start_time)
         _generateFaultyValue(df,
-                NB_WRONG_RECORDS, 
+                int(nb_records * PER_NB_WRONG_RECORDS), 
                 NB_WRONG_RECORD_SERIE,
                 "oxygen_level",
                 O2_LEVEL-10, 2*SIGMA_BASE)

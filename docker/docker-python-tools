@@ -3,6 +3,7 @@ ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/home
 ENV KAFKA_APIKEY=""
 ENV KAFKA_BROKERS=""
+ENV KAFKA_CERT="/opt/app-root/src/es-cert.pem"
 ENV KAFKA_ENV="IBMCLOUD"
 ENV POSTGRES_PWD="postgres"
 ENV POSTGRES_USER="postgres"

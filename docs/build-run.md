@@ -1,7 +1,7 @@
 
 ## The Simulator as web app
 
-This is a simple python Flask web app exposing a REST POST end point and producing Reefer metrics event to kafka. 
+This is a simple python Flask web app exposing a REST POST end point and producing Reefer telemetry events to kafka `reeferTelemetry` topic. 
 The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:
 
 ```json
@@ -37,6 +37,7 @@ To deploy the code to an openshift cluster do the following:
     ```
 
     Then to track the build progress, look at the logs of the build pod:
+    
     ```
     oc logs -f bc/reefersimulator
     ```
@@ -69,13 +70,13 @@ To deploy the code to an openshift cluster do the following:
     If you connect to event stream or kafka with SSL specify where to find the SSL certificate: 
 
     ```
-     oc set env dc/reefersimulator KAFKA_CERT="es-cert.pem"
+     oc set env dc/reefersimulator KAFKA_CERT="/opt/app-root/src/es-cert.pem"
     ```
 
     Get all environment variables set for a given pod: (get the pod id with `oc get pod`)
 
     ```
-    oc get env pod/reefersimulator-4-tq27j --list
+    oc exec reefersimulator-31-2kdv5 env
     ```
 
     ![](images/env-variables.png)
@@ -204,14 +205,13 @@ During the tests we have issue in the data quality, so it is always a good pract
 
 ### Run locally
 
-Under `scoring\eventConsumer` folder, set the environment variables for KAFKA using the commands
+Under `scoring\eventConsumer` folder, set the environment variables for KAFKA using the commands below: (It uses event streams on IBM Cloud)
 
 ```
 export KAFKA_BROKERS=broker-3.eventstreams.cloud.ibm.com:9093,broker-1.eventstreams.cloud.ibm.com:9093,broker-0.eventstreams.cloud.ibm.com:9093,broker-5.eventstreams.cloud.ibm.com:9093,broker-2.eventstreams.cloud.ibm.com:9093,broker-4.eventstreams.cloud.ibm.com:9093
-export KAFKA_APIKEY=""
-export KAFKA_ENV=IBMCLOUD
+export KAFKA_APIKEY="set-api-key-for-eventstreams-on-cloud"
 
-docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_ENV=$KAFKA_ENV -v $(pwd)/..:/home -ti ibmcase/python bash -c "cd /home/scoring && export PYTHONPATH=/home && python ScoringAgent.py"
+docker run -e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY  -v $(pwd)/..:/home -ti ibmcase/python bash -c "cd /home/scoring && export PYTHONPATH=/home && python ScoringAgent.py"
 ```
 
 ### Scoring: Build and run on Openshift
@@ -228,8 +228,8 @@ As done for simulator, the scoring service needs environment variables. We can s
 
 ```
 oc set env dc/reeferpredictivescoring KAFKA_BROKERS=$KAFKA_BROKERS
-oc set env dc/reeferpredictivescoring KAFKA_ENV=$KAFKA_ENV
 oc set env dc/reeferpredictivescoring KAFKA_APIKEY=$KAFKA_APIKEY
+oc set env dc/reeferpredictivescoring KAFKA_CERT=/opt/app-root/src/es-cert.pem
 ```
 
 but we have added a script for you to do so. This script needs only to be run at the first deployment. It leverage the common setenv scripts:
@@ -249,6 +249,9 @@ To run the build again after commit code to github:
 
 ```
 oc start-build reeferpredictivescoring 
+
+# or from local file system
+oc start-build reeferpredictivescoring --from-file=.
 ```
 
 To see the log:
@@ -263,6 +266,24 @@ The scoring service has no API exposed to the external world, so we do not need 
 
 See the [integration test](#integration-tests) section to see a demonstration of the solution end to end.
 
+
+### Build docker images
+
+Build each docker images, publish them to docker hub registry or private registry, and then refresh the app in openshift. Which translates as the following command sequence:
+
+```
+# simulator
+docker build -t ibmcase/reefersimulator .
+docker login
+docker push ibmcase/reefersimulator
+> The push refers to repository [docker.io/ibmcase/reefersimulator]
+```
+
+For the scoring agent:
+
+```
+
+```
 
 #### Run kafka on your laptop
 

@@ -4,6 +4,7 @@ ENV POSTGRES_DBNANE="postgres"
 ENV POSTGRES_PORT=5432
 ENV KAFKA_APIKEY=""
 ENV KAFKA_BROKERS=""
+ENV KAFKA_CERT="/opt/app-root/src/es-cert.pem"
 
 # Add kafka or postegresql ssl certificates
 

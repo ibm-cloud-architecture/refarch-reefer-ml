@@ -1,5 +1,5 @@
 from confluent_kafka import Producer 
-import json
+import json, datetime
 import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 
 class MetricsEventsProducer:
@@ -27,9 +27,9 @@ class MetricsEventsProducer:
         """ Called once for each message produced to indicate delivery result.
             Triggered by poll() or flush(). """
         if err is not None:
-            print('Message delivery failed: {}'.format(err))
+            print( str(datetime.datetime.today()) + ' - Message delivery failed: {}'.format(err))
         else:
-            print('Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
+            print(str(datetime.datetime.today()) + ' - Message delivered to {} [{}]'.format(msg.topic(), msg.partition()))
 
     def publishEvent(self, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
