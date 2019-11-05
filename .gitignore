@@ -20,6 +20,7 @@ scripts/setenv.sh
 .vscode/
 .postgresql/
 .local/
+jovyan/
 
 # Jupyter temp files
 **/.ipynb_checkpoints

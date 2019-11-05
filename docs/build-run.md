@@ -109,12 +109,12 @@ Add the host name in your local /etc/hosts or be sure the hostname is defined in
 
 ## Test sending a simulation control to the POST api
 
-The script `sendSimulControl.sh` is used for that. 
+The script `sendSimulControl.sh` is used for that. The usage looks like:  `sendSimulControl.sh hostname simultype (co2sensor | o2sensor | poweroff) containerID nb_of_records`
 
 ```
 pwd
 refarch-reefer-ml
-./scripts/sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C01  
+./scripts/sendSimulControl.sh reefersimulatorroute-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local co2sensor C01 2000
 ```
 
 If you use no argument for this script, it will send co2sensor control to the service running on our openshift cluster on IBM Cloud.
@@ -127,7 +127,7 @@ Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can
     Generating  10  Co2 metrics
 ```
 
-    We will see how those events are processed in the next section.
+We will see how those events are processed in the next section.
 
 ## Unit test the Simulator
 
@@ -272,7 +272,7 @@ See the [integration test](#integration-tests) section to see a demonstration of
 Build each docker images, publish them to docker hub registry or private registry, and then refresh the app in openshift. Which translates as the following command sequence:
 
 ```
-# simulator
+# simulator folder
 docker build -t ibmcase/reefersimulator .
 docker login
 docker push ibmcase/reefersimulator
@@ -282,6 +282,7 @@ docker push ibmcase/reefersimulator
 For the scoring agent:
 
 ```
+# scoring folder
 
 ```
 

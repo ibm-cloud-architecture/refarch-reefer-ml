@@ -4,7 +4,7 @@ from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 
-VERSION = "Reefer Container simulator v0.0.6 10/21"
+VERSION = "Reefer Container simulator v0.0.7 10/29"
 application = Flask(__name__)
 
 metricsProducer = MetricsEventsProducer()
@@ -12,7 +12,10 @@ metricsProducer = MetricsEventsProducer()
 @application.route("/")
 def hello():
     return VERSION
-    
+
+# Need to support asynchronous HTTP Request, return 202 accepted while starting 
+# the processing of generating events. The HTTP header needs to return a
+# location to get the status of the simulator task    
 @application.route("/control", methods = ['POST'])
 def runSimulator():
     print("post received: ")
@@ -28,7 +31,7 @@ def runSimulator():
     elif  control["simulation"]  == ReeferSimulator.SIMUL_O2:
         metrics=simulator.generateO2Tuples(control["containerID"],int(control["nb_of_records"]),control["product_id"])
     else:
-        return "Wrong simulation controller data"
+        return jsonify("Wrong simulation controller data"),404
     
     for metric in metrics:
         evt = {"containerID": control["containerID"],
