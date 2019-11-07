@@ -4,13 +4,17 @@ from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 
-VERSION = "Reefer Container simulator v0.0.7 10/29"
+VERSION = "Reefer Container simulator v0.0.8 11/06"
 application = Flask(__name__)
 
 metricsProducer = MetricsEventsProducer()
 
 @application.route("/")
 def hello():
+    return VERSION
+
+@application.route("/health")
+def health():
     return VERSION
 
 # Need to support asynchronous HTTP Request, return 202 accepted while starting 

@@ -5,24 +5,26 @@ This is a simple python Flask web app exposing a REST POST end point and produci
 The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:
 
 ```json
-    { 'containerID': 'c100',
+    { 'containerID': 'C02',
     'simulation': 'co2sensor',
     'nb_of_records': 1000,
-    'good_temperature': 4.4
+    "product_id":  "P02"
     }
 ```
 
 ### Simulator: Build and run on OpentShift
 
-To deploy the code to an openshift cluster do the following:
+To build and deploy the code to an OpenShift cluster, using the source 2 image approach, do the following steps:
 
-1. Login to the openshift cluster. 
+1. Login to the OpenShift cluster. 
 
     ```
     oc login -u apikey -p <apikey> --server=https://...
     ```
 
-1. Create a project if you did not create it already:
+    *To find the API key and server URL go to the openshift console under your account, to access the `Copy login command` menu.* 
+
+1. Create a project if you did not create one already:
 
     ```
     oc  new-project reefershipmentsolution --description="A Reefer container shipment solution"
@@ -106,6 +108,14 @@ Once created, the URL of the app is visible in the route list panel:
 ![](images/simul-route.png)
 
 Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.
+
+### An alternate approach is to setup a CI/CD pipeline
+
+We have adopted the Git Action to manage the [continuous integration](https://github.com/ibm-cloud-architecture/refarch-kc-gitops/blob/master/KContainer-CI-Strategy.md), and ArgoCD for the continuous deployment. The build process will build the following images:
+
+* [https://hub.docker.com/repository/docker/ibmcase/kcontainer-reefer-simulator]
+
+Helm charts are added for the simulator and the scoring agent, using `helm create` command, and then the values.yaml and deployment.yaml files were updated to set environment variables and other parameters.
 
 ## Test sending a simulation control to the POST api
 

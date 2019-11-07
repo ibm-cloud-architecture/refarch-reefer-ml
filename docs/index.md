@@ -24,26 +24,26 @@ For the minimum viable demonstration the runtime components looks like in the fi
 1. A web app, deployed on Openshift, is running a simulator to simulate the generation of Reefer container metrics while the container is at sea or during end to end transportation. The app exposes a simple POST operation with a control object to control the simulation. Here is an example of such control.json
 
     ```json
-    { 'containerID': 'c100',
+    { 'containerID': 'C02',
     'simulation': 'co2sensor',
     'nb_of_records': 1000,
-    'good_temperature': 4.4
+    "product_id":  "P02"
     }
     ```
 
-    See [this section to build and deploy](#the-simulator-as-webapp) the simulator web app.
+    See [this section explains how to build and deploy](#the-simulator-as-webapp) the simulator web app.
 
 1. A curl script will do the post of this json object. [See this paragraph.](#test-sending-a-simulation-control-to-the-post-api)
-1. The metrics events are sent to the `reeferTelemetries` topic in Kafka.
+1. The telemetry events are sent to the `reeferTelemetries` topic in Kafka.
 1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](/##2-define-the-predictive-scoring-model) for details.
 1. The maintenance requirement is an event in the `containers` topic.
-1. The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository]() is the microservice we could use for this component, but as of now we have a simple consumer in the `consumer` folder.
+1. The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The [following repository](https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/) is the microservice we could use for this component, but as of now we have a simple consumer in the `consumer` folder.
 
-For the machine learning environment we can use csv file as input data or postgresql database. The environment looks like in the figure below:
+For the machine learning environment we can use csv file as input data or postgresql database or kafka topic. The environment looks like in the figure below:
 
 ![](images/data-collect.png)
 
-The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.
+The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database or can be used to save to csv file. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.
 
 ![](images/postgres-credential.png)
 
@@ -55,7 +55,7 @@ Start by cloning this project using the command:
 git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 ```
 
-### Be sure to have Event Stream or Kafka running somewhere
+### Be sure to have Event Stream or Kafka cluster running somewhere
 
 We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/) on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/). 
 
@@ -84,7 +84,7 @@ Save this file as `postgres.pem` under the simulator folder.
 
 As part of the [12 factors practice](https://12factor.net/), we externalize the end points configuration in environment variables. We are providing a script template (`scripts/setenv-tmp.sh`) to set those variables for your local development. Rename this file as `setenv.sh`. This file is git ignored, to do not share keys and passwords in public domain.
 
-The variables help the different code in the solition to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.
+The variables help the different code in the solution to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.
 
 
 ### Building a python development environment as docker image
@@ -266,8 +266,8 @@ So you need to copy the generated pickle file to the `eventConsumer/domain` fold
 
 ### 4- Deploy each service
 
-See [this detailed note](build-run.md) to deploy each service on openshift.
+See [this detailed note](build-run.md) to deploy each service on OpenShift.
 
 ## Further Readings
 
-* []()
+* [Romeo Kienzler anomaly detection article]()

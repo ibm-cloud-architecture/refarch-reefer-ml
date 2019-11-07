@@ -4,9 +4,11 @@ ml/.ipynb_checkpoints
 simulator/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
+simulator/templates/
 scoring/webapp/__pycache__/
 scoring/webapp/infrastructure/__pycache__
 scoring/webapp/domain/__pycache__
+scoring/templates/
 consumer/__pycache__/
 consumer/*.pem
 simulator/*.pem
@@ -21,6 +23,7 @@ scripts/setenv.sh
 .postgresql/
 .local/
 jovyan/
+work/
 
 # Jupyter temp files
 **/.ipynb_checkpoints
