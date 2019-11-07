@@ -3,8 +3,9 @@ import os, time
 from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
+from concurrent.futures import ThreadPoolExecutor
 
-VERSION = "Reefer Container simulator v0.0.8 11/06"
+VERSION = "Reefer Container simulator v0.0.9 11/06"
 application = Flask(__name__)
 
 metricsProducer = MetricsEventsProducer()
@@ -28,22 +29,29 @@ def runSimulator():
         abort(400) 
     control = request.json
     simulator = ReeferSimulator()
+    nb_records = int(control["nb_of_records"])
     if control["simulation"] == ReeferSimulator.SIMUL_POWEROFF:
-        metrics=simulator.generatePowerOffTuples(control["containerID"],int(control["nb_of_records"]),control["product_id"])
+        metrics=simulator.generatePowerOffTuples(control["containerID"],nb_records,control["product_id"])
     elif  control["simulation"]  == ReeferSimulator.SIMUL_CO2:
-        metrics=simulator.generateCo2Tuples(control["containerID"],int(control["nb_of_records"]),control["product_id"])
+        metrics=simulator.generateCo2Tuples(control["containerID"],nb_records,control["product_id"])
     elif  control["simulation"]  == ReeferSimulator.SIMUL_O2:
-        metrics=simulator.generateO2Tuples(control["containerID"],int(control["nb_of_records"]),control["product_id"])
+        metrics=simulator.generateO2Tuples(control["containerID"],nb_records,control["product_id"])
     else:
         return jsonify("Wrong simulation controller data"),404
     
+    with ThreadPoolExecutor() as executor:
+        executor.submit(sendEvents,metrics)
+        
+    return jsonify("Simulation started"),202
+    
+
+def sendEvents(metrics):
     for metric in metrics:
-        evt = {"containerID": control["containerID"],
-                "timestamp": str(metric[0]),
+        evt = {"containerID": metric[0],
+                "timestamp": str(metric[1]),
                 "type":"ReeferTelemetries",
                 "payload": str(metric)}
         metricsProducer.publishEvent(evt,"containerID")
-    return "Simulation started"
     
 
 if __name__ == "__main__":
