@@ -70,4 +70,9 @@ spec:
               secretKeyRef:
                 name: "{{ .Values.eventstreams.apikeyConfigMap }}"
                 key: binding
+          - name: KAFKA_CERT
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.kafka.capemSecret }}"
+                key: binding
           {{- end }}
