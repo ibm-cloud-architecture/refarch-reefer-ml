@@ -18,6 +18,11 @@ def hello():
 def health():
     return VERSION
 
+result = {}
+@application.route("/status")
+def status():
+    return result
+
 # Need to support asynchronous HTTP Request, return 202 accepted while starting 
 # the processing of generating events. The HTTP header needs to return a
 # location to get the status of the simulator task    
@@ -39,13 +44,17 @@ def runSimulator():
     else:
         return jsonify("Wrong simulation controller data"),404
     
-    with ThreadPoolExecutor() as executor:
-        executor.submit(sendEvents,metrics)
+    if nb_records < 500:
+        sendEvents(metrics)
+    else:
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(sendEvents,metrics)
         
     return jsonify("Simulation started"),202
     
 
 def sendEvents(metrics):
+    print(metrics)
     for metric in metrics:
         evt = {"containerID": metric[0],
                 "timestamp": str(metric[1]),

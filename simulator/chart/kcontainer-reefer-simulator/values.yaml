@@ -22,6 +22,7 @@ kafka:
   brokersConfigMap: demo-kafka-brokers
   telemetryTopicName: reeferTelemetries
   containerTopicName: containers
+  capemSecret: es-cert-pem
 eventstreams:
   enabled: true
   apikeyConfigMap: demo-es-apikey

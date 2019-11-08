@@ -1,4 +1,4 @@
-# Reefer Predictive Maintenance Solution
+# Reefer Anomaly Detection Solution
 
 This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. 
 
@@ -270,4 +270,6 @@ See [this detailed note](build-run.md) to deploy each service on OpenShift.
 
 ## Further Readings
 
-* [Romeo Kienzler anomaly detection article]()
+* [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
+* [Romeo Kienzler anomaly detection article 2](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
+* [Romeo Kienzler anomaly detection article 3](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)

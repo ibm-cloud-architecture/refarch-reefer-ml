@@ -11,7 +11,7 @@ class ContainerEventsListener:
 
     # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
     def prepareConsumer(self, groupID = "pythoncontainerconsumers"):
-        options ={
+        options ={T
                 'bootstrap.servers':  EventBackboneConfiguration.getBrokerEndPoints(),
                 'group.id': groupID,
                  'auto.offset.reset': 'earliest',
