@@ -2,11 +2,21 @@ site_name: Reefer Container Predictive Maintenance
 repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
   - Introduction: index.md
-  - Collect data: collect-data.md
-  - Define the predictive scoring model: https://ibm-cloud-architecture.github.io/refarch-reefer-ml/#2-define-the-predictive-scoring-model
-  - Build and run the solution on Openshift: build-run.md
-  - Run integration tests: integration-tests.md
-  - Reefer predictive maintenance problem: predictive-maintenance.md
+  - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
+  - Collect:
+    - Generate telemetry data: collect/generate-telemetry.md
+    - Collect data with open source solution: collect/oss-collect-data.md
+    - Collect data with cloud pak for data: collect/cp4d-collect-data.md
+  - Organize: organize/readme.md
+  - Analyze: 
+    - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md
+    - Reefer anomaly detection problem: analyze/predictive-maintenance.md
+  - Infuse:
+    - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
+    - Build and run the solution on Openshift: infuse/build-run.md
+    - Engineer dispatching with Business process with Cloud Pak for Automation: infuse/bpm.md
+    - Run integration tests: infuse/integration-tests.md
+  
   - Reefer solution implementation project: https://ibm-cloud-architecture.github.io/refarch-kc/
 theme: 
   name: material

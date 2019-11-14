@@ -1,28 +1,21 @@
+# Generate telemetry data
 
-As part of the IBM AI ladder practice introduced in the [Data  AI reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics) and specially the collect step, we need to get a data topology in place to get data at rest so data scientist can do their data analysis, and feature preparation.
+We are using the simulator to generate data. In the industry, when developing new manufactured product, the engineers do not have a lot of data so they also use a mix of real sensors with simulators to create fake but realistic data to develop and test their models.
 
-In this solution, there are two datasources:
+The historical data need to represent failure, and represent the characteristics of a Reefer container. We have define some sensors to get interesting correlated or independant features.
 
-* the events in the kafka topic, using the [event sourcing design pattern](https://ibm-cloud-architecture.github.io/refarch-eda/design-patterns/event-sourcing/).
-* the database about the Reefer, the fresh products and reefer telemetries
+As of now our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema/reefer_telemetry_value.avsc).
 
-As we do not have Reefer telemetry public data available, we are using our simulator to develop such data. The figure below illustrates this data injection simulation.
+
+For the machine learning environment we can use csv file as input data or postgresql database or kafka topic. The environment looks like in the figure below:
 
 ![](images/data-collect.png)
 
-***Also you can use the simulator to create data in csv file, so there is no need to use postgresql to develop the model.***
+The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database or can be used to save to csv file. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.
 
-### Generate data with the Reefer simulator
+![](images/postgres-credential.png)
 
-As this is not production work, using this simulator, we should be able to get the end to end story still working from a solution point of view. In the industry, when developing new manufactored product, the engineers do not have a lot of data so they also use a mixed of real sensors with some simulators to play with sensors and test their models.
-
-The historical data need to represent failure, and represent the characteristics of a Reefer container. We can imagine it includes a lot of sensors to get interesting correlated or independant features.
-
-As of now our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema).
-
-We have implemented a simulator to create those metrics to be used to build the model inside Jupiter notebook and with sklearn or tensorflow library. 
-
-#### Start python env
+## Start python env
 
 ```
  ./startPythonEnv IBMCLOUD or LOCAL
