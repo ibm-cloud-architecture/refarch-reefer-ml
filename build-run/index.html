@@ -304,6 +304,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#an-alternate-approach-is-to-setup-a-cicd-pipeline" title="An alternate approach is to setup a CI/CD pipeline" class="md-nav__link">
+    An alternate approach is to setup a CI/CD pipeline
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -450,6 +457,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#an-alternate-approach-is-to-setup-a-cicd-pipeline" title="An alternate approach is to setup a CI/CD pipeline" class="md-nav__link">
+    An alternate approach is to setup a CI/CD pipeline
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -540,24 +554,25 @@
                 <h2 id="the-simulator-as-web-app">The Simulator as web app</h2>
 <p>This is a simple python Flask web app exposing a REST POST end point and producing Reefer telemetry events to kafka <code>reeferTelemetry</code> topic. 
 The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:</p>
-<div class="codehilite"><pre><span></span>    <span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;c100&#39;,</span>
+<div class="codehilite"><pre><span></span>    <span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;C02&#39;,</span>
     <span class="err">&#39;simulation&#39;:</span> <span class="err">&#39;co2sensor&#39;,</span>
     <span class="err">&#39;nb_of_records&#39;:</span> <span class="err">1000,</span>
-    <span class="err">&#39;good_temperature&#39;:</span> <span class="err">4.4</span>
+    <span class="nt">&quot;product_id&quot;</span><span class="p">:</span>  <span class="s2">&quot;P02&quot;</span>
     <span class="p">}</span>
 </pre></div>
 
 <h3 id="simulator-build-and-run-on-opentshift">Simulator: Build and run on OpentShift</h3>
-<p>To deploy the code to an openshift cluster do the following:</p>
+<p>To build and deploy the code to an OpenShift cluster, using the source 2 image approach, do the following steps:</p>
 <ol>
 <li>
-<p>Login to the openshift cluster. </p>
+<p>Login to the OpenShift cluster. </p>
 <div class="codehilite"><pre><span></span>oc login -u apikey -p &lt;apikey&gt; --server=https://...
 </pre></div>
 
+<p><em>To find the API key and server URL go to the openshift console under your account, to access the <code>Copy login command</code> menu.</em> </p>
 </li>
 <li>
-<p>Create a project if you did not create it already:</p>
+<p>Create a project if you did not create one already:</p>
 <div class="codehilite"><pre><span></span>oc  new-project reefershipmentsolution --description=&quot;A Reefer container shipment solution&quot;
 </pre></div>
 
@@ -626,6 +641,12 @@ reefersimulator-3-jdh2v         1/1       Running      0          1m
 <p>Once created, the URL of the app is visible in the route list panel:</p>
 <p><img alt="" src="../images/simul-route.png" /></p>
 <p>Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.</p>
+<h3 id="an-alternate-approach-is-to-setup-a-cicd-pipeline">An alternate approach is to setup a CI/CD pipeline</h3>
+<p>We have adopted the Git Action to manage the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-gitops/blob/master/KContainer-CI-Strategy.md">continuous integration</a>, and ArgoCD for the continuous deployment. The build process will build the following images:</p>
+<ul>
+<li>[https://hub.docker.com/repository/docker/ibmcase/kcontainer-reefer-simulator]</li>
+</ul>
+<p>Helm charts are added for the simulator and the scoring agent, using <code>helm create</code> command, and then the values.yaml and deployment.yaml files were updated to set environment variables and other parameters.</p>
 <h2 id="test-sending-a-simulation-control-to-the-post-api">Test sending a simulation control to the POST api</h2>
 <p>The script <code>sendSimulControl.sh</code> is used for that. The usage looks like:  <code>sendSimulControl.sh hostname simultype (co2sensor | o2sensor | poweroff) containerID nb_of_records</code></p>
 <div class="codehilite"><pre><span></span>pwd

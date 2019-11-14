@@ -96,7 +96,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#reefer-predictive-maintenance-solution" tabindex="1" class="md-skip">
+      <a href="#reefer-anomaly-detection-solution" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -273,8 +273,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
-    Be sure to have Event Stream or Kafka running somewhere
+  <a href="#be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or Kafka cluster running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or Kafka cluster running somewhere
   </a>
   
 </li>
@@ -486,8 +486,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-running-somewhere" title="Be sure to have Event Stream or Kafka running somewhere" class="md-nav__link">
-    Be sure to have Event Stream or Kafka running somewhere
+  <a href="#be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or Kafka cluster running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or Kafka cluster running somewhere
   </a>
   
 </li>
@@ -599,7 +599,7 @@
                   <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="reefer-predictive-maintenance-solution">Reefer Predictive Maintenance Solution</h1>
+                <h1 id="reefer-anomaly-detection-solution">Reefer Anomaly Detection Solution</h1>
 <p>This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -616,33 +616,33 @@
 <ol>
 <li>
 <p>A web app, deployed on Openshift, is running a simulator to simulate the generation of Reefer container metrics while the container is at sea or during end to end transportation. The app exposes a simple POST operation with a control object to control the simulation. Here is an example of such control.json</p>
-<div class="codehilite"><pre><span></span><span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;c100&#39;,</span>
+<div class="codehilite"><pre><span></span><span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;C02&#39;,</span>
 <span class="err">&#39;simulation&#39;:</span> <span class="err">&#39;co2sensor&#39;,</span>
 <span class="err">&#39;nb_of_records&#39;:</span> <span class="err">1000,</span>
-<span class="err">&#39;good_temperature&#39;:</span> <span class="err">4.4</span>
+<span class="nt">&quot;product_id&quot;</span><span class="p">:</span>  <span class="s2">&quot;P02&quot;</span>
 <span class="p">}</span>
 </pre></div>
 
-<p>See <a href="#the-simulator-as-webapp">this section to build and deploy</a> the simulator web app.</p>
+<p>See <a href="#the-simulator-as-webapp">this section explains how to build and deploy</a> the simulator web app.</p>
 </li>
 <li>
 <p>A curl script will do the post of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
 </li>
-<li>The metrics events are sent to the <code>reeferTelemetries</code> topic in Kafka.</li>
+<li>The telemetry events are sent to the <code>reeferTelemetries</code> topic in Kafka.</li>
 <li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/##2-define-the-predictive-scoring-model">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
-<li>The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="">following repository</a> is the microservice we could use for this component, but as of now we have a simple consumer in the <code>consumer</code> folder.</li>
+<li>The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/">following repository</a> is the microservice we could use for this component, but as of now we have a simple consumer in the <code>consumer</code> folder.</li>
 </ol>
-<p>For the machine learning environment we can use csv file as input data or postgresql database. The environment looks like in the figure below:</p>
+<p>For the machine learning environment we can use csv file as input data or postgresql database or kafka topic. The environment looks like in the figure below:</p>
 <p><img alt="" src="images/data-collect.png" /></p>
-<p>The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.</p>
+<p>The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database or can be used to save to csv file. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.</p>
 <p><img alt="" src="images/postgres-credential.png" /></p>
 <h2 id="pre-requisites-to-build-and-run-this-solution">Pre-requisites to build and run this solution</h2>
 <p>Start by cloning this project using the command:</p>
 <div class="codehilite"><pre><span></span>git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 </pre></div>
 
-<h3 id="be-sure-to-have-event-stream-or-kafka-running-somewhere">Be sure to have Event Stream or Kafka running somewhere</h3>
+<h3 id="be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere">Be sure to have Event Stream or Kafka cluster running somewhere</h3>
 <p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation <a href="https://ibm.github.io/event-streams/installing/installing-openshift/">here</a>. </p>
 <p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
 <p><img alt="" src="images/es-topics.png" /></p>
@@ -658,7 +658,7 @@ ibmcloud cdb cacert &lt;database deployment name&gt;
 <p>Save this file as <code>postgres.pem</code> under the simulator folder.</p>
 <h3 id="set-environment-variables">Set environment variables</h3>
 <p>As part of the <a href="https://12factor.net/">12 factors practice</a>, we externalize the end points configuration in environment variables. We are providing a script template (<code>scripts/setenv-tmp.sh</code>) to set those variables for your local development. Rename this file as <code>setenv.sh</code>. This file is git ignored, to do not share keys and passwords in public domain.</p>
-<p>The variables help the different code in the solition to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.</p>
+<p>The variables help the different code in the solution to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.</p>
 <h3 id="building-a-python-development-environment-as-docker-image">Building a python development environment as docker image</h3>
 <p>To avoid impacting our laptop environment (specially macbook which use python), we use a dockerfile to get the basic of python 3.7.x and the python modules like kafka, http requests, pandas, sklearn, pytest... we need to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:</p>
 <div class="codehilite"><pre><span></span>cd docker
@@ -807,10 +807,12 @@ docker build -f docker-jupyter-tool -t ibmcase/jupyter .
 <p>In this solution we use the agent implementation.</p>
 <p>So you need to copy the generated pickle file to the <code>eventConsumer/domain</code> folder and if you use the webapp too, copy it to <code>webapp/domain</code>.</p>
 <h3 id="4-deploy-each-service">4- Deploy each service</h3>
-<p>See <a href="build-run/">this detailed note</a> to deploy each service on openshift.</p>
+<p>See <a href="build-run/">this detailed note</a> to deploy each service on OpenShift.</p>
 <h2 id="further-readings">Further Readings</h2>
 <ul>
-<li><a href=""></a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1">Romeo Kienzler anomaly detection article 1</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2">Romeo Kienzler anomaly detection article 2</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/">Romeo Kienzler anomaly detection article 3</a></li>
 </ul>
                 
                   
