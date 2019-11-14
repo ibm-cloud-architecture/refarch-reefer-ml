@@ -258,8 +258,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#component-view" title="Component view" class="md-nav__link">
-    Component view
+  <a href="#mvp-component-view" title="MVP component view" class="md-nav__link">
+    MVP component view
   </a>
   
 </li>
@@ -273,8 +273,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or Kafka cluster running somewhere" class="md-nav__link">
-    Be sure to have Event Stream or Kafka cluster running somewhere
+  <a href="#be-sure-to-have-event-stream-or-a-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or a Kafka cluster running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or a Kafka cluster running somewhere
   </a>
   
 </li>
@@ -328,29 +328,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-collect-data" title="1- Collect data" class="md-nav__link">
-    1- Collect data
+  <a href="#devops" title="DevOps" class="md-nav__link">
+    DevOps
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-define-the-predictive-scoring-model" title="2- Define the predictive scoring model" class="md-nav__link">
-    2- Define the predictive scoring model
+  <a href="#dataops" title="DataOps" class="md-nav__link">
+    DataOps
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-deploy-the-model" title="3- Deploy the model" class="md-nav__link">
-    3- Deploy the model
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-deploy-each-service" title="4- Deploy each service" class="md-nav__link">
-    4- Deploy each service
+  <a href="#mlops" title="MLOps" class="md-nav__link">
+    MLOps
   </a>
   
 </li>
@@ -384,8 +377,8 @@
 
 
   <li class="md-nav__item">
-    <a href="collect-data/" title="Collect data" class="md-nav__link">
-      Collect data
+    <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/" title="Methodology used" class="md-nav__link">
+      Methodology used
     </a>
   </li>
 
@@ -395,10 +388,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Collect
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Collect
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="https://ibm-cloud-architecture.github.io/refarch-reefer-ml/#2-define-the-predictive-scoring-model" title="Define the predictive scoring model" class="md-nav__link">
-      Define the predictive scoring model
+    <a href="collect/generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
+      Generate telemetry data
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="collect/oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
+      Collect data with open source solution
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="collect/cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
+      Collect data with cloud pak for data
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -408,33 +449,129 @@
 
 
   <li class="md-nav__item">
-    <a href="build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
+    <a href="organize/readme/" title="Organize" class="md-nav__link">
+      Organize
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Analyze
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Analyze
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="analyze/oss-ml-dev/" title="Define the anomaly detection scoring model with OSS" class="md-nav__link">
+      Define the anomaly detection scoring model with OSS
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="analyze/predictive-maintenance/" title="Reefer anomaly detection problem" class="md-nav__link">
+      Reefer anomaly detection problem
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Infuse
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Infuse
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="infuse/dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
+      Develop scoring app with cloud pak for application
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="infuse/build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
       Build and run the solution on Openshift
     </a>
   </li>
 
-    
-      
-      
-      
+        
+          
+          
+          
 
 
   <li class="md-nav__item">
-    <a href="integration-tests/" title="Run integration tests" class="md-nav__link">
+    <a href="infuse/bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
+      Engineer dispatching with Business process with Cloud Pak for Automation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="infuse/integration-tests/" title="Run integration tests" class="md-nav__link">
       Run integration tests
     </a>
   </li>
 
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="predictive-maintenance/" title="Reefer predictive maintenance problem" class="md-nav__link">
-      Reefer predictive maintenance problem
-    </a>
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -471,8 +608,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#component-view" title="Component view" class="md-nav__link">
-    Component view
+  <a href="#mvp-component-view" title="MVP component view" class="md-nav__link">
+    MVP component view
   </a>
   
 </li>
@@ -486,8 +623,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or Kafka cluster running somewhere" class="md-nav__link">
-    Be sure to have Event Stream or Kafka cluster running somewhere
+  <a href="#be-sure-to-have-event-stream-or-a-kafka-cluster-running-somewhere" title="Be sure to have Event Stream or a Kafka cluster running somewhere" class="md-nav__link">
+    Be sure to have Event Stream or a Kafka cluster running somewhere
   </a>
   
 </li>
@@ -541,29 +678,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-collect-data" title="1- Collect data" class="md-nav__link">
-    1- Collect data
+  <a href="#devops" title="DevOps" class="md-nav__link">
+    DevOps
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-define-the-predictive-scoring-model" title="2- Define the predictive scoring model" class="md-nav__link">
-    2- Define the predictive scoring model
+  <a href="#dataops" title="DataOps" class="md-nav__link">
+    DataOps
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-deploy-the-model" title="3- Deploy the model" class="md-nav__link">
-    3- Deploy the model
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-deploy-each-service" title="4- Deploy each service" class="md-nav__link">
-    4- Deploy each service
+  <a href="#mlops" title="MLOps" class="md-nav__link">
+    MLOps
   </a>
   
 </li>
@@ -600,22 +730,24 @@
                 
                 
                 <h1 id="reefer-anomaly-detection-solution">Reefer Anomaly Detection Solution</h1>
-<p>This project is to demonstrate how to perform real time analytics, like predictive maintenance of Reefer container in the shipping industry, using Reefer container metric event stream. </p>
+<p>This project is to demonstrate how to perform real time analytics, like anomaly detection for Reefer container in the shipping industry, using Reefer container telemetry event stream. </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a>  to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a>.</p>
+<p>This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a>  to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a> but it also presents how to combine different IBM cloud paks to build the solution: Cloud pak for data, for automation, for integration and for application.</p>
 </div>
-<p>The runtime environment in production may look like in the following diagram:</p>
+<p>As we will detail in next section there are four components in this solution that make the anomaly detection: a Reefer simulator (we do not have such Reefer container in our stock), a container microservice, an analytics scoring agent and a business process. The diagram below is a very high level view of the components in a three layer architecture with Openshift for the deployment infrastructure.</p>
+<p><img alt="" src="images/ibm-cp.png" /></p>
+<p>We also look at an open source version of this solution using an approach close to <a href="http://opendatahub.io/">opendatahub.io</a> proposed architecture, as illustrated in the following diagram:</p>
 <p><img alt="" src="images/RT-analytics.png" /></p>
-<p>The Reefer container is a IoT device, which emits container metrics every 15 minutes via the MQTT protocol. The first component receiving those messages is Apache Nifi to transform the metrics message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on openshift, can consume and publish messages.</p>
-<p>For persistence reason, we may leverage big data type of storage like Cassandra to persist the container metrics over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and build model.</p>
-<p>Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of kafka Reefer metrics events. The action will be to change the state of the Reefer entity via an events to the <code>containers</code> topic. </p>
-<h2 id="component-view">Component view</h2>
-<p>For the minimum viable demonstration the runtime components looks like in the figure below:</p>
+<p>The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. The first component receiving those messages is <a href="">Apache Nifi</a> to transform the telemetry message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on Openshift, can consume and publish messages.</p>
+<p>For persistence reason, we may leverage big data type of storage like Postgresql or Cassandra to persist the container's telemetry over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and select the best model. We also illustrate how to connect to Kafka topic as data source, from a Jupyter notebook.</p>
+<p>Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of Reefer telemetry events. When anomaly is detected, a new  event is posted to the <code>containers</code> topic so the Reefer container manager microservice can apply the expected business logic. </p>
+<h2 id="mvp-component-view">MVP component view</h2>
+<p>For a minimum viable demonstration the runtime components looks like in the figure below:</p>
 <p><img alt="" src="images/mvp-runtime.png" /></p>
 <ol>
 <li>
-<p>A web app, deployed on Openshift, is running a simulator to simulate the generation of Reefer container metrics while the container is at sea or during end to end transportation. The app exposes a simple POST operation with a control object to control the simulation. Here is an example of such control.json</p>
+<p>A web app, deployed on Openshift, is running a simulator to simulate the generation of Reefer container telemetries while the container is at sea or during end to end transportation. The app exposes a simple POST operation with a control object to control the simulation. Here is an example of such <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scripts/simulControl.json">control.json</a> object</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;C02&#39;,</span>
 <span class="err">&#39;simulation&#39;:</span> <span class="err">&#39;co2sensor&#39;,</span>
 <span class="err">&#39;nb_of_records&#39;:</span> <span class="err">1000,</span>
@@ -623,30 +755,28 @@
 <span class="p">}</span>
 </pre></div>
 
-<p>See <a href="#the-simulator-as-webapp">this section explains how to build and deploy</a> the simulator web app.</p>
+<p>The simulation can be done on o2sensor, co2sensor or power. </p>
 </li>
 <li>
-<p>A curl script will do the post of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
+<p>A curl script does the HTTP POST request of this json object. <a href="#test-sending-a-simulation-control-to-the-post-api">See this paragraph.</a></p>
 </li>
 <li>The telemetry events are sent to the <code>reeferTelemetries</code> topic in Kafka.</li>
-<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="/##2-define-the-predictive-scoring-model">See the note</a> for details.</li>
+<li>The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. <a href="analyze/oss-ml-dev/">See the note</a> for details.</li>
 <li>The maintenance requirement is an event in the <code>containers</code> topic.</li>
-<li>The last component of the solution, is to trace the container maintenance event, in real application, this component should trigger a business process to get human performing the maintenance. The <a href="https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/">following repository</a> is the microservice we could use for this component, but as of now we have a simple consumer in the <code>consumer</code> folder.</li>
+<li>The 6<sup>th</sup> component of the solution, is the <a href="https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/">container microservice</a> which was defined in the EDA reference implementation.</li>
+<li>The <a href="infuse/bpm/">maintenance engineer intervention process</a> is modeled in BPM, deploy on public cloud and the process application is exposed as API. The container identifier and the telemetry record is sent as input to the process.</li>
 </ol>
-<p>For the machine learning environment we can use csv file as input data or postgresql database or kafka topic. The environment looks like in the figure below:</p>
-<p><img alt="" src="images/data-collect.png" /></p>
-<p>The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database or can be used to save to csv file. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.</p>
-<p><img alt="" src="images/postgres-credential.png" /></p>
 <h2 id="pre-requisites-to-build-and-run-this-solution">Pre-requisites to build and run this solution</h2>
 <p>Start by cloning this project using the command:</p>
 <div class="codehilite"><pre><span></span>git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 </pre></div>
 
-<h3 id="be-sure-to-have-event-stream-or-kafka-cluster-running-somewhere">Be sure to have Event Stream or Kafka cluster running somewhere</h3>
-<p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/">quick article</a> on this event stream cloud deployment. We also have deployed Event Stream on Openshift running on-premise servers following the product documentation <a href="https://ibm.github.io/event-streams/installing/installing-openshift/">here</a>. </p>
-<p>The following diagram illustrates the topics configured in IBM Cloud Event Stream service:</p>
+<h3 id="be-sure-to-have-event-stream-or-a-kafka-cluster-running-somewhere">Be sure to have Event Stream or a Kafka cluster running somewhere</h3>
+<p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/">quick article</a> on how to deploy event stream. </p>
+<p><em>As an alternate approach, we have deployed Event Stream on Openshift running on-premise servers following the product documentation <a href="https://ibm.github.io/event-streams/installing/installing-openshift/">here</a>.</em> </p>
+<p>The following diagram illustrates the needed Kafka topics configured in IBM Cloud Event Stream service:</p>
 <p><img alt="" src="images/es-topics.png" /></p>
-<p>With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers or producers.</p>
+<p>With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers and the producers.</p>
 <p>For Event Streams on Openshift deployment, click to the <code>connect to the cluster</code> button to get the broker URL and to generate the API key: select the option to generate the key for all topics.</p>
 <p><img alt="" src="images/cluster-access.png" /></p>
 <h3 id="provision-a-postgresql-service">Provision a Postgresql service</h3>
@@ -665,31 +795,32 @@ ibmcloud cdb cacert &lt;database deployment name&gt;
 docker build -f docker-python-tools -t ibmcase/python .
 </pre></div>
 
-<p>To use this python environment you can use the script: <code>startPythonEnv</code>. If you run with Event Stream on the cloud and Postgresql  on your laptopn use the LOCAL argument, use  IBMCLOUD otherwise:</p>
+<p>To use this python environment you can use the script: <code>startPythonEnv</code>. </p>
+<p>When running with Event Stream and Postgres on the cloud use  IBMCLOUD argument:</p>
 <div class="codehilite"><pre><span></span># refarch-reefer-ml project folder
 ./startPythonEnv.sh IBMCLOUD
 </pre></div>
 
 <h3 id="build-the-docker-image-for-jupyter-notebook">Build the docker image for Jupyter notebook</h3>
-<p>We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook. The Dockerfile may use a <code>cert.pem</code> file, which contains the postgres certificate so the notebook can connect to postgresql service wiith SSL connection. </p>
+<p>We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook. The Dockerfile may use a <code>cert.pem</code> file, which contains the postgres certificate so the notebook can connect to postgresql service with SSL connection. </p>
 <div class="codehilite"><pre><span></span>cd docker 
 docker build -f docker-jupyter-tool -t ibmcase/jupyter .
 </pre></div>
 
-<p>To run this jupyter server run:</p>
+<p>To run this jupyter server use the startJupyterServer.sh script:</p>
 <div class="codehilite"><pre><span></span># refarch-reefer-ml project folder
 ./startJupyterServer.sh IBMCLOUD
 </pre></div>
 
 <h3 id="create-the-postgresql-database">Create the postgresql database</h3>
-<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as postgres.pem under the simulator folder, or set POSTGRES_SSL_PEM to the path where to find this file.</p>
+<p>If you use POSTGRESQL on IBM Cloud, you need to get the SSL certificate and put it as postgres.pem under the simulator folder, or set POSTGRES_SSL_PEM to the path where to find this file.</p>
 <p>The postgres.pem file needs to be in the simulator folder.</p>
-<p>Run the ReeferRepository.py tool to create the database and to add the reference data:</p>
+<p>Run the <a href="">ReeferRepository.py</a> tool to create the database schema and to add some reference data like the product catalog:</p>
 <div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
 &gt; python simulator/infrastructure/ReeferRepository.py
 </pre></div>
 
-<p>You should see:</p>
+<p>You should see the following trace:</p>
 <div class="codehilite"><pre><span></span>Connect remote with ssl
 (&#39;PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit&#39;,)
 [
@@ -749,65 +880,23 @@ docker build -f docker-jupyter-tool -t ibmcase/jupyter .
 (&#39;public&#39;, &#39;reefer_telemetries&#39;, &#39;ibm-cloud-base-user&#39;, None, True, False, True, False)
 </pre></div>
 
-<p>For generating the telemetry records see the collect data section below.</p>
 <h2 id="project-approach">Project approach</h2>
-<p>As a major step of developing a machine learning or analytics model, it is important to have good data. In this project we are adopting a lightweight approach to develop this minimum viable product. The activities are summarized in this diagram:</p>
-<p><img alt="" src="images/lightweight-process-model-figure2.png" /></p>
-<p>We encourage you to read <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/lightweight/">this article</a> for more insight on the methodology.</p>
-<h3 id="1-collect-data">1- Collect data</h3>
-<p>We are using a simulator to generate data and go over the detail of how to collect data in <a href="collect-data/">this article</a>.</p>
-<p>If you generate the training and test sets as file, put this .csv file under the <code>ml/data/</code> folder.</p>
-<p>If you use postgresql as data source be sure to have set the POSTGRES environment variables in the <code>setenv.sh</code> script.</p>
-<h3 id="2-define-the-predictive-scoring-model">2- Define the predictive scoring model</h3>
-<p>Predictive maintenance and anomaly detection are complex problems to address. We do not pretend to address those complex problems in this repository, as we focus in putting in place the end to end creation and deployment of the model. To review the problem of predictive maintenance read <a href="predictive-maintenance/">this article.</a></p>
-<p><em>If you want to contribute to build a better model, we are looking for contributors</em>.</p>
-<p>To build the model and work on the data, we will use a local version of <strong>Jupyter</strong> notebook to load the logistic regression nodebook from the <code>ml</code> folder. </p>
-<p>We have two types of notebook</p>
-<ol>
-<li>
-<p>Start a jupyter server using our docker image and a postgresql in IBM cloud.</p>
-<div class="codehilite"><pre><span></span>pwd
-
-./startJupyterServer IBMCLOUD  or LOCAL
-</pre></div>
-
-</li>
-<li>
-<p>Then open a web browser to <code>http://localhost:8888?token=&lt;sometoken&gt;</code> go under <code>work/ml</code> folder.</p>
-</li>
-<li>
-<p>Open one of the model:</p>
+<p>The solution covers different development areas and practices: event driven microservice, business process, data ops and machine learning model development. The software life cycle integrate the three main tracks of DevOps, DataOps and MLOps as presented in <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/">this methodology article</a>.</p>
+<h3 id="devops">DevOps</h3>
+<p>As all the services developed in this solution are event-driven we do not need to rephrase how we used event storming and applied the different patterns for each microservices. You can read the following articles to learn more:</p>
 <ul>
-<li>the <code>model_logistic_regression.ipynb</code> to work on data set saved in the <code>ml/data/telemetries.csv</code> file. </li>
-<li>the <code>model_logistic_regression-pg.ipynb</code> to work on data saved in postgresql running on IBM Cloud.</li>
+<li><a href="https://ibm-cloud-architecture.github.io/refarch-eda/methodology/eventstorming/">Event storming workshop</a></li>
+<li><a href="https://ibm-cloud-architecture.github.io/refarch-kc/design/readme/">From analysis to microservice using domain driven design</a></li>
+<li><a href="https://ibm-cloud-architecture.github.io/refarch-kc-order-ms/ddd-applied/">Apply DDD to order microservice</a></li>
+<li><a href="https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/ES2DDD2MS/">Apply DDD to the container management microservice</a></li>
 </ul>
-<p>The notebooks include comments to explain how the model is done. We use logistic regression to build a binary classification (maintenance required or not), as the data are simulated, and the focus is not in the model building, but more on the end to end process.</p>
-<p>The notebook persists the trained model as a pickle file so it can be loaded by a python module or another notebook.</p>
-<p>For more information on using the Jupyter notebook, here is a <a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/index.html">product documentation</a>.</p>
-<ul>
-<li>The co2 sensor plot over time shows the training data with some sporadic behavior:</li>
-</ul>
-<p><img alt="" src="images/co2sensor-plot.png" /></p>
-<ul>
-<li>The confusion matrix shows very little false positive and false negative:</li>
-</ul>
-<p><img alt="" src="images/confusion-mtx.png" /></p>
-</li>
-<li>
-<p>Use the model in another notebook: We can use a second notebook to test the model with one telemetry record using the pickle serialized model. The notebook is named <code>predictMaintenance.ipynb</code>.</p>
-</li>
-</ol>
-<h3 id="3-deploy-the-model">3- Deploy the model</h3>
-<p>We have two types of deployment:</p>
-<ul>
-<li>Run the model in a web app to support REST calls.</li>
-<li>Run the model in an agent, consumer of reefer telemetry events and producer of container maintenance event.</li>
-</ul>
-<p>The <code>scoring</code> folder includes an <code>eventConsumer</code> folder for the agent implementation and a <code>webapp</code> for the Flask and REST end point wrapper. </p>
-<p>In this solution we use the agent implementation.</p>
-<p>So you need to copy the generated pickle file to the <code>eventConsumer/domain</code> folder and if you use the webapp too, copy it to <code>webapp/domain</code>.</p>
-<h3 id="4-deploy-each-service">4- Deploy each service</h3>
-<p>See <a href="build-run/">this detailed note</a> to deploy each service on OpenShift.</p>
+<p>For the adoption of Appsody and CI/CD based on tektron, we present how we use Cloud Pak for application in the development of the scoring microservice in <a href="infuse/dev-scoring/">this note</a>.</p>
+<p>To understand how to deploy each service on openshift see <a href="infuse/build-run/">this detailed note</a>.</p>
+<h3 id="dataops">DataOps</h3>
+<p><a href="collect/oss-collect-data/">Collect data with open source approach</a>.</p>
+<p><a href="collect/cp4d-collect-data/">Collect data with cloud pak for data</a>.</p>
+<h3 id="mlops">MLOps</h3>
+<p>To use Jupyter, Sparks and kubeflow see <a href="analyze/oss-ml-dev/">this note</a></p>
 <h2 id="further-readings">Further Readings</h2>
 <ul>
 <li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1">Romeo Kienzler anomaly detection article 1</a></li>
@@ -835,13 +924,13 @@ docker build -f docker-jupyter-tool -t ibmcase/jupyter .
       <nav class="md-footer-nav__inner md-grid">
         
         
-          <a href="collect-data/" title="Collect data" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="collect/generate-telemetry/" title="Generate telemetry data" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Collect data
+                Generate telemetry data
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
