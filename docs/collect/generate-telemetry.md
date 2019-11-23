@@ -99,89 +99,19 @@ python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype o2sensor --append
 ```
 
-#### Saving to Postgres
+#### Saving to Mongodb
 
-The same tool can be used to save to a postgresql database. First be sure to set at least the following environment variables in the setenv.sh file
+The same tool can be used to save to a mongodb database. First be sure to set at least the following environment variables in the setenv.sh file
 
 ```
-POSTGRES_URL,  POSTGRES_DBNAME,
+MONGODB_URL,  MONGODB_DBNAME,
 ```
-
-If you want to use `psql` then you need to set all POSGRES* environment variables.
-
-If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as `postgres.pem` under the `simulator` folder, or set `POSTGRES_SSL_PEM` to the path where to find this file.
-
-The `postgres.pem` file needs to be in the simulator folder.
 
 Run the ReeferRepository.py tool to create the database and to add the reference data:
 
 ```
 ./startPythonEnv.sh IBMCLOUD
 > python simulator/infrastructure/ReeferRepository.py
-```
-
-You should see:
-```
-
-```
-Connect remote with ssl
-('PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit',)
-[
-    {
-        "container_id": "C01",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C02",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C03",
-        "last_maintenance_date": null,
-        "reefer_model": "40RH"
-    },
-    {
-        "container_id": "C04",
-        "last_maintenance_date": null,
-        "reefer_model": "45RW"
-    }
-]
-[
-    {
-        "content_type": 1,
-        "description": "Carrots",
-        "product_id": "P01",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Banana",
-        "product_id": "P02",
-        "target_humidity_level": 0.6,
-        "target_temperature": 6.0
-    },
-    {
-        "content_type": 1,
-        "description": "Salad",
-        "product_id": "P03",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Avocado",
-        "product_id": "P04",
-        "target_humidity_level": 0.4,
-        "target_temperature": 6.0
-    }
-]
-('public', 'reefers', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'products', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'reefer_telemetries', 'ibm-cloud-base-user', None, True, False, True, False)
-```
 ```
 
 Once done run the simulator with the --db argument like below:
@@ -216,6 +146,7 @@ Done uploading telemetry records !
 ```
 
 To verify the data loaded into the database we use `psql` with the following script:
+
 ```
 
 ```
