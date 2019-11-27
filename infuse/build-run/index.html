@@ -96,7 +96,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#the-simulator-as-web-app" tabindex="1" class="md-skip">
+      <a href="#development-approach" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -273,10 +273,46 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Preparing data for demonstration
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        Preparing data for demonstration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../collect/products-postgres/" title="Get products into postgresql" class="md-nav__link">
+      Get products into postgresql
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../../collect/generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
       Generate telemetry data
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -396,6 +432,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../simul-app/" title="Develop the simulation app" class="md-nav__link">
+      Develop the simulation app
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
       Develop scoring app with cloud pak for application
     </a>
@@ -431,19 +479,12 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-simulator-as-web-app" title="The Simulator as web app" class="md-nav__link">
-    The Simulator as web app
+  <a href="#development-approach" title="Development approach" class="md-nav__link">
+    Development approach
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
-    Simulator: Build and run on OpentShift
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#an-alternate-approach-is-to-setup-a-cicd-pipeline" title="An alternate approach is to setup a CI/CD pipeline" class="md-nav__link">
@@ -460,13 +501,6 @@
         <li class="md-nav__item">
   <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
     Test sending a simulation control to the POST api
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
-    Unit test the Simulator
   </a>
   
 </li>
@@ -589,19 +623,12 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-simulator-as-web-app" title="The Simulator as web app" class="md-nav__link">
-    The Simulator as web app
+  <a href="#development-approach" title="Development approach" class="md-nav__link">
+    Development approach
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#simulator-build-and-run-on-opentshift" title="Simulator: Build and run on OpentShift" class="md-nav__link">
-    Simulator: Build and run on OpentShift
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#an-alternate-approach-is-to-setup-a-cicd-pipeline" title="An alternate approach is to setup a CI/CD pipeline" class="md-nav__link">
@@ -618,13 +645,6 @@
         <li class="md-nav__item">
   <a href="#test-sending-a-simulation-control-to-the-post-api" title="Test sending a simulation control to the POST api" class="md-nav__link">
     Test sending a simulation control to the POST api
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
-    Unit test the Simulator
   </a>
   
 </li>
@@ -697,96 +717,8 @@
                 
                   <h1>Build and run the solution on Openshift</h1>
                 
-                <h2 id="the-simulator-as-web-app">The Simulator as web app</h2>
-<p>This is a simple python Flask web app exposing a REST POST end point and producing Reefer telemetry events to kafka <code>reeferTelemetry</code> topic. 
-The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:</p>
-<div class="codehilite"><pre><span></span>    <span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;C02&#39;,</span>
-    <span class="err">&#39;simulation&#39;:</span> <span class="err">&#39;co2sensor&#39;,</span>
-    <span class="err">&#39;nb_of_records&#39;:</span> <span class="err">1000,</span>
-    <span class="nt">&quot;product_id&quot;</span><span class="p">:</span>  <span class="s2">&quot;P02&quot;</span>
-    <span class="p">}</span>
-</pre></div>
-
-<h3 id="simulator-build-and-run-on-opentshift">Simulator: Build and run on OpentShift</h3>
-<p>To build and deploy the code to an OpenShift cluster, using the source 2 image approach, do the following steps:</p>
-<ol>
-<li>
-<p>Login to the OpenShift cluster. </p>
-<div class="codehilite"><pre><span></span>oc login -u apikey -p &lt;apikey&gt; --server=https://...
-</pre></div>
-
-<p><em>To find the API key and server URL go to the openshift console under your account, to access the <code>Copy login command</code> menu.</em> </p>
-</li>
-<li>
-<p>Create a project if you did not create one already:</p>
-<div class="codehilite"><pre><span></span>oc  new-project reefershipmentsolution --description=&quot;A Reefer container shipment solution&quot;
-</pre></div>
-
-<p><em>Remember the project is mapped to a kubernetes namespace, but includes other components too</em></p>
-</li>
-<li>
-<p>The first deploy you need to create a new app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.</p>
-<div class="codehilite"><pre><span></span>oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
-</pre></div>
-
-<p>Then to track the build progress, look at the logs of the build pod:</p>
-<p><div class="codehilite"><pre><span></span>oc logs -f bc/reefersimulator
-</pre></div>
-The dependencies are loaded, the build is scheduled and executed, the image is uploaded to the registry, and started.</p>
-</li>
-<li>
-<p>To display information about the build configuration for the application:</p>
-<div class="codehilite"><pre><span></span>oc describe bc/reefersimulator
-</pre></div>
-
-</li>
-<li>
-<p>When you want to redeploy, trigger a remote build (run on Openshift) from local source code do the following command:</p>
-<div class="codehilite"><pre><span></span>oc start-build reefersimulator --from-file=.
-</pre></div>
-
-</li>
-<li>
-<p>Set environment variables</p>
-<p>For Broker URLs
-<div class="codehilite"><pre><span></span>oc set env dc/reefersimulator KAFKA_BROKERS=kafka03-prod02.messagehub.services.us-south.blu....
-</pre></div></p>
-<p>For apikey:
-<div class="codehilite"><pre><span></span>oc set env dc/reefersimulator KAFKA_APIKEY=&quot;&quot;
-</pre></div></p>
-<p>If you connect to event stream or kafka with SSL specify where to find the SSL certificate: </p>
-<div class="codehilite"><pre><span></span> oc set env dc/reefersimulator KAFKA_CERT=&quot;/opt/app-root/src/es-cert.pem&quot;
-</pre></div>
-
-<p>Get all environment variables set for a given pod: (get the pod id with <code>oc get pod</code>)</p>
-<div class="codehilite"><pre><span></span>oc exec reefersimulator-31-2kdv5 env
-</pre></div>
-
-<p><img alt="" src="../images/env-variables.png" /></p>
-</li>
-<li>
-<p>Once the build is done you should see the container up and running</p>
-<div class="codehilite"><pre><span></span>oc get pod
-
-reefersimulator-3-build         0/1       Completed    0          15m
-reefersimulator-3-jdh2v         1/1       Running      0          1m
-</pre></div>
-
-<div class="admonition note">
-<p class="admonition-title">Note<p>The first time the container start, it may crash as the environment variables like KAFKA_APIKEY is not defined. You can use the  <code>./scripts/defEnvVarInOpenShift.sh</code> command to create the needed environment variables.</p>
-</p>
-</div>
-</li>
-<li>
-<p>To make the webapp visible externally to the cluster, you need to add a <code>route</code> for this deployment. Login to the admin console and use <code>Create Route</code> button on top right of the screen, </p>
-</li>
-</ol>
-<p><img alt="" src="../images/create-routes.png" /></p>
-<p>Then enter a name and select the existing service</p>
-<p><img alt="" src="../images/simul-route-create.png" /></p>
-<p>Once created, the URL of the app is visible in the route list panel:</p>
-<p><img alt="" src="../images/simul-route.png" /></p>
-<p>Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.</p>
+                <h2 id="development-approach">Development approach</h2>
+<p>The app is done using Flask, and the code is generated using <code>Appsody</code> template and adapted.</p>
 <h3 id="an-alternate-approach-is-to-setup-a-cicd-pipeline">An alternate approach is to setup a CI/CD pipeline</h3>
 <p>We have adopted the Git Action to manage the <a href="https://github.com/ibm-cloud-architecture/refarch-kc-gitops/blob/master/KContainer-CI-Strategy.md">continuous integration</a>, and ArgoCD for the continuous deployment. The build process will build the following images:</p>
 <ul>
@@ -808,15 +740,6 @@ refarch-reefer-ml
 </pre></div>
 
 <p>We will see how those events are processed in the next section.</p>
-<h2 id="unit-test-the-simulator">Unit test the Simulator</h2>
-<p>The test coverage is not yet great. To run them</p>
-<div class="codehilite"><pre><span></span><span class="n">cd</span> <span class="n">simulator</span>
-<span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">python</span> <span class="n">tests</span><span class="o">/</span><span class="n">TestSimulator</span><span class="p">.</span><span class="n">py</span> 
-</pre></div>
-
 <h2 id="the-predictive-scoring-agent">The predictive scoring agent</h2>
 <p>Applying the same pattern as the simulation webapp, we implement a kafka consumer and producer in python that calls the serialized analytical model. The code in the <code>scoring\eventConsumer</code> folder.</p>
 <p>Applying a TDD approach we start by a TestScoring.py class.</p>
@@ -909,20 +832,12 @@ oc start-build reeferpredictivescoring --from-file=.
 <p>The scoring service has no API exposed to the external world, so we do not need to create a <code>Route</code> or ingress.</p>
 <p>See the <a href="#integration-tests">integration test</a> section to see a demonstration of the solution end to end.</p>
 <h3 id="build-docker-images">Build docker images</h3>
-<p>Build each docker images, publish them to docker hub registry or private registry, and then refresh the app in openshift. Which translates as the following command sequence:</p>
-<div class="codehilite"><pre><span></span># simulator folder
-docker build -t ibmcase/reefersimulator .
-docker login
-docker push ibmcase/reefersimulator
-&gt; The push refers to repository [docker.io/ibmcase/reefersimulator]
-</pre></div>
-
 <p>For the scoring agent:</p>
 <div class="codehilite"><pre><span></span># scoring folder
 </pre></div>
 
 <h4 id="run-kafka-on-your-laptop">Run kafka on your laptop</h4>
-<p>For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">this readme</a>.</p>
+<p>For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md">this readme</a> for details.</p>
                 
                   
                 

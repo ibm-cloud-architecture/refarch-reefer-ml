@@ -277,6 +277,39 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
+    
+    <label class="md-nav__link" for="nav-3-1">
+      Preparing data for demonstration
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-1">
+        Preparing data for demonstration
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../products-postgres/" title="Get products into postgresql" class="md-nav__link">
+      Get products into postgresql
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
@@ -303,8 +336,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#start-python-env" title="Start python env" class="md-nav__link">
-    Start python env
+  <a href="#create-reference-data-in-postgresql" title="Create reference data in postgresql" class="md-nav__link">
+    Create reference data in postgresql
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-python-environment" title="Start python environment" class="md-nav__link">
+    Start python environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-data-as-csv-file" title="Generate data as csv file" class="md-nav__link">
+    Generate data as csv file
   </a>
   
     <nav class="md-nav">
@@ -331,9 +378,29 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-to-mongodb" title="Saving to Mongodb" class="md-nav__link">
+    Saving to Mongodb
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
-  <a href="#saving-to-postgres" title="Saving to Postgres" class="md-nav__link">
-    Saving to Postgres
+  <a href="#generate-records-in-mongodb-using-simulationtool" title="Generate records in mongodb using SimulationTool" class="md-nav__link">
+    Generate records in mongodb using SimulationTool
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-data-with-mongo-cli" title="Verify data with mongo CLI" class="md-nav__link">
+    Verify data with mongo CLI
   </a>
   
 </li>
@@ -358,6 +425,11 @@
   
 </nav>
     
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -475,6 +547,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
+      Develop the simulation app
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../infuse/dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
       Develop scoring app with cloud pak for application
     </a>
@@ -555,8 +639,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#start-python-env" title="Start python env" class="md-nav__link">
-    Start python env
+  <a href="#create-reference-data-in-postgresql" title="Create reference data in postgresql" class="md-nav__link">
+    Create reference data in postgresql
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-python-environment" title="Start python environment" class="md-nav__link">
+    Start python environment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-data-as-csv-file" title="Generate data as csv file" class="md-nav__link">
+    Generate data as csv file
   </a>
   
     <nav class="md-nav">
@@ -583,9 +681,29 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-to-mongodb" title="Saving to Mongodb" class="md-nav__link">
+    Saving to Mongodb
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
-  <a href="#saving-to-postgres" title="Saving to Postgres" class="md-nav__link">
-    Saving to Postgres
+  <a href="#generate-records-in-mongodb-using-simulationtool" title="Generate records in mongodb using SimulationTool" class="md-nav__link">
+    Generate records in mongodb using SimulationTool
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-data-with-mongo-cli" title="Verify data with mongo CLI" class="md-nav__link">
+    Verify data with mongo CLI
   </a>
   
 </li>
@@ -625,27 +743,30 @@
 <p>We are using the simulator to generate data. In the industry, when developing new manufactured product, the engineers do not have a lot of data so they also use a mix of real sensors with simulators to create fake but realistic data to develop and test their models.</p>
 <p>The historical data need to represent failure, and represent the characteristics of a Reefer container. We have define some sensors to get interesting correlated or independant features.</p>
 <p>As of now our telemetry event structure can be seen in this <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema/reefer_telemetry_value.avsc">avro schema</a>.</p>
-<p>For the machine learning environment we can use csv file as input data or postgresql database or kafka topic. The environment looks like in the figure below:</p>
+<p>For the machine learning environment we can use csv file as input data or mongodb database or kafka topic.  The environment looks like in the figure below:</p>
 <p><img alt="" src="../images/data-collect.png" /></p>
-<p>The simulator can run as a standalone tool to create training and test data to be saved in a remote postgresql database or can be used to save to csv file. We use postgresql as a service on IBM cloud. The service has credential with URL and SSL certificate.</p>
+<p>The simulator can run as a standalone tool to create training and test data to be saved in a remote mongodb database or can be used to save to csv file. We use mongodb as a service on IBM cloud. </p>
+<p><img alt="" src="../images/ibm-cloud-dbs.png" /></p>
+<p>We also use reference data like products and shipping container inventory in Postgresql on IBM Cloud too. The service has credential with URL and SSL certificate.</p>
 <p><img alt="" src="../images/postgres-credential.png" /></p>
-<h2 id="start-python-env">Start python env</h2>
+<h2 id="create-reference-data-in-postgresql">Create reference data in postgresql</h2>
+<p>See <a href="../products-postgres">this separate note</a> for detail.</p>
+<h2 id="start-python-environment">Start python environment</h2>
+<p>Use IBMCLOUD if you use mongodb, postgresql and kafka on cloud, or LOCAL for kafka and postgresql running via docker compose.</p>
 <div class="codehilite"><pre><span></span> <span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span> <span class="n">IBMCLOUD</span> <span class="n">or</span> <span class="n">LOCAL</span>
 
-<span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
+<span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span>
 </pre></div>
 
-<p>In the Dockerfile we set the first PYTHONPATH to /home to specify where python should find the new modules.</p>
-<div class="codehilite"><pre><span></span><span class="n">root</span><span class="mf">@03721594782f</span><span class="o">:/</span><span class="n">home</span> <span class="err">#</span> 
-</pre></div>
-
-<h4 id="generate-power-off-metrics">Generate power off metrics</h4>
-<p>When the reefer containers lose power at some time, then restart and reloose it, it may become an issue.</p>
+<p>In the Dockerfile we set the first PYTHONPATH to <code>/home</code> to specify where python should find the application specifics modules. </p>
+<h2 id="generate-data-as-csv-file">Generate data as csv file</h2>
+<h3 id="generate-power-off-metrics">Generate power off metrics</h3>
+<p>When a reefer container loses power, restart and reloose it, it may become an issue. This is the goal of this simulation.</p>
 <p>The simulator accepts different arguments as specified below </p>
 <div class="codehilite"><pre><span></span>usage reefer_simulator-tool 
      --stype [poweroff | co2sensor | o2sensor | normal]
-      --cid [C01 | C02 | C03 | C04]
-     --product_id [ P01 | P02 | P03 | P04 ]
+      --cid [C01 | C02 | C03 | C04 | C05]
+     --product_id [ P01 | P02 | P03 | P04 | P05 ]
      --records &lt;the number of records to generate&gt;
      --file &lt;the filename to create&gt;
      --append
@@ -653,39 +774,45 @@
 </pre></div>
 
 <ul>
-<li>The <code>cid</code> is for the container id. As the simulator is taking some data from internal datasource you can use only one of those values: <code>[C01 | C02 | C03 | C04]</code></li>
-<li><code>product_id</code> is also one of the value <code>[ P01 | P02 | P03 | P04 ]</code>, as the simulator will derive the target temperature and humidity level from its internal datasource:
+<li>The <code>cid</code> is for the container id. As the simulator is taking some data from internal datasource you can use only one of those values: <code>[C01 | C02 | C03 | C04 | C05]</code></li>
+<li><code>product_id</code> is also one of the value <code>[ P01 | P02 | P03 | P04 | P05]</code>, as the simulator will derive the target temperature and humidity level from its internal datasource:
     ('P01','Carrots',1,4,0.4),
     ('P02','Banana',2,6,0.6),
     ('P03','Salad',1,4,0.4),
-    ('P04','Avocado',2,6,0.4);</li>
-<li><code>--db</code> is when you want to save in a postgresql DB. In this case be sure to have set the credentials and URL in the <code>scripts/setenv.sh</code> script (see the <code>scripts/setenv-tmp.sh</code> template file)</li>
+    ('P04','Avocado',2,6,0.4),
+    ('P05','Tomato',1,6,0.4);</li>
+<li><code>--db</code> is when you want to save the telemetry into mongodb DB. In this case be sure to have set the credentials and URL in the <code>scripts/setenv.sh</code> script (see the <code>scripts/setenv-tmp.sh</code> template file)</li>
 <li><code>--file</code> is to specify a csv file to write the data</li>
 <li>
 <p><code>--append</code> is used to append the output of this run to an existing file: It permits to accumulate different simulation in the same dataset.</p>
 </li>
 <li>
-<p>(Re)create a new file. It is an important step to get the header as first row.
-<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records 1000 --product_id P02 --file telemetries.csv 
-</pre></div></p>
+<p>(Re)create a new file. It is an important step to get the header as first row.</p>
 </li>
-<li>append to existing file
-<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file telemetries.csv --stype poweroff --append
-</pre></div></li>
 </ul>
-<p>The results looks like:
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --stype poweroff --cid C01 --records <span class="m">1000</span> --product_id P02 --file telemetries.csv 
+</pre></div>
+
+<ul>
+<li>append to existing file</li>
+</ul>
+<div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P03 --records <span class="m">1000</span> --file telemetries.csv --stype poweroff --append
+</pre></div>
+
+<p>The results looks like:</p>
 <div class="codehilite"><pre><span></span>    Generating  1000  poweroff metrics
 
     Timestamp   ID  Temperature(celsius) Target_Temperature(celsius)      Power  PowerConsumption ContentType  O2 CO2  Time_Door_Open Maintenance_Required Defrost_Cycle
     1.000000  2019-06-30 T15:43 Z  101              3.416766                           4  17.698034          6.662044           1  11   1        8.735273                    0             6
     1.001001  2019-06-30 T15:43 Z  101              4.973630                           4   3.701072          8.457314           1  13   3        5.699655                    0             6
     1.002002  2019-06-30 T15:43 Z  101              1.299275                           4   7.629094 
-</pre></div></p>
-<p>From the two previous commands you should have 2001 rows (one gor the header which will be used in the model creation):
+</pre></div>
+
+<p>From the two previous commands you should have 2001 rows (one for the header which will be used in the model creation):
 <div class="codehilite"><pre><span></span>wc -l telemetries.csv 
 2001 telemetries.csv
 </pre></div></p>
-<h4 id="generate-co2-sensor-malfunction-in-same-file">Generate Co2 sensor malfunction in same file</h4>
+<h3 id="generate-co2-sensor-malfunction-in-same-file">Generate Co2 sensor malfunction in same file</h3>
 <p>In the same way as above the simulator can generate data for Co2 sensor malfunction using the command:</p>
 <div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype co2sensor --append
 </pre></div>
@@ -694,85 +821,46 @@
 <p class="admonition-title">Note<p>The simulator is integrated in the event producer to send real time events to kafka, as if the Reefer container was loaded with fresh goods and is travelling oversea. A consumer code can call the predictive model to assess if maintenance is required and post new event on a <code>containers</code> topic (this consumer code is in the <code>scoring/eventConsumer</code> folder).</p>
 </p>
 </div>
-<h4 id="generate-o2-sensor-malfunction-in-same-file">Generate O2 sensor malfunction in same file</h4>
+<h3 id="generate-o2-sensor-malfunction-in-same-file">Generate O2 sensor malfunction in same file</h3>
 <div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype o2sensor --append
 </pre></div>
 
-<h4 id="saving-to-postgres">Saving to Postgres</h4>
-<p>The same tool can be used to save to a postgresql database. First be sure to set at least the following environment variables in the setenv.sh file</p>
-<div class="codehilite"><pre><span></span>POSTGRES_URL,  POSTGRES_DBNAME,
+<h2 id="saving-to-mongodb">Saving to Mongodb</h2>
+<p>The same tool can be used to save to a <a href="https://www.mongodb.com/">mongodb</a> database. The document saved in mongo will not be a flat record as produced by the simulator when it creates records to Kafka, but the Json document matches the following format, where sensors are in their own object:</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span> <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2019-09-04 T15:31 Z&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;containerID&quot;</span><span class="p">:</span> <span class="s2">&quot;C100&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;product_id&quot;</span><span class="p">:</span> <span class="s2">&quot;P02&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;content_type&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;sensors&quot;</span><span class="p">:</span> <span class="p">{</span>
+   <span class="nt">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">5.49647</span><span class="p">,</span>
+   <span class="nt">&quot;oxygen_level&quot;</span> <span class="p">:</span> <span class="mf">20.4543</span><span class="p">,</span>
+   <span class="nt">&quot;nitrogen_level&quot;</span> <span class="p">:</span> <span class="mf">79.4046</span><span class="p">,</span>
+   <span class="nt">&quot;carbon_dioxide_level&quot;</span> <span class="p">:</span> <span class="mf">4.42579</span><span class="p">,</span>
+   <span class="nt">&quot;humidity_level&quot;</span> <span class="p">:</span> <span class="mf">60.3148</span><span class="p">,</span>
+   <span class="nt">&quot;fan_1&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;fan_2&quot;</span> <span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;fan_3&quot;</span> <span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;ambiant_temperature&quot;</span><span class="p">:</span> <span class="mf">19.8447</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;target_temperature&quot;</span><span class="p">:</span> <span class="mf">6.0</span><span class="p">,</span>
+   <span class="nt">&quot;kilowatts&quot;</span><span class="p">:</span> <span class="mf">3.44686</span><span class="p">,</span>
+   <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="s2">&quot;37.8226902168957,&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="s2">&quot;-122.3248956640928&quot;</span><span class="p">,</span>
+   <span class="nt">&quot;time_door_open&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+   <span class="nt">&quot;defrost_cycle&quot;</span><span class="p">:</span> <span class="mi">6</span>
+<span class="p">}</span>
 </pre></div>
 
-<p>If you want to use <code>psql</code> then you need to set all POSGRES* environment variables.</p>
-<p>If you use POSTGRESQL on IBM Cloud or a deployment using SSL, you need to get the SSL certificate and put it as <code>postgres.pem</code> under the <code>simulator</code> folder, or set <code>POSTGRES_SSL_PEM</code> to the path where to find this file.</p>
-<p>The <code>postgres.pem</code> file needs to be in the simulator folder.</p>
-<p>Run the ReeferRepository.py tool to create the database and to add the reference data:</p>
+<p>First be sure to set at least the following environment variables in the <code>setenv.sh</code> file</p>
+<div class="codehilite"><pre><span></span>MONGO_DB_URL, MONGO_SSL_PEM
+</pre></div>
+
+<p>If not done before or to ensure the mongo connection works fine, run the ReeferRepository.py tool to create the telemetries collection using the following command:</p>
 <div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
 &gt; python simulator/infrastructure/ReeferRepository.py
 </pre></div>
 
-<p>You should see:
-<div class="codehilite"><pre><span></span>
-</pre></div>
-Connect remote with ssl
-('PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit',)
-[
-    {
-        "container_id": "C01",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C02",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C03",
-        "last_maintenance_date": null,
-        "reefer_model": "40RH"
-    },
-    {
-        "container_id": "C04",
-        "last_maintenance_date": null,
-        "reefer_model": "45RW"
-    }
-]
-[
-    {
-        "content_type": 1,
-        "description": "Carrots",
-        "product_id": "P01",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Banana",
-        "product_id": "P02",
-        "target_humidity_level": 0.6,
-        "target_temperature": 6.0
-    },
-    {
-        "content_type": 1,
-        "description": "Salad",
-        "product_id": "P03",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Avocado",
-        "product_id": "P04",
-        "target_humidity_level": 0.4,
-        "target_temperature": 6.0
-    }
-]
-('public', 'reefers', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'products', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'reefer_telemetries', 'ibm-cloud-base-user', None, True, False, True, False)
-<div class="codehilite"><pre><span></span>
-</pre></div></p>
+<h3 id="generate-records-in-mongodb-using-simulationtool">Generate records in mongodb using SimulationTool</h3>
 <p>Once done run the simulator with the --db argument like below:</p>
 <div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000  --stype poweroff --db
 
@@ -781,37 +869,42 @@ python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000  --stype o2sensor --db
 </pre></div>
 
-<p>Here is an example of output:</p>
-<div class="codehilite"><pre><span></span>Generating records for co2 sensor issue
-Generating records for normal behavior
-Generate 2000 records for Banana
-     container_id           measurement_time product_id  temperature  ...  vent_1  vent_2  vent_3  maintenance_required
-0             C03 2019-09-27 05:16:32.015791        P02     5.023500  ...    True    True    True                     0
-1             C03 2019-09-27 05:21:32.015791        P02     7.015356  ...    True    True    True                     0
-2             C03 2019-09-27 05:26:32.015791        P02     6.106849  ...    True    True    True                     0
-3             C03 2019-09-27 05:31:32.015791        P02     6.521214  ...    True    True    True                     0
-4             C03 2019-09-27 05:36:32.015791        P02     6.704980  ...    True    True    True                     0
-...           ...                        ...        ...          ...  ...     ...     ...     ...       
-
-[2000 rows x 18 columns]
-dc2537b....databases.appdomain.cloud:32347
-ibmclouddb
-Connect remote with ssl
-Done uploading telemetry records !
+<h3 id="verify-data-with-mongo-cli">Verify data with mongo CLI</h3>
+<p>To verify the data loaded into the database we use <a href="https://docs.mongodb.com/manual/installation/">mongo</a> CLI with the following command:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># to connect</span>
+mongo -u <span class="nv">$USERNAME</span> -p <span class="nv">$PASSWORD</span> --tls --tlsCAFile mongodb.pem --authenticationDatabase admin --host replset/1a2ce8ca-&lt;&gt;.bn&lt;&gt;c0.databases.appdomain.cloud:30796 --tlsAllowInvalidCertificates
 </pre></div>
 
-<p>To verify the data loaded into the database we use <code>psql</code> with the following script:
-<div class="codehilite"><pre><span></span>
-</pre></div></p>
-<p>Then in the CLI:
-<div class="codehilite"><pre><span></span># get the list of tables
-ibmclouddb&gt; \d
+<p><em>The full host name is masked</em>. </p>
+<p>The USERNAME and PASSWORD are environment variables you set from the IBM Cloud service credentials. Something like:</p>
+<div class="codehilite"><pre><span></span>{
+  &quot;connection&quot;: {
+    &quot;cli&quot;: {
+      &quot;arguments&quot;: [
+        [
+          &quot;-u&quot;,
+          &quot;ibm_cloud_&lt;&gt;_48b1_b899&quot;,
+          &quot;-p&quot;,
+          &quot;3359192a&lt;&gt;e5fbdf51fd573676e58aff4f9e223&quot;,
+</pre></div>
 
-ibmclouddb&gt; SELECT * FROM reefers;
-ibmclouddb&gt; SELECT * FROM products;
-ibmclouddb&gt; SELECT * FROM reefer_telemetries;
-</pre></div></p>
-<h4 id="delete-records-in-database">Delete records in database</h4>
+<p>The <code>mongodb.pem</code> is the certificate in text save in a file. To get this certificate you can use the following command:</p>
+<div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; mongodb.pem
+</pre></div>
+
+<p>or by using the IBM Cloud mongodb service user interface (Manage menu):</p>
+<p><img alt="" src="../images/tls-certificat.png" /></p>
+<p>Once connected use the ibmclouddb database with mongo CLI:</p>
+<div class="codehilite"><pre><span></span>MongoDB server version: 4.2.0
+replset:PRIMARY&gt; use ibmclouddb
+replset:PRIMARY&gt; db.getCollection(&quot;telemetries&quot;).find()
+</pre></div>
+
+<h3 id="delete-records-in-database">Delete records in database</h3>
+<p>In mongo CLI do:</p>
+<div class="codehilite"><pre><span></span>db.telemetries.deleteMany({})
+</pre></div>
+
 <p>Next step is to build the model... </p>
                 
                   
@@ -833,7 +926,7 @@ ibmclouddb&gt; SELECT * FROM reefer_telemetries;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../.." title="Introduction" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../products-postgres/" title="Get products into postgresql" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -842,7 +935,7 @@ ibmclouddb&gt; SELECT * FROM reefer_telemetries;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Introduction
+                Get products into postgresql
               </span>
             </div>
           </a>
