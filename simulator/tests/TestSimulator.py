@@ -1,7 +1,7 @@
 import unittest
 import datetime
 import json
-from domain.reefer_simulator import ReeferSimulator 
+from simulator.domain.reefer_simulator import ReeferSimulator 
 
 
 class TestReeferSimulator(unittest.TestCase):
@@ -11,13 +11,19 @@ class TestReeferSimulator(unittest.TestCase):
         simul = ReeferSimulator()
         self.assertIsNotNone(simul)
     
+    def testNormalRecords(self):
+        simul = ReeferSimulator()
+        df=simul.generateNormalRecords(nb_records = 4)
+        self.assertIsNotNone(df)
+        for idx, content in df.items():
+            print(content)
+
     def testGeneratingPowerOff(self):
         simul = ReeferSimulator()
         df=simul.generatePowerOffRecords(cid="C01",nb_records = 100, product_id= "P02")
         self.assertIsNotNone(df)
-        self.assertEqual(df.size, 1800)  # nb of rows x nbr of columns
+        self.assertEqual(df.size, 2000)  # nb of rows x nbr of columns
         df2 = df.loc[df['maintenance_required'] == 1]
-
         for idx, content in df2.items():
             print(content)
         
@@ -26,7 +32,7 @@ class TestReeferSimulator(unittest.TestCase):
         simul = ReeferSimulator()
         df=simul.generateCo2Records(cid="C01",nb_records = 100, product_id= "P02")
         self.assertIsNotNone(df)
-        self.assertEqual(df.size, 1800)  # nb of rows x nbr of columns
+        self.assertEqual(df.size, 2000)  # nb of rows x nbr of columns
 
 
     def testGenerateO2(self):
@@ -36,8 +42,9 @@ class TestReeferSimulator(unittest.TestCase):
 
     def testGenerateCO2tuples(self):
         simul = ReeferSimulator()
-        values = simul.generateCo2Tuples(cid="C02",nb_records = 100, product_id= "P02")
-        # print(values)
+        values = simul.generateCo2Tuples(cid="C02",nb_records = 10, product_id= "P03")
+        for value in values:
+            print(value)
 
 if __name__ == '__main__':
     unittest.main()

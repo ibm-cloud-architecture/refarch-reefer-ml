@@ -4,7 +4,9 @@ nav:
   - Introduction: index.md
   - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
   - Collect:
-    - Generate telemetry data: collect/generate-telemetry.md
+    - Preparing data for demonstration:
+      - Get products into postgresql: collect/products-postgres.md
+      - Generate telemetry data: collect/generate-telemetry.md
     - Collect data with open source solution: collect/oss-collect-data.md
     - Collect data with cloud pak for data: collect/cp4d-collect-data.md
   - Organize: organize/readme.md
@@ -12,6 +14,7 @@ nav:
     - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md
     - Reefer anomaly detection problem: analyze/predictive-maintenance.md
   - Infuse:
+    - Develop the simulation app: infuse/simul-app.md
     - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
     - Build and run the solution on Openshift: infuse/build-run.md
     - Engineer dispatching with Business process with Cloud Pak for Automation: infuse/bpm.md

@@ -29,10 +29,11 @@ DEFROST_LEVEL = 7   # Common timing periods were 6, 8, 12 and 24 hours.
 METRIC_FREQUENCY = "5min"
 
 SIGMA_BASE = 1
-products = { 'P01': {'d':'Carrots','type':1,'T':4,'H':40},
-            'P02': {'d':'Banana','type':2,'T':6,'H':60},
-            'P03': {'d':'Salad','type':1,'T':4,'H':40},
-            'P04': {'d':'Avocado','type':2,'T':6,'H':40}}
+products = { 'P01': {'d': 'Carrots','type': 1,'T': 4.0,'H': 40},
+            'P02': {'d': 'Banana','type': 2,'T': 6.0,'H': 60},
+            'P03': {'d': 'Salad','type': 1,'T': 4.0,'H': 40},
+            'P04': {'d': 'Avocado','type': 2,'T': 6.0,'H': 40},
+            'P05': {'d': 'Tomato','type': 1,'T': 5.0,'H': 40}}
 
 def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
@@ -47,7 +48,7 @@ def _generateTimestamps(nb_records: int, start_time: datetime.datetime):
     '''
     if start_time is None:
         start_time = datetime.datetime.today() 
-    return pd.date_range(start_time, periods=nb_records, freq=METRIC_FREQUENCY)
+    return pd.date_range(start_time, periods=nb_records, freq=METRIC_FREQUENCY).strftime("%Y-%m-%d %H:%M:%S")
 
 def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     '''
@@ -76,7 +77,7 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     cols["target_temperature"] = np.repeat( products[product_id]['T'], nb_records)
     cols["ambiant_temperature"] = np.random.normal(20, SIGMA_BASE, size=nb_records)
     cols["kilowatts"] = np.random.normal(POWER_LEVEL, SIGMA_BASE, size=nb_records)
-    cols["time_door_open"] = np.random.normal(1.0, SIGMA_BASE, size=nb_records)
+    cols["time_door_open"] = np.repeat(0,nb_records)
     content_type = products[product_id]['type']
     cols["content_type"] = np.repeat(content_type, nb_records)
     cols["defrost_cycle"] = np.random.randint(3 ,DEFROST_LEVEL, size = nb_records)
@@ -85,9 +86,11 @@ def _generateStationaryCols(nb_records: int, cid: str, product_id: str):
     cols["nitrogen_level"] = np.random.normal(NITROGEN_LEVEL, SIGMA_BASE, size=nb_records)
     cols["humidity_level"] = np.random.normal(products[product_id]['H'], SIGMA_BASE, size=nb_records)
     cols["carbon_dioxide_level"] = np.random.normal(CO2_LEVEL, SIGMA_BASE, size=nb_records)
-    cols["vent_1"] = np.repeat(True,nb_records)
-    cols["vent_2"] = np.repeat(True,nb_records)
-    cols["vent_3"] = np.repeat(True,nb_records)
+    cols["fan_1"] = np.repeat(True,nb_records)
+    cols["fan_2"] = np.repeat(True,nb_records)
+    cols["fan_3"] = np.repeat(True,nb_records)
+    cols["latitude"]= np.repeat("37.8226902168957",nb_records)
+    cols["longitude"]= np.repeat("-122.324895",nb_records)
     # Uniform values
     cols["maintenance_required"] = np.repeat(0, nb_records)
     return pd.DataFrame(data = cols)
@@ -131,7 +134,7 @@ class ReeferSimulator:
                 "nitrogen_level", 
                 "humidity_level",
                 "carbon_dioxide_level", 
-                "vent_1", "vent_2", "vent_3", "maintenance_required"]
+                "fan_1", "fan_2", "fan_3", "latitude", "longitude", "maintenance_required"]
     
 
     def generateNormalRecords(self, cid: str = "C01", 
@@ -188,9 +191,9 @@ class ReeferSimulator:
         for i in range(0, df['kilowatts'].size - 1):
             if (df.at[i,"kilowatts"] <= 0  and df.at[i + 1 ,"kilowatts"] <= 0):
                 df.at[i,"maintenance_required"] = 1
-                df.at[i,"vent_1"] = False
-                df.at[i,"vent_2"] = False
-                df.at[i,"vent_3"] = False
+                df.at[i,"fan_1"] = False
+                df.at[i,"fan_2"] = False
+                df.at[i,"fan_3"] = False
         return df[ReeferSimulator.COLUMN_NAMES]
 
 

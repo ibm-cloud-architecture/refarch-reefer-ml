@@ -24,24 +24,41 @@ def assessPredictiveMaintenance(msg):
     print(msg['payload'])
     score = 0
     if assessDataAreValid(msg['payload']):
-        metricValue = msg['payload'].replace('(','').replace(')','')
-        metric = header+"\n"+metricValue
+        metricValues = msg['payload'].replace('(','').replace(')','')
+        metric = header+"\n"+metricValues
         score = predictService.predict(metric)
     print(score)
     if score == 1:
-        print("Go to maintenance " + msg['containerID'])
         # TODO do not send a maintenance event if already done in the current travel.
         # This will lead to a stateful agent...
         tstamp = int(time.time())
+        metricValues = eval(msg['payload'])
         data = {"timestamp": tstamp,
                 "type": "ContainerMaintenance",
                 "version":"1",
                 "containerID":  msg['containerID'],
-                "payload": {"containerID":  msg['containerID'], 
-                    "type": "Reefer",
-                    "status": "MaintenanceNeeded",
-                    "Reason": "Predictive maintenance scoring found a risk of failure",}
+                "payload": {
+                    "timestamp": metricValues[0],
+                    "containerID": metricValues[1],
+                    "temperature": metricValues[2],
+                    "target_temperature": metricValues[3],
+                    "ambiant_temperature": metricValues[4],
+                    "kilowatts": metricValues[5],
+                    "content_type" : metricValues[6],
+                    "oxygen_level" : metricValues[7],
+                    "nitrogen_level" : metricValues[8],
+                    "carbon_dioxide_level" : metricValues[9],
+                    "humidity_level" : metricValues[10],
+                    "latitude": "37.8226902168957",
+                    "longitude": "-122.3248956640928",
+                    "vent_1": metricValues[11],
+                    "vent_2" : metricValues[12],
+                    "vent_3" : metricValues[13],
+                    "time_door_open" : metricValues[14],
+                    "defrost_cycle": metricValues[15]
                 }
+            }
+        print(data)
         containerEventsProducer.publishEvent(data,"containerID")
     
 

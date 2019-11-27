@@ -1,18 +1,37 @@
 from flask import Flask, request, jsonify, abort
+from flasgger import Swagger
 import os, time
 from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 from concurrent.futures import ThreadPoolExecutor
+swagger_template = {
+  "swagger": "2.0",
+  "info": {
+    "title": "Reefer Simulator",
+    "description": "API for health/monitoring and simulation control",
+    "contact": {
+      "responsibleOrganization": "IBM Garage Solution Engineering",
+    },
+    "version": "0.1"
+  },
+  "schemes": [
+    "http"
+  ],
+}
 
-VERSION = "Reefer Container simulator v0.0.9 11/06"
+
+VERSION = "Reefer Container simulator v0.0.10 11/25"
 application = Flask(__name__)
+swagger = Swagger(application, template=swagger_template)
 
 metricsProducer = MetricsEventsProducer()
 
-@application.route("/")
-def hello():
-    return VERSION
+# It is considered bad form to return an error for '/', so let's redirect to the apidocs
+@application.route('/')
+def index():
+    return redirect('/apidocs')
+
 
 @application.route("/health")
 def health():
