@@ -1,4 +1,4 @@
--- Containers and container metrics DDL to create tables and index
+-- Products, Reefers and reefer telemetrics DDL to create tables and index
 -- used 
 CREATE TABLE reefers (
     container_id varchar(64) NOT NULL PRIMARY KEY,

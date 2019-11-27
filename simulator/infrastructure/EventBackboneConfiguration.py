@@ -14,7 +14,7 @@ def hasAPIKey():
     return KAFKA_APIKEY != ''
 
 def isEncrypted():
-    return KAFKA_CERT != ""
+    return KAFKA_CERT != ''
 
 def getKafkaCertificate():
     return KAFKA_CERT

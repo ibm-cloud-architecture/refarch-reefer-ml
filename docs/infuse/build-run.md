@@ -1,113 +1,11 @@
 
-## The Simulator as web app
 
-This is a simple python Flask web app exposing a REST POST end point and producing Reefer telemetry events to kafka `reeferTelemetry` topic. 
-The POST operation in on the /control url. The control object, to generate 1000 events with the co2sensor simulation looks like:
 
-```json
-    { 'containerID': 'C02',
-    'simulation': 'co2sensor',
-    'nb_of_records': 1000,
-    "product_id":  "P02"
-    }
-```
+## Development approach
 
-### Simulator: Build and run on OpentShift
+The app is done using Flask, and the code is generated using `Appsody` template and adapted.
 
-To build and deploy the code to an OpenShift cluster, using the source 2 image approach, do the following steps:
 
-1. Login to the OpenShift cluster. 
-
-    ```
-    oc login -u apikey -p <apikey> --server=https://...
-    ```
-
-    *To find the API key and server URL go to the openshift console under your account, to access the `Copy login command` menu.* 
-
-1. Create a project if you did not create one already:
-
-    ```
-    oc  new-project reefershipmentsolution --description="A Reefer container shipment solution"
-    ```
-
-    *Remember the project is mapped to a kubernetes namespace, but includes other components too*
-
-1. The first deploy you need to create a new app from the source code, and use source to image build process to deploy the app. You can use a subdirectory of your source code repository by specifying a --context-dir flag.
-
-    ```
-    oc new-app python:latest~https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git --context-dir=simulator --name reefersimulator
-    ```
-
-    Then to track the build progress, look at the logs of the build pod:
-    
-    ```
-    oc logs -f bc/reefersimulator
-    ```
-    The dependencies are loaded, the build is scheduled and executed, the image is uploaded to the registry, and started.
-
-1. To display information about the build configuration for the application:
-
-    ```
-    oc describe bc/reefersimulator
-    ```
-
-1. When you want to redeploy, trigger a remote build (run on Openshift) from local source code do the following command:
-
-    ```
-    oc start-build reefersimulator --from-file=.
-    ```
-
-1. Set environment variables
-
-    For Broker URLs
-    ```
-    oc set env dc/reefersimulator KAFKA_BROKERS=kafka03-prod02.messagehub.services.us-south.blu....
-    ```
-
-    For apikey:
-    ```
-    oc set env dc/reefersimulator KAFKA_APIKEY=""
-    ```
-
-    If you connect to event stream or kafka with SSL specify where to find the SSL certificate: 
-
-    ```
-     oc set env dc/reefersimulator KAFKA_CERT="/opt/app-root/src/es-cert.pem"
-    ```
-
-    Get all environment variables set for a given pod: (get the pod id with `oc get pod`)
-
-    ```
-    oc exec reefersimulator-31-2kdv5 env
-    ```
-
-    ![](images/env-variables.png)
-
-1. Once the build is done you should see the container up and running
-
-    ```
-    oc get pod
-
-    reefersimulator-3-build         0/1       Completed    0          15m
-    reefersimulator-3-jdh2v         1/1       Running      0          1m
-    ```
-
-    !!! note
-            The first time the container start, it may crash as the environment variables like KAFKA_APIKEY is not defined. You can use the  `./scripts/defEnvVarInOpenShift.sh` command to create the needed environment variables.
-
-1. To make the webapp visible externally to the cluster, you need to add a `route` for this deployment. Login to the admin console and use `Create Route` button on top right of the screen, 
-
-![](images/create-routes.png)
-
-Then enter a name and select the existing service
-
-![](images/simul-route-create.png)
-
-Once created, the URL of the app is visible in the route list panel:
-
-![](images/simul-route.png)
-
-Add the host name in your local /etc/hosts or be sure the hostname is defined in DNS server. Map to the IP address of the kubernetes proxy server end point.
 
 ### An alternate approach is to setup a CI/CD pipeline
 
@@ -139,17 +37,7 @@ Looking at the logs from the pod using `oc logs reefersimulator-3-jdh2v` you can
 
 We will see how those events are processed in the next section.
 
-## Unit test the Simulator
 
-The test coverage is not yet great. To run them
-
-```
-cd simulator
-./startPythonEnv
-root@1de81b16f940:/# export PYTHONPATH=/home/simulator
-root@1de81b16f940:/# cd /home/simulator
-root@1de81b16f940:/# python tests/TestSimulator.py 
-```
 
 ## The predictive scoring agent
 
@@ -279,15 +167,7 @@ See the [integration test](#integration-tests) section to see a demonstration of
 
 ### Build docker images
 
-Build each docker images, publish them to docker hub registry or private registry, and then refresh the app in openshift. Which translates as the following command sequence:
 
-```
-# simulator folder
-docker build -t ibmcase/reefersimulator .
-docker login
-docker push ibmcase/reefersimulator
-> The push refers to repository [docker.io/ibmcase/reefersimulator]
-```
 
 For the scoring agent:
 
@@ -298,4 +178,4 @@ For the scoring agent:
 
 #### Run kafka on your laptop
 
-For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read [this readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md).
+For development purpose, you can also run kafka, zookeeper and postgresql and the solution on your laptop. For that read [this readme](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/docker/README.md) for details.

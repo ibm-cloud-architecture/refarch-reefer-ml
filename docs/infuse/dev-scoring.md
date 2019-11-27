@@ -1,7 +1,8 @@
 # Develop the scoring agent with cloud pak for application
 
-The scoring service needs to use an analytics scoring built from a machine learned model, and serialized so that it can be loaded in memory.
+The scoring service needs to use an analytics scoring model built using a machine learning techniques, and serialized so that it can be loaded in memory.
 
+Using appsody...
 
 ## Further Readings
 

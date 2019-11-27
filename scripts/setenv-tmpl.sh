@@ -10,7 +10,6 @@ case "$kcenv" in
    IBMCLOUD)
         export KAFKA_BROKERS="broker-.....south.eventstreams.cloud.ibm.com:9093"
         export KAFKA_APIKEY=""
-        export KAFKA_ENV="IBMCLOUD"
         export POSTGRES_URL="postgres://<user>:<pwd>@<host>:32347/ibmclouddb?sslmode=verify-full"
         export POSTGRES_DBNAME="ibmclouddb"
         export POSTGRES_SSL_PEM="./postgres.pem"
@@ -18,15 +17,18 @@ case "$kcenv" in
         export POSTGRES_PWD=""
         export POSTGRES_HOST="databases.appdomain.cloud"
         export POSTGRES_PORT=32347
+        export MONGO_DB_URL="mongodb://i.../ibmclouddb?authSource=admin&replicaSet=replset"
+        export MONGO_SSL_PEM="/home/simulator/mongodb.pem"
     ;;
    ICP)
         export KAFKA_BROKERS=icp-proxy.apps.green-with-envy.ocp.csplab.local:32016
         export KAFKA_APIKEY=""
     ;;
     LOCAL)
-        export KAFKA_ENV="LOCAL"
         export KAFKA_APIKEY=""
         export KAFKA_BROKER="kafka1:9092" 
+        export MONGO_DB_URL="mongodb://i.../ibmclouddb?authSource=admin&replicaSet=replset"
+        export MONGO_SSL_PEM="/home/simulator/mongodb.pem"
         export POSTGRES_URL="postgres://postgres:supersecret@localhost:5432/postgres"
         export POSTGRES_DBNAME="postgres"
         export POSTGRES_SSL_PEM=""

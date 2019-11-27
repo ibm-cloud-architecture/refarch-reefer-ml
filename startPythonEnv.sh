@@ -16,17 +16,15 @@ if [[ $kcenv == "LOCAL" ]]
 then
   docker run -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
-     -e POSTGRES_URL=$POSTGRES_URL \
      --network docker_default\
-     -e POSTGRES_DBNAME=$POSTGRES_DBNAME \
-     -e POSTGRES_SSL_PEM=$POSTGRES_SSL_PEM\
+      -e MONGO_DB_URL=$MONGO_DB_URL \
+      -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
       -ti ibmcase/python bash
 else
   docker run  -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
-     -e POSTGRES_URL=$POSTGRES_URL \
      --network host \
-     -e POSTGRES_DBNAME=$POSTGRES_DBNAME \
-     -e POSTGRES_SSL_PEM=$POSTGRES_SSL_PEM\
+     -e MONGO_DB_URL=$MONGO_DB_URL \
+     -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
       -ti ibmcase/python bash
 fi

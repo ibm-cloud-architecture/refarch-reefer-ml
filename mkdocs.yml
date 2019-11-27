@@ -14,6 +14,7 @@ nav:
     - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md
     - Reefer anomaly detection problem: analyze/predictive-maintenance.md
   - Infuse:
+    - Develop the simulation app: infuse/simul-app.md
     - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
     - Build and run the solution on Openshift: infuse/build-run.md
     - Engineer dispatching with Business process with Cloud Pak for Automation: infuse/bpm.md

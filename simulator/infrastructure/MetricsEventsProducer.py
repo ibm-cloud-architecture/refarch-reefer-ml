@@ -5,7 +5,7 @@ import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 class MetricsEventsProducer:
 
     def __init__(self):
-        self.prepareProducer("pythonreefermetricproducers")
+        self.prepareProducer("ReeferTelemetryProducers")
         
     def prepareProducer(self,groupID):
         options ={
@@ -19,6 +19,7 @@ class MetricsEventsProducer:
             options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
         if (EventBackboneConfiguration.isEncrypted()):
             options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
+        print("Kafka options are: \n\t")
         print(options)
         self.producer = Producer(options)
 

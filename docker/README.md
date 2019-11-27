@@ -33,7 +33,7 @@
 
 ## Running the solution locally
 
-* Start the kafka and zookeeper
+* Start the kafka and zookeeper docker containers
 
 Under the docker folder
 
@@ -70,6 +70,6 @@ docker-compose -f backbone-compose.yml down
 * Send a simulation control json to the simulator: under the `scripts` folder
 
 ```
-./sendSimulControl.sh localhost:8080 co2sensor C101
+./sendSimulControl.sh localhost:8080 co2sensor C02 5
 ```
 

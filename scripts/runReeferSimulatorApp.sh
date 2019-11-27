@@ -4,13 +4,13 @@ else
   kcenv=$1
 fi
 source ./scripts/setenv.sh $kcenv
-shift
 
-docker run -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
+docker run -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
-     -e KAFKA_ENV=$KAFKA_ENV  \
+     -e KAFKA_CERT=$KAFKA_CERT \
      -e MONGO_DB_URL=$MONGO_DB_URL \
      -e MONGO_DBNAME=$MONGO_DBNAME \
      -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
-     -ti ibmcase/python "python simulator/reefer_simulator_tool.py $@"
+     -p 8080:8080 \
+     ibmcase/kcontainer-reefer-simulator
 

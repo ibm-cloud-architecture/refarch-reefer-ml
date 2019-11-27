@@ -1,211 +1,93 @@
 import os,sys, io
-import psycopg2
+# python drive for mongodb: https://api.mongodb.com/python/current/index.html
+from pymongo import MongoClient
 import pandas as pd 
-from urllib.parse import urlparse
 import json
 
-TABLE_COLUMNS = {"container_id", "measurement_time", "product_id",
-                "temperature","target_temperature", "ambiant_temperature", 
-                "kilowatts", "time_door_open",
-                "content_type", "defrost_cycle",
-                "oxygen_level", "nitrogen_level", "humidity_level","carbon_dioxide_level", 
-                "vent_1", "vent_2", "vent_3", "maintenance_required"}
-TABLE_METRICS="reefer_telemetries"
+
+def toJson(record):
+    t = {}
+    sensors = {}
+    t["containerID"] = record[0]
+    t["measurement_time"] = record[1]
+    t["product_id"] = record[2]
+    sensors["temperature"] = record[3]
+    t["target_temperature"] = int(record[4])  # bson does not know about numpy.int64
+    sensors["ambiant_temperature"] = record[5]
+    t["kilowatts"] = record[6]
+    t["time_door_open"] = int(record[7])
+    t["content_type"] = int(record[8])
+    t["defrost_cycle"] = int(record[9])
+    sensors["oxygen_level"] = record[10]
+    sensors["nitrogen_level"] = record[11]
+    sensors["humidity_level"] = record[12]
+    sensors["carbon_dioxide_level"] = record[13]
+    sensors["fan_1"] = bool(record[14])   # bson does not know about numpy.bool
+    sensors["fan_2"] = bool(record[15])
+    sensors["fan_3"] = bool(record[16])
+    t["sensors"]= sensors
+    t["latitude"] = record[17]
+    t["longitude"] = record[18]
+    return t
 
 class ReeferRepository:
 
     def __init__(self):
-        self.parsedURL = urlparse(os.getenv('POSTGRES_URL','localhost:5432'))
-        self.dbName = os.getenv('POSTGRES_DBNAME','ibmclouddb')
-        self.sllCert = os.getenv('POSTGRES_SSL_PEM','')
-        print(self.parsedURL.hostname + ":" + str(self.parsedURL.port))
-        print(self.dbName )
+        self.URL = os.getenv('MONGO_DB_URL','mongodb://localhost:27017')
+        print( self.URL)
+        self.dbName = os.getenv('MONGO_DBNAME','ibmclouddb')
+        self.tlsCert = os.getenv('MONGO_SSL_PEM','')
 
     def connect(self):
-        if self.sllCert != "" :
-            print("Connect remote with ssl")
-            self.conn = psycopg2.connect(host=self.parsedURL.hostname,
-                                port=self.parsedURL.port,
-                                user=self.parsedURL.username,
-                                password=self.parsedURL.password,
-                                sslmode='verify-full',
-                                sslrootcert=self.sllCert,
-                                database=self.dbName)
-        else:
-            self.conn = psycopg2.connect(host=self.parsedURL.hostname,
-                                port=self.parsedURL.port,
-                                user=self.parsedURL.username,
-                                password=self.parsedURL.password,
-                                database=self.dbName
-                                )
+        client = MongoClient(self.URL,ssl=True,ssl_ca_certs=self.tlsCert)
+        self.conn = client.ibmclouddb
         return self.conn
 
+    def createTelemetriesCollection(self):
+        telemetry={ "timestamp": "2019-09-04 T15:31 Z",
+                    "containerID": "C101",
+                    "product_id": "P02",
+                    "sensors": {
+                    "temperature": 5.49647,
+                    "oxygen_level" : 20.4543,
+                    "nitrogen_level" : 79.4046,
+                    "carbon_dioxide_level" : 4.42579,
+                    "humidity_level" : 60.3148,
+                    "fan_1": "True",
+                    "fan_2" : "True",
+                    "fan_3" : "True",
+                    "ambiant_temperature": 19.8447
+                    },
+                    "content_type": 1,
+                    "target_temperature": 6.0,
+                    "kilowatts": 3.44686,
+                    "latitude": "37.8226902168957,",
+                    "longitude": "-122.3248956640928",
+                    "time_door_open" : 300,
+                    "defrost_cycle": 6
+                }
+        result = self.conn.telemetries.insert_one(telemetry)
 
-    def getVersion(self):
-        cur = self.conn.cursor()
-        cur.execute('SELECT version()')
-        return cur.fetchone()
 
-    def createTables(self):
-        """
-        Create reefers and products tables as reference data. It can be done with psql too.
-        Then create the reefer telemetries table to keep all the metrics for Machine learning work
-        """
-        cur = self.conn.cursor()
-        cur.execute("""CREATE TABLE IF NOT EXISTS reefers (
-            container_id varchar(64) NOT NULL PRIMARY KEY,
-            reefer_model varchar(10),  -- 20RF, 40RH, 45RW
-            last_maintenance_date TIMESTAMP
-            ); """)
-        cur.execute("""CREATE TABLE IF NOT EXISTS products (
-                product_id varchar(10) NOT NULL PRIMARY KEY,
-                description varchar(100),
-                target_temperature REAL,
-                target_humidity_level REAL,
-                content_type INT
-            );""")
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS reefer_telemetries (
-                container_id varchar(64) NOT NULL,
-                measurement_time TIMESTAMP NOT NULL,
-                product_id varchar(10) NOT NULL,
-                temperature REAL,
-                target_temperature REAL,
-                ambiant_temperature REAL, 
-                kilowatts REAL,
-                content_type INT,
-                oxygen_level REAL,
-                nitrogen_level REAL,
-                carbon_dioxide_level REAL,
-                humidity_level REAL,
-                vent_1 BOOLEAN,
-                vent_2 BOOLEAN,
-                vent_3 BOOLEAN,
-                time_door_open REAL,
-                location POINT,
-                defrost_cycle INT,
-                maintenance_required INT,
-                primary key (container_id, measurement_time), -- Duplicate measurements not allowed
-                foreign key (container_id) references Reefers(container_id),
-                foreign key (product_id) references Products(product_id)
-            );""")
 
-    def populateReefersReferenceData(self):
-        cur = self.conn.cursor()
-        cur.execute("""INSERT INTO reefers(container_id, reefer_model) 
-        VALUES ( 'C01','20RF'), ('C02','20RF'), ('C03','40RH'), ('C04','45RW');
-        """)
-        self.conn.commit()
+    def addReeferTelemetry(self,record):
+        telemetry = toJson(record)
+        result = self.conn.telemetries.insert_one(telemetry)
+        print("Done uploading telemetry record -> " + str(result.inserted_id))
         
-    
-    def populateProductsReferenceData(self):
-        cur = self.conn.cursor()
-        cur.execute("""
-            INSERT INTO products(product_id,description,content_type,target_temperature,target_humidity_level) VALUES 
-            ('P01','Carrots',1,4,0.4),
-            ('P02','Banana',2,6,0.6),
-            ('P03','Salad',1,4,0.4),
-            ('P04','Avocado',2,6,0.4);
-            """)
-        self.conn.commit()
-
-    def addReeferTelemetries(self,dataFrame: pd.DataFrame):
-        """
-        Bulk load all the tuples from a data frame into the reefer telemetries table
-        """
-        cur = self.conn.cursor()
-        csv_str = dataFrame[TABLE_COLUMNS].to_csv(index=False, header=False)
-        csv_buf = io.StringIO(csv_str)
-        cur.copy_from(csv_buf, TABLE_METRICS, columns=(TABLE_COLUMNS), sep=",")
-        self.conn.commit()
-        print("Done uploading telemetry records !")
-        
-
-    def addReeferTelemetry(self,telemetry:dict):
-        cur = self.conn.cursor()
-        keys = telemetry.keys()
-        columns = ','.join(keys)
-        values = [telemetry[k] for k in keys]
-        values_as_str = ','.join(['%s' for i in range(len(values))])
-        sql='INSERT INTO reefer_telemetries({}) VALUES ({})'.format(columns,values_as_str)
-        print(sql)
-        cur.mogrify(sql,telemetry)
-        self.conn.commit()
-        print("Done uploading telemetry record !")
-        
-
-    def getAll(self,tableName):
-        cur = self.conn.cursor()
-        cur.execute("SELECT * FROM " + tableName)
-        cursor_obj = cur.fetchall()
-        # grabs column names from the table
-        labels = [column[0] for column in cur.description]
-        # makes a list from the dict of the zip of column names and the results object
-        results_list = []
-        for row in cursor_obj:
-            results_list.append(dict(zip(labels, row)))
-        return json.dumps(results_list,indent=4, sort_keys=True, default=str)
-
-    def getAllReefers(self):
-        return self.getAll("reefers")
-
-    def getAllProducts(self):
-        return self.getAll("products")
-
+ 
     def getAllReeferTelemetries(self):
-        return self.getAll("reefer_telemetries")
+        telemetries = self.conn.telemetries.find()
+        return telemetries
 
-    def dropTable(self,tableName):
-        cur = self.conn.cursor()
-        cur.execute("DROP TABLE " + tableName)
-        self.conn.commit()
 
-    def listTables(self):
-        cur = self.conn.cursor()
-        cur.execute("""
-        SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';
-        """)
-        cursor_obj = cur.fetchall()
-        for row in cursor_obj:
-            print(row)
 
 if __name__ == '__main__':
     repo = ReeferRepository()
     conn=repo.connect()
-    v=repo.getVersion()
-    print(v)
-    repo.createTables()
-    repo.populateReefersReferenceData()
-    repo.populateProductsReferenceData()
-    reefers = repo.getAllReefers()
-    print(reefers)
-    products = repo.getAllProducts()
-    print(products)
-    repo.listTables()
-    telemetry =  {
-        "container_id": "C02",
-        "measurement_time": "2019-09-16 23:41:28.424611",
-        "product_id": "P02",
-        "temperature": 4.0,
-        "target_temperature": 4.0,
-        "ambiant_temperature": 18.0,
-        "kilowatts": 10,
-        "content_type": 2,
-        "oxygen_level": .2,
-        "nitrogen_level": .6,
-        "carbon_dioxide_level": .2,
-        "humidity_level": .4,
-        "vent_1": 1,
-        "vent_2": 1,
-        "vent_3": 1,
-        "time_door_open": 0,
-        "location": None,
-        "defrost_cycle": 1,
-        "maintenance_required": 0
-    }
 
-    # repo.addReeferTelemetry(telemetry)
-    print(repo.getAllReeferTelemetries())
-    # repo.dropTable("reefer_telemetries")
-    # repo.dropTable("products")
+    repo.createTelemetriesCollection()
+    for t in repo.getAllReeferTelemetries():
+        print(t)
+
     

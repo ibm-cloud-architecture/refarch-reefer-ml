@@ -9,7 +9,7 @@ from simulator.infrastructure.ReeferRepository import ReeferRepository
 '''
 Tool to create the csv file for ML work using the Reefer metrics simulator.
 '''
-FILENAME = "../ml/data/testdata.csv"
+FILENAME = "telemetries.csv"
 
 def saveFile(df,fname = FILENAME,flag = True):
     print("Save to file ", fname)  
@@ -25,7 +25,9 @@ def saveToDB(df):
     print(df)
     repo = ReeferRepository()
     repo.connect()
-    repo.addReeferTelemetries(df)
+    for record in list(df.to_records(index=False)):
+        print(record)
+        repo.addReeferTelemetry(record)
     
 
 def parseArguments():

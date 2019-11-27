@@ -1,6 +1,10 @@
 # Define the products data into postgresql
 
-We are using a Postgresql instance on IBM Cloud.
+We are using a Postgresql instance on IBM Cloud. So once you create your own instance get the credential for the URL and the certificate.
+
+```
+
+```
 
 First be sure to set at least the following environment variables in the setenv.sh file
 
