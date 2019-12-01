@@ -17,12 +17,12 @@ class ReeferRepository:
     def __init__(self):
         self.parsedURL = urlparse(os.getenv('POSTGRES_URL','localhost:5432'))
         self.dbName = os.getenv('POSTGRES_DBNAME','ibmclouddb')
-        self.sllCert = os.getenv('POSTGRES_SSL_PEM','')
+        self.tlsCert = os.getenv('POSTGRES_SSL_PEM','')
         print(self.parsedURL.hostname + ":" + str(self.parsedURL.port))
         print(self.dbName )
 
     def connect(self):
-        if self.sllCert != "" :
+        if self.tlsCert != "" :
             print("Connect remote with ssl")
             self.conn = psycopg2.connect(host=self.parsedURL.hostname,
                                 port=self.parsedURL.port,
@@ -57,13 +57,6 @@ class ReeferRepository:
             reefer_model varchar(10),  -- 20RF, 40RH, 45RW
             last_maintenance_date TIMESTAMP
             ); """)
-        cur.execute("""CREATE TABLE IF NOT EXISTS products (
-                product_id varchar(10) NOT NULL PRIMARY KEY,
-                description varchar(100),
-                target_temperature REAL,
-                target_humidity_level REAL,
-                content_type INT
-            );""")
         cur.execute("""
             CREATE TABLE IF NOT EXISTS reefer_telemetries (
                 container_id varchar(64) NOT NULL,
@@ -98,16 +91,7 @@ class ReeferRepository:
         self.conn.commit()
         
     
-    def populateProductsReferenceData(self):
-        cur = self.conn.cursor()
-        cur.execute("""
-            INSERT INTO products(product_id,description,content_type,target_temperature,target_humidity_level) VALUES 
-            ('P01','Carrots',1,4,0.4),
-            ('P02','Banana',2,6,0.6),
-            ('P03','Salad',1,4,0.4),
-            ('P04','Avocado',2,6,0.4);
-            """)
-        self.conn.commit()
+
 
     def addReeferTelemetries(self,dataFrame: pd.DataFrame):
         """
@@ -149,8 +133,7 @@ class ReeferRepository:
     def getAllReefers(self):
         return self.getAll("reefers")
 
-    def getAllProducts(self):
-        return self.getAll("products")
+
 
     def getAllReeferTelemetries(self):
         return self.getAll("reefer_telemetries")
@@ -176,11 +159,9 @@ if __name__ == '__main__':
     print(v)
     repo.createTables()
     repo.populateReefersReferenceData()
-    repo.populateProductsReferenceData()
     reefers = repo.getAllReefers()
     print(reefers)
-    products = repo.getAllProducts()
-    print(products)
+   
     repo.listTables()
     telemetry =  {
         "container_id": "C02",
@@ -207,5 +188,5 @@ if __name__ == '__main__':
     # repo.addReeferTelemetry(telemetry)
     print(repo.getAllReeferTelemetries())
     # repo.dropTable("reefer_telemetries")
-    # repo.dropTable("products")
+
     
