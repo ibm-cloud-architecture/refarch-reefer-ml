@@ -1,10 +1,20 @@
 from flask import Flask, request, jsonify, abort
+from flask.cli import FlaskGroup
 from flasgger import Swagger
 import os, time
 from datetime import datetime
 from infrastructure.MetricsEventsProducer import MetricsEventsProducer 
 from domain.reefer_simulator import ReeferSimulator
 from concurrent.futures import ThreadPoolExecutor
+
+'''
+created a new FlaskGroup instance to extend the normal CLI with commands related to the Flask app
+'''
+# use app factory
+app = create_app() 
+
+cli = FlaskGroup(create_app=create_app)
+
 swagger_template = {
   "swagger": "2.0",
   "info": {
@@ -81,8 +91,6 @@ def sendEvents(metrics):
                 "payload": str(metric)}
         metricsProducer.publishEvent(evt,"containerID")
     
-
-if __name__ == "__main__":
-    print(VERSION)
-    application.run()
     
+if __name__ == '__main__':
+    cli()

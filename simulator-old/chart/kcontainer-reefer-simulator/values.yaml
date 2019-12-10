@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: ibmcase/kcontainer-reefer-simulator
-  tag: latest
+  tag: v0.0.10
   pullPolicy: Always
   pullSecret: null
 

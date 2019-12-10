@@ -35,17 +35,12 @@ class ReeferRepository:
     def __init__(self):
         self.URL = os.getenv('MONGO_DB_URL','mongodb://localhost:27017')
         print( self.URL)
-        self.dbName = os.getenv('MONGO_DATABASE','ibmclouddb')
+        self.dbName = os.getenv('MONGO_DBNAME','ibmclouddb')
         self.tlsCert = os.getenv('MONGO_SSL_PEM','')
 
     def connect(self):
-        if not self.tlsCert:
-            client = MongoClient(self.URL,ssl=False)
-            print('http connection to mongodb ' + self.dbName)
-        else:
-            client = MongoClient(self.URL,ssl=True,ssl_ca_certs=self.tlsCert)
-            print('https connection to mongodb with ' + self.tlsCert)
-        self.conn = client[self.dbName]
+        client = MongoClient(self.URL,ssl=True,ssl_ca_certs=self.tlsCert)
+        self.conn = client.ibmclouddb
         return self.conn
 
     def createTelemetriesCollection(self):

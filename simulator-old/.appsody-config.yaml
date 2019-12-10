@@ -1,2 +1,2 @@
-project-name: reefer-simulation
+project-name: simulator
 stack: appsody/python-flask:0.1
