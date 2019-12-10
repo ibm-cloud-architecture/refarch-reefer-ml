@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/project
+    ports:
+      - 8080:8080
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - KAFKA_BROKERS=kafka1:9092
+      - KAFKA_APIKEY= ""
+    

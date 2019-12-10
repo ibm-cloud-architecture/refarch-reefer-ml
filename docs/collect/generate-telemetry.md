@@ -29,7 +29,7 @@ See [this separate note](../products-postgres) for detail.
 Use IBMCLOUD if you use mongodb, postgresql and kafka on cloud, or LOCAL for kafka and postgresql running via docker compose.
 
 ```
- ./startPythonEnv IBMCLOUD or LOCAL
+ ./startPythonEnv IBMCLOUD or LOCAL or CP
 
 root@03721594782f: cd /home
 ```

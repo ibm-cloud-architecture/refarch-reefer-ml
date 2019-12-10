@@ -41,10 +41,10 @@ class ReeferRepository:
     def connect(self):
         if not self.tlsCert:
             client = MongoClient(self.URL,ssl=False)
-            print('http connection to mongodb ' + self.dbName)
+            print('connection to mongodb ' + self.dbName)
         else:
             client = MongoClient(self.URL,ssl=True,ssl_ca_certs=self.tlsCert)
-            print('https connection to mongodb with ' + self.tlsCert)
+            print('TLS connection to mongodb with ' + self.tlsCert)
         self.conn = client[self.dbName]
         return self.conn
 
