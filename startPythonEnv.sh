@@ -19,12 +19,13 @@ then
      --network docker_default\
       -e MONGO_DB_URL=$MONGO_DB_URL \
       -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
+      -e MONGO_DATABASE=$MONGODB_DATABASE \
       -ti ibmcase/python bash
 else
   docker run  -e DISPLAY=$IPADDR:0 -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
-     --network host \
      -e MONGO_DB_URL=$MONGO_DB_URL \
      -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
+     -e MONGO_DATABASE=$MONGODB_DATABASE \
       -ti ibmcase/python bash
 fi

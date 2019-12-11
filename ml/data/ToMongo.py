@@ -47,10 +47,19 @@ def connectToMongo():
     # use the string found in the "composed" field of the connection information.
     URL=os.getenv('MONGO_DB_URL')
     print(URL)
+    dbName = os.getenv('MONGO_DATABASE','ibmclouddb')
+    tlsCert = os.getenv('MONGO_SSL_PEM','')
     # connect to MongoDB
-    client = MongoClient(URL,ssl=True,ssl_ca_certs='/home/mongodb.pem')
-    db = client.ibmclouddb
+    if not tlsCert:
+        client = MongoClient(URL,ssl=False)
+        print('connection to mongodb ' + dbName)
+    else:
+        client = MongoClient(URL,ssl=True,ssl_ca_certs=tlsCert)
+        print('TLS connection to mongodb with ' + tlsCert)
+    db = client.ibmcl[dbName]
     return db
+        
+ 
 
 def insertOneTelemetry(db,telemetry):
     result = db.telemetries.insert_one(telemetry)
@@ -91,7 +100,7 @@ if __name__ == "__main__":
             }
     
     db=connectToMongo()
-    readCsv(db)
+    # readCsv(db)
     # insertOneTelemetry(db,telemetry)
     listTelemetryCollection(db)
     # telem = getTelemetryById(db,'5ddc813c39f5241b4d4a5a43')

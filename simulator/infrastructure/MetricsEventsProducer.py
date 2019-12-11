@@ -1,6 +1,6 @@
 from confluent_kafka import Producer 
 import json, datetime
-import infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
+import userapp.infrastructure.EventBackboneConfiguration as EventBackboneConfiguration
 
 class MetricsEventsProducer:
 
