@@ -18,11 +18,17 @@ case "$kcenv" in
         export POSTGRES_HOST="databases.appdomain.cloud"
         export POSTGRES_PORT=32347
         export MONGO_DB_URL="mongodb://i.../ibmclouddb?authSource=admin&replicaSet=replset"
+        export MONGODB_DATABASE="ibmclouddb"
         export MONGO_SSL_PEM="/home/simulator/mongodb.pem"
     ;;
-   ICP)
+   CP)
         export KAFKA_BROKERS=icp-proxy.apps.green-with-envy.ocp.csplab.local:32016
         export KAFKA_APIKEY=""
+        export MONGO_DB_URL="mongodb://mongo:mongo@mongodb-36-centos7-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local:27017/reeferdb"
+        export MONGODB_USER="mongo"
+        export MONGODB_PASSWORD="mongo"
+        export MONGODB_DATABASE="reeferdb"
+        export MONGODB_ADMIN_PASSWORD="admin"
     ;;
     LOCAL)
         export KAFKA_APIKEY=""
