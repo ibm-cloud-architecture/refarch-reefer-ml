@@ -6,13 +6,18 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-Flask = "==1.1.1"
+Flask = ">=1.1.1"
+flask-restful = ">=0.3.7"
 flasgger = "==0.9.3"
 prometheus_client = "*"
-gunicorn = "==20.0.4"
+gunicorn = ">=20.0.4"
 confluent_kafka = "==1.2.0"
 pandas = "*"
-
+pytest = ">=5.3.1"
+pytest-cov = ">=2.7.1"
+flake8 = ">=3.7.8"
+pymongo = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.7"

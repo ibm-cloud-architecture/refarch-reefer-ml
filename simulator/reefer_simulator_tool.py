@@ -3,8 +3,8 @@ import random
 import numpy as np
 import pandas as pd
 import os
-from simulator.domain.reefer_simulator import ReeferSimulator
-from simulator.infrastructure.ReeferRepository import ReeferRepository
+from domain.reefer_simulator import ReeferSimulator
+from infrastructure.ReeferRepository import ReeferRepository
 
 '''
 Tool to create the csv file for ML work using the Reefer metrics simulator.

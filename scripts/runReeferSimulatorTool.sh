@@ -8,9 +8,10 @@ shift
 
 docker run -v $(pwd):/home -e KAFKA_BROKERS=$KAFKA_BROKERS \
      -e KAFKA_APIKEY=$KAFKA_APIKEY \
-     -e KAFKA_ENV=$KAFKA_ENV  \
      -e MONGO_DB_URL=$MONGO_DB_URL \
-     -e MONGO_DBNAME=$MONGO_DBNAME \
+     -e MONGO_DATABASE=$MONGODB_DATABASE \
      -e MONGO_SSL_PEM=$MONGO_SSL_PEM\
-     -ti ibmcase/python "python simulator/reefer_simulator_tool.py $@"
+     -ti ibmcase/python bash
+     
+# "python simulator/reefer_simulator_tool.py $@"
 

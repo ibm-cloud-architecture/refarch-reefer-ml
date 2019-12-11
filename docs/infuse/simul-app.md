@@ -1,6 +1,6 @@
 # The Simulator as web app
 
-The Simulator webapp is a simple python Flask web app exposing a REST POST end point to control the type of simulation and as effect it is producing Reefer telemetry events to kafka `reeferTelemetry` topic. 
+The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation and as effect it is producing Reefer telemetry events to kafka `reeferTelemetry` topic. 
 The POST operation in on the `/control` url and send a jsong control object, like:
 
 ```json
@@ -17,16 +17,20 @@ We have tried to support a domain driven design approach to structure the code, 
 
 As the simulator is also a webapp we need to package it with [Flask](https://www.fullstackpython.com/flask.html) and run it using one of the Web Server Gateway Interface (WSGI) implementation with [Gunicorn](http://docs.gunicorn.org/).
 
-We recommend to follow Flask tutorial if you do not know this python library to develop web app or REST service.
+We recommend to follow [Flask tutorial](https://flask.palletsprojects.com/en/1.1.x/tutorial/) if you do not know this python library to develop web app or REST service.
 
-- explain flask
-- explain gunicorn
+Flask is a simple library to implement REST based microservice and web application in python. It has other related projects to add interesting features to develop production application. The standard development includes defining routes, function to support handling the request and generating HTTP response, but also defining APIs... Read more with the [explore Flask book online](http://exploreflask.com/en/latest/).
+Flask is mono threaded so it fits well in a simple web application for development purpose, but for production it is recommended to add a web server like [Gunicorn](https://gunicorn.org/) to handle multiple concurrent requests.
+
 - explain swaggers
 - explain blueprint
 
+The pipfile defines the dependencies for this component. 
 
 
-## Unit test the Simulator
+## Testing
+
+### Unit test the Simulator
 
 The test coverage is not yet great. To run them
 
@@ -35,7 +39,7 @@ cd simulator
 ./startPythonEnv
 root@1de81b16f940:/# export PYTHONPATH=/home/simulator
 root@1de81b16f940:/# cd /home/simulator
-root@1de81b16f940:/# python tests/TestSimulator.py 
+root@1de81b16f940:/# python tests/unit/TestSimulator.py 
 ```
 
 ## Build
