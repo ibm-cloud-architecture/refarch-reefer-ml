@@ -91,7 +91,7 @@ if __name__ == '__main__':
     repo = ReeferRepository()
     conn=repo.connect()
 
-    repo.createTelemetriesCollection()
+    # repo.createTelemetriesCollection()
     for t in repo.getAllReeferTelemetries():
         print(t)
 

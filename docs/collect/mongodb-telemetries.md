@@ -23,7 +23,7 @@ Use the python pymongo driver and open a connection with code like below:
 ```python
  URL=os.getenv('MONGO_DB_URL')
  client = MongoClient(URL,ssl=True,ssl_ca_certs='/home/mongodb.pem')
- db = client.ibmclouddb
+ db = client['ibmclouddb']
 
  # insert a record
  result = db.telemetries.insert_one(telemetry)
@@ -34,7 +34,19 @@ Use the python pymongo driver and open a connection with code like below:
  for t in telemetries:
 ```
 
-See the rest of the code in `ml/data/ToMongo.py`.
+See the rest of the `ml/data/ToMongo.py` for the code loading from CSV file, or the `simulator/infrastructure/ReeferRepository.py` for the one generating metrics and uploading them directly to mongo.
+
+### Add data from csv file
+
+Using the ToMongo.py script we can load the data in the telemetries.csv file. In a Terminal window uses the following commmand:
+
+```
+./startPythonEnv.sh IBMCLOUD
+
+cd ml/data
+
+python ToMongo.py
+```
 
 ### As a telemetry repository for the simulator
 
