@@ -2,7 +2,10 @@ site_name: Reefer Container Predictive Maintenance
 repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
   - Introduction: index.md
-  - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
+  - Enablement Content:
+    - Cloud Pak approach: cp-approach.md
+    - Open source approach: oos-approach.md
+    - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
   - Collect:
     - Preparing data for demonstration:
       - Get products into postgresql: collect/products-postgres.md

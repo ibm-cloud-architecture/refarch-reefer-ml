@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ $# -ne 1 ]];then
- echo "Usage createPGtables.sh [LOCAL  | IBMCLOUD ]"
+ echo "Usage createPGtables.sh [LOCAL  | IBMCLOUD | CP]"
  exit 1
 fi
 
