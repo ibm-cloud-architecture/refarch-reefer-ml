@@ -6,19 +6,28 @@ MongoDB is a popular document-based database that allows developers to quickly b
 * mongos - controls routing to the databases in case of sharding
 * config servers (CSRS) - stores the metadata in a sharded environment. 
 
+We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside mongodb or Cassandra.
+
+So here we present how to use MongoDB on IBM Cloud to support long term persistence.
+
+![](images/ibm-cloud-dbs.png)
+
+
 ## With mongodb on IBM Cloud 
 
-Create the service credentials and the mongodb.composed url, something starting as `mongodb://ibm_cloud_e154ff52_ed` 
+Create the mongoDN service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as `mongodb://ibm_cloud_e154ff52_ed`) 
 
-Set this URL in setenv.sh the MONGO_DB_URL="mongodb://ibm_c..."
+Set this URL in `scripts/setenv.sh` the `export MONGO_DB_URL="mongodb://ibm_c..."`
 
-Get the certificate as pem file
+Get the TLS certificate as pem file:
 
 ```
 ibmcloud cdb deployment-cacert gse-eda-mongodb > mongodbca.pem
 ```
 
-Use the python pymongo driver and open a connection with code like below:
+## Use our docker image for python environment
+
+Use the python pymongo driver (pip install pymongo) and open a connection with a code like below:
 
 ```python
  URL=os.getenv('MONGO_DB_URL')
