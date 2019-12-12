@@ -1,24 +1,56 @@
 # Reefer Anomaly Detection Solution
 
-This project is to demonstrate how to perform real time analytics, like anomaly detection for Reefer container in the shipping industry, using Reefer container telemetry event stream. 
+This project aims to demonstrate how to perform real time analytics on data streams using an anomaly detection scoring service to assess Reefer container maintenance needs. Most of machine learning and analytics are done on data at rest and data warehouse. In this repository we are presenting an approach to use both data at rest and in motion within kafka.
 
 !!! note
     This project is part of the [reference implementation solution](https://ibm-cloud-architecture.github.io/refarch-kc/)  to demonstrate the IBM [event driven reference architecture](https://ibm-cloud-architecture.github.io/refarch-eda) but it also presents how to combine different IBM cloud paks to build the solution: Cloud pak for data, for automation, for integration and for application.
 
-As we will detail in next section there are four components in this solution that make the anomaly detection: a Reefer simulator (we do not have such Reefer container in our stock), a container microservice, an analytics scoring agent and a business process. The diagram below is a very high level view of the components in a three layer architecture with Openshift for the deployment infrastructure.
+The implementation is using two approaches: 
+
+* one using open sources mostly from Apache projects 
+* one using IBM Cloud Pak products
+
+As we will detail in [next section](#mvp-component-view) there are four components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice, an analytics scoring agent and a business process. 
+
+![](images/mvp-runtime.png)
+
+
+## Problem statements
+
+The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. We want to detect sensor anomaly and trigger a field engineer dispatch when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
+
+Going into this content you will learn the following:
+
+* how to apply anomaly detection on telemetry data using Waston Studio or Jupiter notebook and python library
+* how to deploy the model as agent or web service using Watson ML or Kubeflow
+* how to integrate kafka events into Pandas dataset for build test and training sets.
+* how to develop microservice in python for scoring telemetry using [Appsody](https://appsody.dev/)
+
+When anomaly is detected, a new  event is posted to the `containers` Kafka topic so the Reefer container manager microservice can apply the expected business logic. 
+
+## A Cloud Pak Approach
+
+To develop the solution we can use IBM Cloud Pak products as presented in the diagram below using a three layer architecture with Openshift for the deployment infrastructure.
 
 ![](images/ibm-cp.png)
+
+We recommend to follow the [following tutorial](cp-approach.md) for understanding how the solution was built.
+
+## An open source based solution
 
 
 We also look at an open source version of this solution using an approach close to [opendatahub.io](http://opendatahub.io/) proposed architecture, as illustrated in the following diagram:
 
 ![](images/RT-analytics.png)
 
-The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. The first component receiving those messages is [Apache Nifi]() to transform the telemetry message to a kafka event. Kafka is used as the event backbone and event sourcing so microservices, deployed on Openshift, can consume and publish messages.
 
-For persistence reason, we may leverage big data type of storage like Postgresql or Cassandra to persist the container's telemetry over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and select the best model. We also illustrate how to connect to Kafka topic as data source, from a Jupyter notebook.
+The first component receiving the telemetry messages is [Apache Nifi](https://nifi.apache.org/) to transform the telemetry messages to kafka events. [Apache Kafka](https://kafka.apache.org/) is used as the event backbone and event sourcing so microservices, deployed on Openshift, can consume and publish messages.
 
-Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of Reefer telemetry events. When anomaly is detected, a new  event is posted to the `containers` topic so the Reefer container manager microservice can apply the expected business logic. 
+For persistence reason, we may leverage big data type of storage like [Apache Cassandra](http://cassandra.apache.org/) or [mongodb](https://www.mongodb.com/) to persist the container's telemetries over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and select the best model. We also illustrate how to connect to Kafka topic as data source, from a Jupyter notebook.
+
+Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of Reefer telemetry events. 
+
+See [this note](oos-approach.md) to understand how to build and run the solution.
 
 ## MVP component view
 
@@ -53,32 +85,6 @@ Start by cloning this project using the command:
 git clone https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 ```
 
-### Be sure to have Event Stream or a Kafka cluster running somewhere
-
-We recommend creating the Event Stream service using the [IBM Cloud catalog](https://cloud.ibm.com/catalog/services/event-streams), you can also read our [quick article](https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/) on how to deploy event stream. 
-
-*As an alternate approach, we have deployed Event Stream on Openshift running on-premise servers following the product documentation [here](https://ibm.github.io/event-streams/installing/installing-openshift/).* 
-
-The following diagram illustrates the needed Kafka topics configured in IBM Cloud Event Stream service:
-
-![](images/es-topics.png)
-
-With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers and the producers.
-
-For Event Streams on Openshift deployment, click to the `connect to the cluster` button to get the broker URL and to generate the API key: select the option to generate the key for all topics.
-
-![](images/cluster-access.png)
-
-### Provision a Postgresql service
-
-If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the [product documentation](https://cloud.ibm.com/docs/services/databases-for-postgresql) to provision your own service. Define service credential and use the `composed` url, the database name and the SSL certificate. Use the following commands to get the certificate:
-        
-```shell
-ibmcloud login
-ibmcloud cdb cacert <database deployment name>
-```  
-
-Save this file as `postgres.pem` under the simulator folder.
 
 ### Set environment variables
 
@@ -103,97 +109,6 @@ When running with Event Stream and Postgres on the cloud use  IBMCLOUD argument:
 ```
 # refarch-reefer-ml project folder
 ./startPythonEnv.sh IBMCLOUD
-```
-
-### Build the docker image for Jupyter notebook
-
-We are using a special version of conda to add the postgresql and kafka libraries for python so we can access postgresql or kafka from notebook. The Dockerfile may use a `cert.pem` file, which contains the postgres certificate so the notebook can connect to postgresql service with SSL connection. 
-
-```
-cd docker 
-docker build -f docker-jupyter-tool -t ibmcase/jupyter .
-```
-
-To run this jupyter server use the startJupyterServer.sh script:
-
-```
-# refarch-reefer-ml project folder
-./startJupyterServer.sh IBMCLOUD
-```
-
-### Create the postgresql database
-
-If you use POSTGRESQL on IBM Cloud, you need to get the SSL certificate and put it as postgres.pem under the simulator folder, or set POSTGRES_SSL_PEM to the path where to find this file.
-
-The postgres.pem file needs to be in the simulator folder.
-
-Run the [ReeferRepository.py]() tool to create the database schema and to add some reference data like the product catalog:
-
-```
-./startPythonEnv.sh IBMCLOUD
-> python simulator/infrastructure/ReeferRepository.py
-```
-
-You should see the following trace:
-
-```
-Connect remote with ssl
-('PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit',)
-[
-    {
-        "container_id": "C01",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C02",
-        "last_maintenance_date": null,
-        "reefer_model": "20RF"
-    },
-    {
-        "container_id": "C03",
-        "last_maintenance_date": null,
-        "reefer_model": "40RH"
-    },
-    {
-        "container_id": "C04",
-        "last_maintenance_date": null,
-        "reefer_model": "45RW"
-    }
-]
-[
-    {
-        "content_type": 1,
-        "description": "Carrots",
-        "product_id": "P01",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Banana",
-        "product_id": "P02",
-        "target_humidity_level": 0.6,
-        "target_temperature": 6.0
-    },
-    {
-        "content_type": 1,
-        "description": "Salad",
-        "product_id": "P03",
-        "target_humidity_level": 0.4,
-        "target_temperature": 4.0
-    },
-    {
-        "content_type": 2,
-        "description": "Avocado",
-        "product_id": "P04",
-        "target_humidity_level": 0.4,
-        "target_temperature": 6.0
-    }
-]
-('public', 'reefers', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'products', 'ibm-cloud-base-user', None, True, False, True, False)
-('public', 'reefer_telemetries', 'ibm-cloud-base-user', None, True, False, True, False)
 ```
 
 ## Project approach
@@ -225,6 +140,7 @@ To use Jupyter, Sparks and kubeflow see [this note](analyze/oss-ml-dev.md)
 
 ## Further Readings
 
+* [Data AI reference architecture]()
 * [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
 * [Romeo Kienzler anomaly detection article 2](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
 * [Romeo Kienzler anomaly detection article 3](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
