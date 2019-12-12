@@ -36,7 +36,7 @@
     
     
       
-        <title>Work with Mongodb to persist telemetries - Reefer Container Predictive Maintenance</title>
+        <title>Event Streams provisioning and configuration - Reefer Container Predictive Maintenance</title>
       
     
     
@@ -96,7 +96,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#work-with-mongodb-to-persist-telemetries" tabindex="1" class="md-skip">
+      <a href="#event-streams-provisioning-and-configuration" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -121,7 +121,7 @@
               Reefer Container Predictive Maintenance
             </span>
             <span class="md-header-nav__topic">
-              Work with Mongodb to persist telemetries
+              Event Streams provisioning and configuration
             </span>
           
         </div>
@@ -341,7 +341,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../products-postgres/" title="Get products into postgresql" class="md-nav__link">
+    <a href="../../collect/products-postgres/" title="Get products into postgresql" class="md-nav__link">
       Get products into postgresql
     </a>
   </li>
@@ -353,7 +353,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
+    <a href="../../collect/generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
       Generate telemetry data
     </a>
   </li>
@@ -370,7 +370,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
+    <a href="../../collect/oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
       Collect data with open source solution
     </a>
   </li>
@@ -382,7 +382,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
+    <a href="../../collect/cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
       Collect data with cloud pak for data
     </a>
   </li>
@@ -478,7 +478,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
+    <a href="../simul-app/" title="Develop the simulation app" class="md-nav__link">
       Develop the simulation app
     </a>
   </li>
@@ -490,7 +490,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
+    <a href="../dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
       Develop scoring app with cloud pak for application
     </a>
   </li>
@@ -502,7 +502,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
+    <a href="../build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
       Build and run the solution on Openshift
     </a>
   </li>
@@ -514,7 +514,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
+    <a href="../bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
       Engineer dispatching with Business process with Cloud Pak for Automation
     </a>
   </li>
@@ -526,7 +526,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/integration-tests/" title="Run integration tests" class="md-nav__link">
+    <a href="../integration-tests/" title="Run integration tests" class="md-nav__link">
       Run integration tests
     </a>
   </li>
@@ -570,42 +570,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#with-mongodb-on-ibm-cloud" title="With mongodb on IBM Cloud" class="md-nav__link">
-    With mongodb on IBM Cloud
+  <a href="#deploying-event-streams-from-cp-for-integration" title="Deploying Event Streams from CP for integration" class="md-nav__link">
+    Deploying Event Streams from CP for integration
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#use-our-docker-image-for-python-environment" title="Use our docker image for python environment" class="md-nav__link">
-    Use our docker image for python environment
+  <a href="#defines-topics" title="Defines topics" class="md-nav__link">
+    Defines topics
   </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#add-data-from-csv-file" title="Add data from csv file" class="md-nav__link">
-    Add data from csv file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#as-a-telemetry-repository-for-the-simulator" title="As a telemetry repository for the simulator" class="md-nav__link">
-    As a telemetry repository for the simulator
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#on-openshift-311-on-premise" title="On Openshift 3.11 on premise" class="md-nav__link">
-    On Openshift 3.11 on premise
+  <a href="#ibm-cloud-public" title="IBM Cloud Public" class="md-nav__link">
+    IBM Cloud Public
   </a>
   
 </li>
@@ -626,74 +606,27 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/collect/mongodb-telemetries.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/infuse/event-streams.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="work-with-mongodb-to-persist-telemetries">Work with Mongodb to persist telemetries</h1>
-<p>MongoDB is a popular document-based database that allows developers to quickly build projects without worrying about schema. Mongo components include: </p>
-<ul>
-<li>mongod - the core process that runs the actual database </li>
-<li>mongos - controls routing to the databases in case of sharding</li>
-<li>config servers (CSRS) - stores the metadata in a sharded environment. </li>
-</ul>
-<p>We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside mongodb or Cassandra.</p>
-<p>So here we present how to use MongoDB on IBM Cloud to support long term persistence.</p>
-<p><img alt="" src="../images/ibm-cloud-dbs.png" /></p>
-<h2 id="with-mongodb-on-ibm-cloud">With mongodb on IBM Cloud</h2>
-<p>Create the mongoDN service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as <code>mongodb://ibm_cloud_e154ff52_ed</code>) </p>
-<p>Set this URL in <code>scripts/setenv.sh</code> the <code>export MONGO_DB_URL="mongodb://ibm_c..."</code></p>
-<p>Get the TLS certificate as pem file:</p>
-<div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; mongodbca.pem
-</pre></div>
-
-<h2 id="use-our-docker-image-for-python-environment">Use our docker image for python environment</h2>
-<p>Use the python pymongo driver (pip install pymongo) and open a connection with a code like below:</p>
-<div class="codehilite"><pre><span></span> <span class="n">URL</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;MONGO_DB_URL&#39;</span><span class="p">)</span>
- <span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span><span class="n">ssl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ssl_ca_certs</span><span class="o">=</span><span class="s1">&#39;/home/mongodb.pem&#39;</span><span class="p">)</span>
- <span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;ibmclouddb&#39;</span><span class="p">]</span>
-
- <span class="c1"># insert a record</span>
- <span class="n">result</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">telemetry</span><span class="p">)</span>
- <span class="n">telemetry</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">)})</span>
-
- <span class="c1"># get all the records</span>
- <span class="n">telemetries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
- <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">telemetries</span><span class="p">:</span>
-</pre></div>
-
-<p>See the rest of the <code>ml/data/ToMongo.py</code> for the code loading from CSV file, or the <code>simulator/infrastructure/ReeferRepository.py</code> for the one generating metrics and uploading them directly to mongo.</p>
-<h3 id="add-data-from-csv-file">Add data from csv file</h3>
-<p>Using the ToMongo.py script we can load the data in the telemetries.csv file. In a Terminal window uses the following commmand:</p>
-<div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
-
-cd ml/data
-
-python ToMongo.py
-</pre></div>
-
-<h3 id="as-a-telemetry-repository-for-the-simulator">As a telemetry repository for the simulator</h3>
-<p>The approach is to use the same APIs, but get the pem file in the docker image and set the environment variables accordingly.
-The <a href="">ReeferRepository.py</a> implements the mongodb operations to save telemetry.</p>
-<h2 id="on-openshift-311-on-premise">On Openshift 3.11 on premise</h2>
-<p>We use the following image: <code>centos/mongodb-36-centos7</code>. So to install it, we use the following command:</p>
-<div class="codehilite"><pre><span></span>oc new-app -e \
-    MONGODB_USER=mongo,MONGODB_PASSWORD=&lt;password&gt;,MONGODB_DATABASE=reeferdb,MONGODB_ADMIN_PASSWORD=&lt;admin_password&gt; \
-    centos/mongodb-36-centos7
-</pre></div>
-
-<p>Connect to the pod and then use the mongo CLI</p>
-<div class="codehilite"><pre><span></span>$ oc get pods
-NAME                                         READY     STATUS             RESTARTS   AGE
-mongodb-36-centos7-1-wcn7h                   <span class="m">1</span>/1       Running            <span class="m">0</span>          4d
-
-$ oc rsh mongodb-36-centos7-1-wcn7h 
-bash-4.2$ mongo -u <span class="nv">$MONGODB_USER</span> -p <span class="nv">$MONGODB_PASSWORD</span> <span class="nv">$MONGODB_DATABASE</span>
-MongoDB shell version: <span class="m">2</span>.4.9
-connecting to: reeferdb
-&gt; show collections
-</pre></div>
-
-<p>To remove the db on openshift: <code>oc delete dc</code></p>
+                <h1 id="event-streams-provisioning-and-configuration">Event Streams provisioning and configuration</h1>
+<p>We cover a lot about Kafka installation and configuration in the <a href="https://ibm-cloud-architecture.github.io/refarch-eda/">EDA reference architecture repository</a>. </p>
+<h2 id="deploying-event-streams-from-cp-for-integration">Deploying Event Streams from CP for integration</h2>
+<p>The <a href="https://www.ibm.com/cloud/cloud-pak-for-integration">cloud pack for integration</a> includes IBM Event Streams, the Kafka solution for on premise deployment. </p>
+<p>Once you have an Openshift cluster, you can install cloud pak for integration as presented in <a href="https://cloudpak8s.io/integration/onprem/#run-the-integration-cloud-pak-install">this tutorial</a>.</p>
+<p>Then you can deploy Event streams with a 3 brokers cluster using the CP4I home page:</p>
+<p><img alt="" src="../images/cp4i-home-es.png" /></p>
+<p>using the steps described in <a href="https://cloudpak8s.io/integration/deploy-kafka/">this tutorial</a>. </p>
+<p>We also use the <a href="https://ibm.github.io/event-streams/installing/installing-openshift/">Event Streams product documentation</a>.</p>
+<h2 id="defines-topics">Defines topics</h2>
+<p>The following diagram illustrates the needed Kafka topics configured in IBM Cloud Event Stream service:</p>
+<p><img alt="" src="../images/es-topics.png" /></p>
+<p>As an alternate you can use Event Streams on Public Cloud.</p>
+<h2 id="ibm-cloud-public">IBM Cloud Public</h2>
+<p>We recommend creating the Event Stream service using the <a href="https://cloud.ibm.com/catalog/services/event-streams">IBM Cloud catalog</a>, you can also read our <a href="https://ibm-cloud-architecture.github.io/refarch-eda/deployments/eventstreams/es-ibm-cloud/">quick article</a> on how to deploy Event Streams. </p>
+<p>With IBM Cloud deployment use the service credentials to create new credentials to get the Kafka brokers list, the admin URL and the api key needed to authenticate the consumers and the producers.</p>
+<p>For Event Streams on Openshift deployment, click to the <code>connect to the cluster</code> button to get the broker URL and to generate the API key: select the option to generate the key for all topics.</p>
+<p><img alt="" src="../images/cluster-access.png" /></p>
                 
                   
                 

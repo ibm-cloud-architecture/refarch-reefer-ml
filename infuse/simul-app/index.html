@@ -242,10 +242,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Enablement Content
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Enablement Content
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cp-approach/" title="Cloud Pak approach" class="md-nav__link">
+      Cloud Pak approach
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../oos-approach/" title="Open source approach" class="md-nav__link">
+      Open source approach
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/" title="Methodology used" class="md-nav__link">
       Methodology used
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -466,9 +514,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#testing" title="Testing" class="md-nav__link">
+    Testing
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
     Unit test the Simulator
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -603,9 +664,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#testing" title="Testing" class="md-nav__link">
+    Testing
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#unit-test-the-simulator" title="Unit test the Simulator" class="md-nav__link">
     Unit test the Simulator
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -656,7 +730,7 @@
                 
                 
                 <h1 id="the-simulator-as-web-app">The Simulator as web app</h1>
-<p>The Simulator webapp is a simple python Flask web app exposing a REST POST end point to control the type of simulation and as effect it is producing Reefer telemetry events to kafka <code>reeferTelemetry</code> topic. 
+<p>The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation and as effect it is producing Reefer telemetry events to kafka <code>reeferTelemetry</code> topic. 
 The POST operation in on the <code>/control</code> url and send a jsong control object, like:</p>
 <div class="codehilite"><pre><span></span>    <span class="p">{</span> <span class="err">&#39;containerID&#39;:</span> <span class="err">&#39;C02&#39;,</span>
     <span class="err">&#39;simulation&#39;:</span> <span class="err">&#39;co2sensor&#39;,</span>
@@ -668,20 +742,22 @@ The POST operation in on the <code>/control</code> url and send a jsong control 
 <h2 id="design-approach">Design approach</h2>
 <p>We have tried to support a domain driven design approach to structure the code, with domain, infrastructure and app modules. The domain module has a unique class for the simulator which main goals is to generate tuples or records for the different simulation types. It is reused for the standalone simulation tools to generate data at rest.</p>
 <p>As the simulator is also a webapp we need to package it with <a href="https://www.fullstackpython.com/flask.html">Flask</a> and run it using one of the Web Server Gateway Interface (WSGI) implementation with <a href="http://docs.gunicorn.org/">Gunicorn</a>.</p>
-<p>We recommend to follow Flask tutorial if you do not know this python library to develop web app or REST service.</p>
+<p>We recommend to follow <a href="https://flask.palletsprojects.com/en/1.1.x/tutorial/">Flask tutorial</a> if you do not know this python library to develop web app or REST service.</p>
+<p>Flask is a simple library to implement REST based microservice and web application in python. It has other related projects to add interesting features to develop production application. The standard development includes defining routes, function to support handling the request and generating HTTP response, but also defining APIs... Read more with the <a href="http://exploreflask.com/en/latest/">explore Flask book online</a>.
+Flask is mono threaded so it fits well in a simple web application for development purpose, but for production it is recommended to add a web server like <a href="https://gunicorn.org/">Gunicorn</a> to handle multiple concurrent requests.</p>
 <ul>
-<li>explain flask</li>
-<li>explain gunicorn</li>
 <li>explain swaggers</li>
 <li>explain blueprint</li>
 </ul>
-<h2 id="unit-test-the-simulator">Unit test the Simulator</h2>
+<p>The pipfile defines the dependencies for this component. </p>
+<h2 id="testing">Testing</h2>
+<h3 id="unit-test-the-simulator">Unit test the Simulator</h3>
 <p>The test coverage is not yet great. To run them</p>
 <div class="codehilite"><pre><span></span><span class="n">cd</span> <span class="n">simulator</span>
 <span class="p">.</span><span class="o">/</span><span class="n">startPythonEnv</span>
 <span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
 <span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">simulator</span>
-<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">python</span> <span class="n">tests</span><span class="o">/</span><span class="n">TestSimulator</span><span class="p">.</span><span class="n">py</span> 
+<span class="n">root</span><span class="mi">@1</span><span class="nl">de81b16f940</span><span class="p">:</span><span class="o">/</span><span class="err">#</span> <span class="n">python</span> <span class="n">tests</span><span class="o">/</span><span class="n">unit</span><span class="o">/</span><span class="n">TestSimulator</span><span class="p">.</span><span class="n">py</span> 
 </pre></div>
 
 <h2 id="build">Build</h2>

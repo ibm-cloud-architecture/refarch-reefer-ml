@@ -242,10 +242,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Enablement Content
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Enablement Content
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../cp-approach/" title="Cloud Pak approach" class="md-nav__link">
+      Cloud Pak approach
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../oos-approach/" title="Open source approach" class="md-nav__link">
+      Open source approach
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/" title="Methodology used" class="md-nav__link">
       Methodology used
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -305,9 +353,58 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Get products into postgresql
+      </label>
+    
     <a href="./" title="Get products into postgresql" class="md-nav__link md-nav__link--active">
       Get products into postgresql
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#populate-the-products-data-with-the-simulator-repository" title="Populate the products data with the Simulator repository" class="md-nav__link">
+    Populate the products data with the Simulator repository
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#connect-with-psql" title="Connect with psql" class="md-nav__link">
+    Connect with psql
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-relations" title="List relations..." class="md-nav__link">
+    List relations...
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -531,6 +628,42 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#populate-the-products-data-with-the-simulator-repository" title="Populate the products data with the Simulator repository" class="md-nav__link">
+    Populate the products data with the Simulator repository
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#connect-with-psql" title="Connect with psql" class="md-nav__link">
+    Connect with psql
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list-relations" title="List relations..." class="md-nav__link">
+    List relations...
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -545,70 +678,77 @@
                 
                 
                 <h1 id="define-the-products-data-into-postgresql">Define the products data into postgresql</h1>
-<p>We are using a Postgresql instance on IBM Cloud. So once you create your own instance get the credential for the URL and the certificate.</p>
-<div class="codehilite"><pre><span></span>
+<p>If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the <a href="https://cloud.ibm.com/docs/services/databases-for-postgresql">product documentation</a> to provision your own service. </p>
+<p><img alt="" src="../images/ibm-cloud-dbs.png" /></p>
+<p>using the default configuration. Once you create your own instance define the service credential for the host, user, password and the certificate.</p>
+<p><img alt="" src="../images/postgres-credential.png" /></p>
+<p>Something like that:</p>
+<div class="codehilite"><pre><span></span>&quot;host=bd2d0216-0b7d-4575-8c0b-d2e934843e41.6131b73286f34215871dfad7254b4f7d.databases.appdomain.cloud port=31384 
+dbname=ibmclouddb 
+user=ibm_cloud_c958... 
+&quot;PGPASSWORD&quot;: &quot;2d1c526.....3&quot;
 </pre></div>
 
-<p>First be sure to set at least the following environment variables in the setenv.sh file</p>
+<p>First be sure to set at least the following environment variables in the <code>scripts/setenv.sh</code> file. (if not done before rename the <code>scripts/setenv-tmpl.sh</code> to <code>scripts/setenv.sh</code>)</p>
 <div class="codehilite"><pre><span></span>POSTGRES_URL,  POSTGRES_DBNAME,
 </pre></div>
 
-<p>If you use POSTGRESQL on IBM Cloud or any deployment using SSL, you need to get the SSL certificate as <code>postgres.pem</code> file, or set <code>POSTGRES_SSL_PEM</code> variable to the path where to find this file.</p>
+<p>You need to get the SSL certificate as a <code>postgres.pem</code> file, using the following commands to get the certificate:</p>
+<div class="codehilite"><pre><span></span>ibmcloud login
+ibmcloud cdb deployment-cacert &lt;database deployment name&gt;
+</pre></div>
+
+<p>Then in <code>setenv.sh</code> set <code>POSTGRES_SSL_PEM</code> variable to the path where to find this file (<code>export POSTGRES_SSL_PEM="./simulator/postgres.pem"</code>). </p>
+<h2 id="populate-the-products-data-with-the-simulator-repository">Populate the products data with the Simulator repository</h2>
+<p>The simulator code includes the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py">infrastructure/ProductRepository.py</a> that can create tables and add some product definitions inside the table.</p>
+<p>The following command using docker and python interpreter will create the database:</p>
+<div class="codehilite"><pre><span></span>./scripts/createPGTables.sh IBMCLOUD
+</pre></div>
+
+<p>And alternate techniques is to use <a href="https://www.postgresql.org/docs/9.3/app-psql.html">psql</a> as described below.</p>
+<h3 id="connect-with-psql">Connect with psql</h3>
+<p>We use a docker image to run psql:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># under the data_schema/rdbms/postgresql folder</span>
+$ ./startPsql.sh IBMCLOUD
+$ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$POSTGRES_PWD</span> psql --host<span class="o">=</span><span class="nv">$HOST</span> --port<span class="o">=</span><span class="nv">$PORT</span> --username<span class="o">=</span><span class="nv">$POSTGRES_USER</span> --dbname<span class="o">=</span><span class="nv">$POSTGRES_DB</span>
+<span class="nv">ibmclouddb</span> <span class="o">=</span>&gt; 
+</pre></div>
+
+<h3 id="list-relations">List relations...</h3>
+<div class="codehilite"><pre><span></span>ibmclouddb =&gt; \d
+</pre></div>
+
+<p>Then create table if not done before
+<div class="codehilite"><pre><span></span>ibmclouddb =&gt; CREATE TABLE products (
+    product_id varchar(64) NOT NULL PRIMARY KEY,
+    description varchar(100),
+    target_temperature REAL,
+    target_humidity_level REAL
+);
+</pre></div></p>
+<p>Populate the data:</p>
+<div class="codehilite"><pre><span></span>ibmclouddb =&gt; INSERT INTO products(product_id,description,target_temperature,target_humidity_level) VALUES
+(&#39;P01&#39;,&#39;Carrots&#39;,4,0.4),
+(&#39;P02&#39;,&#39;Banana&#39;,6,0.6),
+(&#39;P03&#39;,&#39;Salad&#39;,4,0.4),
+(&#39;P04&#39;,&#39;Avocado&#39;,6,0.4),
+(&#39;P05&#39;,&#39;Tomato&#39;,4,0.4);
+</pre></div>
+
+<p>List the products
+<div class="codehilite"><pre><span></span>SELECT * FROM products;
+</pre></div></p>
 <p>You should see:
-<div class="codehilite"><pre><span></span>Connect remote with ssl
-(&#39;PostgreSQL 10.10 on x86_64-pc-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit&#39;,)
-[
-    {
-        &quot;container_id&quot;: &quot;C01&quot;,
-        &quot;last_maintenance_date&quot;: null,
-        &quot;reefer_model&quot;: &quot;20RF&quot;
-    },
-    {
-        &quot;container_id&quot;: &quot;C02&quot;,
-        &quot;last_maintenance_date&quot;: null,
-        &quot;reefer_model&quot;: &quot;20RF&quot;
-    },
-    {
-        &quot;container_id&quot;: &quot;C03&quot;,
-        &quot;last_maintenance_date&quot;: null,
-        &quot;reefer_model&quot;: &quot;40RH&quot;
-    },
-    {
-        &quot;container_id&quot;: &quot;C04&quot;,
-        &quot;last_maintenance_date&quot;: null,
-        &quot;reefer_model&quot;: &quot;45RW&quot;
-    }
-]
-[
-    {
-        &quot;content_type&quot;: 1,
-        &quot;description&quot;: &quot;Carrots&quot;,
-        &quot;product_id&quot;: &quot;P01&quot;,
-        &quot;target_humidity_level&quot;: 0.4,
-        &quot;target_temperature&quot;: 4.0
-    },
-    {
-        &quot;content_type&quot;: 2,
-        &quot;description&quot;: &quot;Banana&quot;,
-        &quot;product_id&quot;: &quot;P02&quot;,
-        &quot;target_humidity_level&quot;: 0.6,
-        &quot;target_temperature&quot;: 6.0
-    },
-    {
-        &quot;content_type&quot;: 1,
-        &quot;description&quot;: &quot;Salad&quot;,
-        &quot;product_id&quot;: &quot;P03&quot;,
-        &quot;target_humidity_level&quot;: 0.4,
-        &quot;target_temperature&quot;: 4.0
-    },
-    {
-        &quot;content_type&quot;: 2,
-        &quot;description&quot;: &quot;Avocado&quot;,
-        &quot;product_id&quot;: &quot;P04&quot;,
-        &quot;target_humidity_level&quot;: 0.4,
-        &quot;target_temperature&quot;: 6.0
-    }
-]
+<div class="codehilite"><pre><span></span> product_id | description | target_temperature | target_humidity_level | content_type 
+------------+-------------+--------------------+-----------------------+--------------
+ P01        | Carrots     |                  4 |                   0.4 |            1
+ P02        | Banana      |                  6 |                   0.6 |            2
+ P03        | Salad       |                  4 |                   0.4 |            1
+ P04        | Avocado     |                  6 |                   0.4 |            2
+ P05        | Tomato      |                  6 |                   0.3 |            6
+</pre></div></p>
+<p>Quit 
+<div class="codehilite"><pre><span></span>ibmclouddb =&gt; \q
 </pre></div></p>
                 
                   
@@ -630,7 +770,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../.." title="Introduction" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../oos-approach/" title="Open source approach" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -639,7 +779,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Introduction
+                Open source approach
               </span>
             </div>
           </a>

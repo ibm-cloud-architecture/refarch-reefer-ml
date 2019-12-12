@@ -31,21 +31,21 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.0.1">
     
     
       
-        <title>Work with Mongodb to persist telemetries - Reefer Container Predictive Maintenance</title>
+        <title>Cloud Pak approach - Reefer Container Predictive Maintenance</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.982221ab.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.982221ab.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1f0bcf2b.js"></script>
+      <script src="../assets/javascripts/modernizr.1f0bcf2b.js"></script>
     
     
       
@@ -54,10 +54,10 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
     
     
-      <link rel="stylesheet" href="../../extra.css">
+      <link rel="stylesheet" href="../extra.css">
     
     
       
@@ -96,7 +96,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#work-with-mongodb-to-persist-telemetries" tabindex="1" class="md-skip">
+      <a href="#ibm-cloud-pak-approach" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -105,7 +105,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../.." title="Reefer Container Predictive Maintenance" class="md-header-nav__button md-logo">
+        <a href=".." title="Reefer Container Predictive Maintenance" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -121,7 +121,7 @@
               Reefer Container Predictive Maintenance
             </span>
             <span class="md-header-nav__topic">
-              Work with Mongodb to persist telemetries
+              Cloud Pak approach
             </span>
           
         </div>
@@ -195,7 +195,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../.." title="Reefer Container Predictive Maintenance" class="md-nav__button md-logo">
+    <a href=".." title="Reefer Container Predictive Maintenance" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
@@ -231,7 +231,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../.." title="Introduction" class="md-nav__link">
+    <a href=".." title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -241,10 +241,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       Enablement Content
@@ -260,11 +262,139 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../cp-approach/" title="Cloud Pak approach" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Cloud Pak approach
+      </label>
+    
+    <a href="./" title="Cloud Pak approach" class="md-nav__link md-nav__link--active">
       Cloud Pak approach
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-the-different-environments" title="Preparing the different environments" class="md-nav__link">
+    Preparing the different environments
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-postgresql-service" title="1- PostgreSQL Service" class="md-nav__link">
+    1- PostgreSQL Service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-mongodb-service" title="2- MongoDB Service" class="md-nav__link">
+    2- MongoDB Service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-openshift-42-cluster-for-cp4i-and-cp4app" title="3- Openshift 4.2 Cluster for CP4I and CP4App" class="md-nav__link">
+    3- Openshift 4.2 Cluster for CP4I and CP4App
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-deploy-event-streams-and-defines-topics" title="4- Deploy event streams and defines topics" class="md-nav__link">
+    4- Deploy event streams and defines topics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-deploy-cloud-pak-for-application" title="5- Deploy Cloud Pak for Application" class="md-nav__link">
+    5- Deploy Cloud Pak for Application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-reefer-simulator-as-appsody-python" title="6- Reefer simulator as Appsody Python" class="md-nav__link">
+    6- Reefer simulator as Appsody Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-scoring-microservice-as-java-microprofile-app" title="7- Scoring microservice as Java Microprofile app" class="md-nav__link">
+    7- Scoring microservice as Java Microprofile app
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-data-virtualization" title="8- Data Virtualization" class="md-nav__link">
+    8- Data Virtualization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-anomaly-detection-notebook" title="9- Anomaly detection notebook" class="md-nav__link">
+    9- Anomaly detection notebook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-anomaly-detection-service" title="10- Anomaly detection service" class="md-nav__link">
+    10- Anomaly detection service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-cloud-pak-for-automation" title="11- Cloud Pak for Automation" class="md-nav__link">
+    11- Cloud Pak for Automation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-reefer-maintenance-business-process" title="12- Reefer Maintenance business process" class="md-nav__link">
+    12- Reefer Maintenance business process
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -274,7 +404,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../oos-approach/" title="Open source approach" class="md-nav__link">
+    <a href="../oos-approach/" title="Open source approach" class="md-nav__link">
       Open source approach
     </a>
   </li>
@@ -341,7 +471,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../products-postgres/" title="Get products into postgresql" class="md-nav__link">
+    <a href="../collect/products-postgres/" title="Get products into postgresql" class="md-nav__link">
       Get products into postgresql
     </a>
   </li>
@@ -353,7 +483,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
+    <a href="../collect/generate-telemetry/" title="Generate telemetry data" class="md-nav__link">
       Generate telemetry data
     </a>
   </li>
@@ -370,7 +500,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
+    <a href="../collect/oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
       Collect data with open source solution
     </a>
   </li>
@@ -382,7 +512,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
+    <a href="../collect/cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
       Collect data with cloud pak for data
     </a>
   </li>
@@ -399,7 +529,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../organize/readme/" title="Organize" class="md-nav__link">
+    <a href="../organize/readme/" title="Organize" class="md-nav__link">
       Organize
     </a>
   </li>
@@ -430,7 +560,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../analyze/oss-ml-dev/" title="Define the anomaly detection scoring model with OSS" class="md-nav__link">
+    <a href="../analyze/oss-ml-dev/" title="Define the anomaly detection scoring model with OSS" class="md-nav__link">
       Define the anomaly detection scoring model with OSS
     </a>
   </li>
@@ -442,7 +572,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../analyze/predictive-maintenance/" title="Reefer anomaly detection problem" class="md-nav__link">
+    <a href="../analyze/predictive-maintenance/" title="Reefer anomaly detection problem" class="md-nav__link">
       Reefer anomaly detection problem
     </a>
   </li>
@@ -478,7 +608,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
+    <a href="../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
       Develop the simulation app
     </a>
   </li>
@@ -490,7 +620,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
+    <a href="../infuse/dev-scoring/" title="Develop scoring app with cloud pak for application" class="md-nav__link">
       Develop scoring app with cloud pak for application
     </a>
   </li>
@@ -502,7 +632,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
+    <a href="../infuse/build-run/" title="Build and run the solution on Openshift" class="md-nav__link">
       Build and run the solution on Openshift
     </a>
   </li>
@@ -514,7 +644,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
+    <a href="../infuse/bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
       Engineer dispatching with Business process with Cloud Pak for Automation
     </a>
   </li>
@@ -526,7 +656,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infuse/integration-tests/" title="Run integration tests" class="md-nav__link">
+    <a href="../infuse/integration-tests/" title="Run integration tests" class="md-nav__link">
       Run integration tests
     </a>
   </li>
@@ -570,43 +700,99 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#with-mongodb-on-ibm-cloud" title="With mongodb on IBM Cloud" class="md-nav__link">
-    With mongodb on IBM Cloud
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#use-our-docker-image-for-python-environment" title="Use our docker image for python environment" class="md-nav__link">
-    Use our docker image for python environment
+  <a href="#preparing-the-different-environments" title="Preparing the different environments" class="md-nav__link">
+    Preparing the different environments
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#add-data-from-csv-file" title="Add data from csv file" class="md-nav__link">
-    Add data from csv file
+  <a href="#1-postgresql-service" title="1- PostgreSQL Service" class="md-nav__link">
+    1- PostgreSQL Service
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#as-a-telemetry-repository-for-the-simulator" title="As a telemetry repository for the simulator" class="md-nav__link">
-    As a telemetry repository for the simulator
+  <a href="#2-mongodb-service" title="2- MongoDB Service" class="md-nav__link">
+    2- MongoDB Service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-openshift-42-cluster-for-cp4i-and-cp4app" title="3- Openshift 4.2 Cluster for CP4I and CP4App" class="md-nav__link">
+    3- Openshift 4.2 Cluster for CP4I and CP4App
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-deploy-event-streams-and-defines-topics" title="4- Deploy event streams and defines topics" class="md-nav__link">
+    4- Deploy event streams and defines topics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-deploy-cloud-pak-for-application" title="5- Deploy Cloud Pak for Application" class="md-nav__link">
+    5- Deploy Cloud Pak for Application
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-reefer-simulator-as-appsody-python" title="6- Reefer simulator as Appsody Python" class="md-nav__link">
+    6- Reefer simulator as Appsody Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-scoring-microservice-as-java-microprofile-app" title="7- Scoring microservice as Java Microprofile app" class="md-nav__link">
+    7- Scoring microservice as Java Microprofile app
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-data-virtualization" title="8- Data Virtualization" class="md-nav__link">
+    8- Data Virtualization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-anomaly-detection-notebook" title="9- Anomaly detection notebook" class="md-nav__link">
+    9- Anomaly detection notebook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-anomaly-detection-service" title="10- Anomaly detection service" class="md-nav__link">
+    10- Anomaly detection service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-cloud-pak-for-automation" title="11- Cloud Pak for Automation" class="md-nav__link">
+    11- Cloud Pak for Automation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-reefer-maintenance-business-process" title="12- Reefer Maintenance business process" class="md-nav__link">
+    12- Reefer Maintenance business process
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#on-openshift-311-on-premise" title="On Openshift 3.11 on premise" class="md-nav__link">
-    On Openshift 3.11 on premise
-  </a>
   
 </li>
       
@@ -626,74 +812,34 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/collect/mongodb-telemetries.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/cp-approach.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="work-with-mongodb-to-persist-telemetries">Work with Mongodb to persist telemetries</h1>
-<p>MongoDB is a popular document-based database that allows developers to quickly build projects without worrying about schema. Mongo components include: </p>
-<ul>
-<li>mongod - the core process that runs the actual database </li>
-<li>mongos - controls routing to the databases in case of sharding</li>
-<li>config servers (CSRS) - stores the metadata in a sharded environment. </li>
-</ul>
-<p>We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside mongodb or Cassandra.</p>
-<p>So here we present how to use MongoDB on IBM Cloud to support long term persistence.</p>
-<p><img alt="" src="../images/ibm-cloud-dbs.png" /></p>
-<h2 id="with-mongodb-on-ibm-cloud">With mongodb on IBM Cloud</h2>
-<p>Create the mongoDN service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as <code>mongodb://ibm_cloud_e154ff52_ed</code>) </p>
-<p>Set this URL in <code>scripts/setenv.sh</code> the <code>export MONGO_DB_URL="mongodb://ibm_c..."</code></p>
-<p>Get the TLS certificate as pem file:</p>
-<div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; mongodbca.pem
-</pre></div>
-
-<h2 id="use-our-docker-image-for-python-environment">Use our docker image for python environment</h2>
-<p>Use the python pymongo driver (pip install pymongo) and open a connection with a code like below:</p>
-<div class="codehilite"><pre><span></span> <span class="n">URL</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;MONGO_DB_URL&#39;</span><span class="p">)</span>
- <span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span><span class="n">ssl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">ssl_ca_certs</span><span class="o">=</span><span class="s1">&#39;/home/mongodb.pem&#39;</span><span class="p">)</span>
- <span class="n">db</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;ibmclouddb&#39;</span><span class="p">]</span>
-
- <span class="c1"># insert a record</span>
- <span class="n">result</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">telemetry</span><span class="p">)</span>
- <span class="n">telemetry</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">inserted_id</span><span class="p">)})</span>
-
- <span class="c1"># get all the records</span>
- <span class="n">telemetries</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">telemetries</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
- <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">telemetries</span><span class="p">:</span>
-</pre></div>
-
-<p>See the rest of the <code>ml/data/ToMongo.py</code> for the code loading from CSV file, or the <code>simulator/infrastructure/ReeferRepository.py</code> for the one generating metrics and uploading them directly to mongo.</p>
-<h3 id="add-data-from-csv-file">Add data from csv file</h3>
-<p>Using the ToMongo.py script we can load the data in the telemetries.csv file. In a Terminal window uses the following commmand:</p>
-<div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
-
-cd ml/data
-
-python ToMongo.py
-</pre></div>
-
-<h3 id="as-a-telemetry-repository-for-the-simulator">As a telemetry repository for the simulator</h3>
-<p>The approach is to use the same APIs, but get the pem file in the docker image and set the environment variables accordingly.
-The <a href="">ReeferRepository.py</a> implements the mongodb operations to save telemetry.</p>
-<h2 id="on-openshift-311-on-premise">On Openshift 3.11 on premise</h2>
-<p>We use the following image: <code>centos/mongodb-36-centos7</code>. So to install it, we use the following command:</p>
-<div class="codehilite"><pre><span></span>oc new-app -e \
-    MONGODB_USER=mongo,MONGODB_PASSWORD=&lt;password&gt;,MONGODB_DATABASE=reeferdb,MONGODB_ADMIN_PASSWORD=&lt;admin_password&gt; \
-    centos/mongodb-36-centos7
-</pre></div>
-
-<p>Connect to the pod and then use the mongo CLI</p>
-<div class="codehilite"><pre><span></span>$ oc get pods
-NAME                                         READY     STATUS             RESTARTS   AGE
-mongodb-36-centos7-1-wcn7h                   <span class="m">1</span>/1       Running            <span class="m">0</span>          4d
-
-$ oc rsh mongodb-36-centos7-1-wcn7h 
-bash-4.2$ mongo -u <span class="nv">$MONGODB_USER</span> -p <span class="nv">$MONGODB_PASSWORD</span> <span class="nv">$MONGODB_DATABASE</span>
-MongoDB shell version: <span class="m">2</span>.4.9
-connecting to: reeferdb
-&gt; show collections
-</pre></div>
-
-<p>To remove the db on openshift: <code>oc delete dc</code></p>
+                <h1 id="ibm-cloud-pak-approach">IBM Cloud Pak Approach</h1>
+<p>The goal of this approach is to use the following cloud Pak to develop and deploy the solution. The following diagram illustrates the features or components used in each cloud paks to support the implementation.</p>
+<p><img alt="" src="../images/cp-approach.png" /></p>
+<p>The grey components are part of the solution implementation. </p>
+<h2 id="preparing-the-different-environments">Preparing the different environments</h2>
+<p>The numbered figure below, illustrates the step by step environment setup:</p>
+<p><img alt="" src="../images/cp-approach-num.png" /></p>
+<h3 id="1-postgresql-service">1- PostgreSQL Service</h3>
+<p>The products database is defined in PostgreSQL service within IBM Cloud public. See <a href="../collect/products-postgres/">this note</a> for details on how to use this service and the python code in the simulator folder or the psql tool to create the product database. </p>
+<h3 id="2-mongodb-service">2- MongoDB Service</h3>
+<p>The long term persistence for the telemetry metrics we are using mongodb on IBM Cloud. This <a href="../collect/mongodb-telemetries/">separate note</a> goes into details on how we prepare the data and upload them to mongo.</p>
+<h3 id="3-openshift-42-cluster-for-cp4i-and-cp4app">3- Openshift 4.2 Cluster for CP4I and CP4App</h3>
+<p>To install Openshift 4.2 cluster we recommend following Red Hat tutorials and <a href="">our cookbook</a>.</p>
+<h3 id="4-deploy-event-streams-and-defines-topics">4- Deploy event streams and defines topics</h3>
+<p>We are presenting a quick overview of deploying event streams from Cloud pak for integration and how to configure the needed Kafka topics in <a href="../infuse/event-streams/">this note</a>.</p>
+<h3 id="5-deploy-cloud-pak-for-application">5- Deploy Cloud Pak for Application</h3>
+<p>See also the reference architecture <a href="https://www.ibm.com/cloud/garage/architectures/application-modernization">article for application modernization</a>.</p>
+<h3 id="6-reefer-simulator-as-appsody-python">6- Reefer simulator as Appsody Python</h3>
+<p>We are presenting how we used the Appsody python template as a based to implement the Reefer simulator combined with other python development best practices, in <a href="../infuse/simul-app/">this note</a>.</p>
+<h3 id="7-scoring-microservice-as-java-microprofile-app">7- Scoring microservice as Java Microprofile app</h3>
+<h3 id="8-data-virtualization">8- Data Virtualization</h3>
+<h3 id="9-anomaly-detection-notebook">9- Anomaly detection notebook</h3>
+<h3 id="10-anomaly-detection-service">10- Anomaly detection service</h3>
+<h3 id="11-cloud-pak-for-automation">11- Cloud Pak for Automation</h3>
+<h3 id="12-reefer-maintenance-business-process">12- Reefer Maintenance business process</h3>
                 
                   
                 
@@ -710,6 +856,41 @@ connecting to: reeferdb
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href=".." title="Introduction" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Introduction
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../oos-approach/" title="Open source approach" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Open source approach
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -728,9 +909,9 @@ connecting to: reeferdb
       
     </div>
     
-      <script src="../../assets/javascripts/application.b806dc00.js"></script>
+      <script src="../assets/javascripts/application.b806dc00.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
     
   </body>
