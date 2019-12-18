@@ -17,7 +17,11 @@ As we will detail in [next section](#mvp-component-view) there are four componen
 
 ## Problem statements
 
-The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. We want to detect sensor anomaly and trigger a field engineer dispatch when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
+The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. 
+
+![Reefer](analyze/images/reefer.png)
+
+We want to detect sensor anomaly and trigger a field engineer dispatch to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
 
 Going into this content you will learn the following:
 
@@ -26,7 +30,11 @@ Going into this content you will learn the following:
 * how to integrate kafka events into Pandas dataset for build test and training sets.
 * how to develop microservice in python for scoring telemetry using [Appsody](https://appsody.dev/)
 
-When anomaly is detected, a new  event is posted to the `containers` Kafka topic so the Reefer container manager microservice can apply the expected business logic. 
+Some sensors may act badly. For example the co2 sensor telemetry plotted over time shows some sporadic behavior:
+
+![](analyze/images/co2sensor-plot.png)
+
+The goal is to identify in real time such behavior. When anomaly is detected, a new  event is posted to the `containers` Kafka topic so the Reefer container manager microservice can apply the expected business logic. 
 
 ## A Cloud Pak Approach
 
@@ -140,7 +148,7 @@ To use Jupyter, Sparks and kubeflow see [this note](analyze/oss-ml-dev.md)
 
 ## Further Readings
 
-* [Data AI reference architecture]()
+* [Data AI reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/)
 * [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
 * [Romeo Kienzler anomaly detection article 2](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
 * [Romeo Kienzler anomaly detection article 3](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)

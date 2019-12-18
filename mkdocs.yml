@@ -8,7 +8,7 @@ nav:
     - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
   - Collect:
     - Preparing data for demonstration:
-      - Get products into postgresql: collect/products-postgres.md
+      - Define products reference data: collect/products-postgres.md
       - Generate telemetry data: collect/generate-telemetry.md
     - Collect data with open source solution: collect/oss-collect-data.md
     - Collect data with cloud pak for data: collect/cp4d-collect-data.md

@@ -20,8 +20,14 @@ case "$kcenv" in
         export MONGO_DB_URL="mongodb://i.../ibmclouddb?authSource=admin&replicaSet=replset"
         export MONGODB_DATABASE="ibmclouddb"
         export MONGO_SSL_PEM="/home/simulator/mongodb.pem"
+        export MONGODB_USER="mongo"
+        export MONGODB_PASSWORD="mongo"
+        export cp4d_user=""
+        export cp4d_pwd=""
+        export PREDICTION_BASE_URL="https://zen-cpd-zen.apps.demo.ibmcloud.com"
+        export PREDICTION_URL="/v4/deployments/be/predictions"
     ;;
-   CP)
+   OCP)
         export KAFKA_BROKERS=icp-proxy.apps.green-with-envy.ocp.csplab.local:32016
         export KAFKA_APIKEY=""
         export MONGO_DB_URL="mongodb://mongo:mongo@mongodb-36-centos7-reefershipmentsolution.apps.green-with-envy.ocp.csplab.local:27017/reeferdb"
@@ -29,6 +35,10 @@ case "$kcenv" in
         export MONGODB_PASSWORD="mongo"
         export MONGODB_DATABASE="reeferdb"
         export MONGODB_ADMIN_PASSWORD="admin"
+        export cp4d_user=""
+        export cp4d_pwd=""
+        export PREDICTION_BASE_URL="https://zen-cpd-zen.apps.demo.ibmcloud.com"
+        export PREDICTION_URL="/v4/deployments/b/predictions"
     ;;
     LOCAL)
         export KAFKA_APIKEY=""
@@ -42,5 +52,9 @@ case "$kcenv" in
         export POSTGRES_PORT=5432
         export POSTGRES_USER="prostgres"
         export POSTGRES_PWD="supersecret"
+        export cp4d_user=""
+        export cp4d_pwd=""
+        export PREDICTION_BASE_URL="https://zen-cpd-zen.apps.demo.ibmcloud.com"
+        export PREDICTION_URL="/v4/deployments/b/predictions"
     ;;
 esac
