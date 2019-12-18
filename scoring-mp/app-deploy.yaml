@@ -1,0 +1,50 @@
+apiVersion: appsody.dev/v1beta1
+kind: AppsodyApplication
+metadata:
+  annotations:
+    commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
+    commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
+    commit.image.appsody.dev/contextDir: /scoring-mp
+    commit.image.appsody.dev/date: Wed Dec 11 19:37:28 2019 -0800
+    commit.image.appsody.dev/message: Work on fast start content structure
+    image.opencontainers.org/created: "2019-12-17T14:51:30-08:00"
+    image.opencontainers.org/documentation: https://github.com/jbcodeforce/refarch-reefer-ml
+    image.opencontainers.org/revision: e0ccc19f84668ee4639cb963bb43cc63eaca2cb8-modified
+    image.opencontainers.org/source: https://github.com/jbcodeforce/refarch-reefer-ml/tree/master
+    image.opencontainers.org/url: https://github.com/jbcodeforce/refarch-reefer-ml
+    stack.appsody.dev/configured: docker.io/appsody/java-microprofile:0.2
+    stack.appsody.dev/created: 2019-11-26T15:01:00+0000
+    stack.appsody.dev/revision: 697abc712b0ee47832d1016bbf0d1b5d50129338
+    stack.appsody.dev/tag: appsody/java-microprofile:0.2.21
+  creationTimestamp: null
+  labels:
+    image.opencontainers.org/title: scoring-mp
+    stack.appsody.dev/version: 0.2.21
+  name: scoring-mp
+spec:
+  applicationImage: dev.local/scoring-mp
+  createKnativeService: false
+  expose: true
+  livenessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /health/live
+      port: 9080
+    initialDelaySeconds: 5
+    periodSeconds: 2
+  readinessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /health/ready
+      port: 9080
+    initialDelaySeconds: 5
+    periodSeconds: 2
+    timeoutSeconds: 1
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+    port: 9080
+    type: NodePort
+  stack: java-microprofile
+  version: 1.0.0
+status: {}

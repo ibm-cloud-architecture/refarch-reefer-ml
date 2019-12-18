@@ -37,13 +37,15 @@ class ReeferRepository:
         print( self.URL)
         self.dbName = os.getenv('MONGO_DATABASE','ibmclouddb')
         self.tlsCert = os.getenv('MONGO_SSL_PEM','')
+        self.dbUser = os.getenv('MONGODB_USER','ibmclouddb')
+        self.dbPwd = os.getenv('MONGODB_PASSWORD','ibmclouddb')
 
     def connect(self):
         if not self.tlsCert:
-            client = MongoClient(self.URL,ssl=False)
+            client = MongoClient(self.URL,username=self.dbUser,password=self.dbPwd,ssl=False)
             print('connection to mongodb ' + self.dbName)
         else:
-            client = MongoClient(self.URL,ssl=True,ssl_ca_certs=self.tlsCert)
+            client = MongoClient(self.URL,username=self.dbUser,password=self.dbPwd,ssl=True,ssl_ca_certs=self.tlsCert)
             print('TLS connection to mongodb with ' + self.tlsCert)
         self.conn = client[self.dbName]
         return self.conn

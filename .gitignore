@@ -1,5 +1,4 @@
 simulator/scripts/setenv.sh
-docker/*.pem
 ml/.ipynb_checkpoints/
 simulator/__pycache__/
 simulator/domain/__pycache__/
@@ -9,10 +8,10 @@ scoring/webapp/__pycache__/
 scoring/webapp/infrastructure/__pycache__
 scoring/webapp/domain/__pycache__
 scoring/templates/
+scoring-mp/.vscode/
+scoring-mp/target/
 consumer/__pycache__/
-consumer/*.pem
-simulator/*.pem
-ml/data/*.pem
+certs/*.pem
 scoring/eventConsumer/*.pem
 scoring/eventConsumer/__pycache__/
 scoring/eventConsumer/infrastructure/__pycache__

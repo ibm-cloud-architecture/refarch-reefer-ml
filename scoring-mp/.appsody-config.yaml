@@ -1,0 +1,2 @@
+project-name: scoring-mp
+stack: appsody/java-microprofile:0.2
