@@ -1,54 +1,59 @@
 package ibm.gse.kcontainer.scoring.infrastructure;
 
-import ibm.gse.kcontainer.scoring.domain.Telemetry;
-
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.io.StringReader;
-import java.net.URI;
-import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.json.JsonReader;
-import javax.ws.rs.core.Response;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import com.google.gson.Gson;
+
+import ibm.gse.kcontainer.scoring.domain.Telemetry;
 
 /**
  * Call remote predictive scoring deploy on CP for data via WML.
+ * Use JAX RS client code to stay dependant to other library
  */
 public class ScoringClient {
 
 
     private Client client;
+    // authentication token to be use to contact remote web service
     private String mlToken = null;
     @Inject
-    @ConfigProperty(name = "cp4d_base_url", defaultValue="https://zen-cpd-zen.apps.cp4dperf5.demo.ibmcloud.com")
+    @ConfigProperty(name = "cp4d_base_url")
     private String endPointURL;
     @Inject
-    @ConfigProperty(name = "cp4d_prediction_url",  defaultValue="/v4/deployments/bea7d396-88c5-41fa-a622-1a92deb2bb9e/predictions")
+    @ConfigProperty(name = "cp4d_prediction_url")
     private String predictionURL;
     @Inject
-    @ConfigProperty(name = "cp4d_user", defaultValue="jboyer")
+    @ConfigProperty(name = "cp4d_user")
     private String username;
     @Inject
-    @ConfigProperty(name = "cp4d_pwd", defaultValue="cp4d123")
+    @ConfigProperty(name = "cp4d_pwd")
     private String password;
-
+    
+    // connection is over TLS
     private SSLContext sslcontext;
+    // marshalizing from json
+    static Gson parser = new Gson();
 
+    
     public ScoringClient() {
         initSSL();
     }
@@ -68,7 +73,10 @@ public class ScoringClient {
                 public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
                 public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
             }}, new java.security.SecureRandom());
-            client = ClientBuilder.newBuilder().sslContext(this.sslcontext).hostnameVerifier((s1,s2) -> true)
+           
+            client = ClientBuilder.newBuilder()
+            		.sslContext(this.sslcontext)
+            		.hostnameVerifier((s1,s2) -> true)
                 .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,12 +119,15 @@ public class ScoringClient {
         }
         
         WebTarget targetResource = client.target(endPointURL + predictionURL);
-        Entity entity = null; 
+        ScoringTelemetry sc = new ScoringTelemetry(t);
+        Entity<String> entity = Entity.(parser.toJson(sc)); 
+        
         Response  rep = targetResource.request().header("Content-Type", APPLICATION_JSON)
             .header("Authorization", "Bearer " + mlToken)
             .accept(APPLICATION_JSON)
             .post(entity);
-        ScoringResult result = rep.readEntity(ScoringResult.class);
+        
+        ScoringResult result = parser.fromJson(rep.readEntity(String.class),ScoringResult.class);
        
        return result;
     }
