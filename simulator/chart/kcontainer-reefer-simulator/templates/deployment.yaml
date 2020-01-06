@@ -3,9 +3,10 @@ kind: Deployment
 metadata:
   name: {{ include "kcontainer-reefer-simulator.fullname" . }}
   labels:
-{{ include "kcontainer-reefer-simulator.labels" . | indent 4 }} 
+{{ include "kcontainer-reefer-simulator.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "kcontainer-reefer-simulator.name" . }}
