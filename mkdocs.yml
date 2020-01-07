@@ -3,12 +3,13 @@ repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
   - Introduction: index.md
   - Enablement Content:
+    - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
     - Cloud Pak approach: cp-approach.md
     - Open source approach: oos-approach.md
-    - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
   - Collect:
+    - Event Streams environment: collect/event-streams.md
     - Preparing data for demonstration:
-      - Get products into postgresql: collect/products-postgres.md
+      - Define products reference data: collect/products-postgres.md
       - Generate telemetry data: collect/generate-telemetry.md
     - Collect data with open source solution: collect/oss-collect-data.md
     - Collect data with cloud pak for data: collect/cp4d-collect-data.md
@@ -20,9 +21,11 @@ nav:
     - Develop the simulation app: infuse/simul-app.md
     - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
     - Build and run the solution on Openshift: infuse/build-run.md
-    - Engineer dispatching with Business process with Cloud Pak for Automation: infuse/bpm.md
     - Run integration tests: infuse/integration-tests.md
-  
+    - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
+  - Devops: devops.md
+  - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
+  - Do it yourself - Workshop: workshop.md
   - Reefer solution implementation project: https://ibm-cloud-architecture.github.io/refarch-kc/
 theme: 
   name: material

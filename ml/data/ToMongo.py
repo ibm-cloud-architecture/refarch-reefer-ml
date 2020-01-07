@@ -48,13 +48,15 @@ def connectToMongo():
     URL=os.getenv('MONGO_DB_URL')
     print(URL)
     dbName = os.getenv('MONGO_DATABASE','ibmclouddb')
+    dbUser = os.getenv('MONGODB_USER','ibmclouddb')
+    dbPwd = os.getenv('MONGODB_PASSWORD','ibmclouddb')
     tlsCert = os.getenv('MONGO_SSL_PEM','')
     # connect to MongoDB
     if not tlsCert:
-        client = MongoClient(URL,ssl=False)
+        client = MongoClient(URL,username=dbUser,password=dbPwd,ssl=False)
         print('connection to mongodb ' + dbName)
     else:
-        client = MongoClient(URL,ssl=True,ssl_ca_certs=tlsCert)
+        client = MongoClient(URL,username=dbUser,password=dbPwd,ssl=True,ssl_ca_certs=tlsCert)
         print('TLS connection to mongodb with ' + tlsCert)
     db = client.ibmcl[dbName]
     return db
@@ -91,7 +93,7 @@ if __name__ == "__main__":
                 "fan_3" : "True",
                 "ambiant_temperature": 19.8447
             },
-            "target_temperature": 6.0,
+            "target_temperature": 6,
             "kilowatts": 3.44686,
             "latitude": "37.8226902168957",
             "longitude": "-122.3248956640928",
@@ -100,7 +102,7 @@ if __name__ == "__main__":
             }
     
     db=connectToMongo()
-    # readCsv(db)
+    readCsv(db)
     # insertOneTelemetry(db,telemetry)
     listTelemetryCollection(db)
     # telem = getTelemetryById(db,'5ddc813c39f5241b4d4a5a43')

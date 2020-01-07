@@ -52,7 +52,7 @@
             "type": "float"
         },
         {
-            "name" : "vent_1",
+            "name" : "fan_1",
             "type" : "boolean"
         },
         {
