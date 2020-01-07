@@ -18,7 +18,7 @@ The products database is defined in PostgreSQL service within IBM Cloud public. 
 
 ### 2- MongoDB Service
 
-The long term persistence for the telemetry metrics we are using mongodb on IBM Cloud. This [separate note](collect/mongodb-telemetries.md) goes into details on how we prepare the data and upload them to mongo.
+The long term persistence for the telemetry metrics we are using mongodb on IBM Cloud. This [separate note](collect/generate-telemetry.md) goes into details on how we prepare the data and upload them to mongo.
 
 ### 3- Openshift 4.2 Cluster for CP4I and CP4App
 
@@ -26,7 +26,7 @@ To install Openshift 4.2 cluster we recommend following Red Hat tutorials and [o
 
 ### 4- Deploy event streams and defines topics
 
-We are presenting a quick overview of deploying event streams from Cloud pak for integration and how to configure the needed Kafka topics in [this note](infuse/event-streams.md).
+We are presenting a quick overview of deploying IBM Event Streams from Cloud pak for Integration and how to configure the needed Kafka topics in [this note](collect/event-streams.md).
 
 
 ### 5- Deploy Cloud Pak for Application
