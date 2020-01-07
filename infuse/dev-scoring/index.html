@@ -262,6 +262,18 @@
 
 
   <li class="md-nav__item">
+    <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/" title="Methodology used" class="md-nav__link">
+      Methodology used
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../cp-approach/" title="Cloud Pak approach" class="md-nav__link">
       Cloud Pak approach
     </a>
@@ -276,18 +288,6 @@
   <li class="md-nav__item">
     <a href="../../oos-approach/" title="Open source approach" class="md-nav__link">
       Open source approach
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/" title="Methodology used" class="md-nav__link">
-      Methodology used
     </a>
   </li>
 
@@ -321,15 +321,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../../collect/event-streams/" title="Event Streams environment" class="md-nav__link">
+      Event Streams environment
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
     
-    <label class="md-nav__link" for="nav-3-1">
+    <label class="md-nav__link" for="nav-3-2">
       Preparing data for demonstration
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-3-1">
+      <label class="md-nav__title" for="nav-3-2">
         Preparing data for demonstration
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -341,8 +353,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../collect/products-postgres/" title="Get products into postgresql" class="md-nav__link">
-      Get products into postgresql
+    <a href="../../collect/products-postgres/" title="Define products reference data" class="md-nav__link">
+      Define products reference data
     </a>
   </li>
 
@@ -519,6 +531,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1-scoring-with-python-flask-kafka-pickle" title="1- Scoring with Python Flask, Kafka, pickle" class="md-nav__link">
+    1- Scoring with Python Flask, Kafka, pickle
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-java-micro-profile-30-with-cloud-pak-for-application" title="2- Java Micro Profile 3.0 with Cloud Pak for Application" class="md-nav__link">
+    2- Java Micro Profile 3.0 with Cloud Pak for Application
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#further-readings" title="Further Readings" class="md-nav__link">
     Further Readings
   </a>
@@ -554,8 +580,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../bpm/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
-      Engineer dispatching with Business process with Cloud Pak for Automation
+    <a href="../integration-tests/" title="Run integration tests" class="md-nav__link">
+      Run integration tests
     </a>
   </li>
 
@@ -566,14 +592,50 @@
 
 
   <li class="md-nav__item">
-    <a href="../integration-tests/" title="Run integration tests" class="md-nav__link">
-      Run integration tests
+    <a href="../../bpm/readme/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
+      Engineer dispatching with Business process with Cloud Pak for Automation
     </a>
   </li>
 
         
       </ul>
     </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../devops/" title="Devops" class="md-nav__link">
+      Devops
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../bpm/readme/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
+      Engineer dispatching with Business process with Cloud Pak for Automation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../workshop/" title="Do it yourself - Workshop" class="md-nav__link">
+      Do it yourself - Workshop
+    </a>
   </li>
 
     
@@ -610,6 +672,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1-scoring-with-python-flask-kafka-pickle" title="1- Scoring with Python Flask, Kafka, pickle" class="md-nav__link">
+    1- Scoring with Python Flask, Kafka, pickle
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-java-micro-profile-30-with-cloud-pak-for-application" title="2- Java Micro Profile 3.0 with Cloud Pak for Application" class="md-nav__link">
+    2- Java Micro Profile 3.0 with Cloud Pak for Application
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#further-readings" title="Further Readings" class="md-nav__link">
     Further Readings
   </a>
@@ -636,11 +712,20 @@
                 
                 
                 <h1 id="develop-the-scoring-agent-with-cloud-pak-for-application">Develop the scoring agent with cloud pak for application</h1>
+<p>We have two approaches to build the predictive scoring agent: </p>
+<ol>
+<li>one using a python Flask app listening to telemetry events coming from Kafka, run the predictive scoring within the same app. The model was developed with Jupiter notebook and serialized with <a href="https://docs.python.org/3/library/pickle.html">pickle</a>, so it responds in microseconds and generates anomaly to a second kafka topic. The code is under <code>scoring</code> folder, and uses essentially open source components.</li>
+<li>one using Java microprofile 3.0 with the reactive messaging annotations, to consume telemetry events and call a remote predictive scoring service, developped and deployed within Cloud Pak for Data. The code is under <code>scoping-mp</code> folder.</li>
+</ol>
 <p>The scoring service needs to use an analytics scoring model built using a machine learning techniques, and serialized so that it can be loaded in memory.</p>
-<p>Using appsody...</p>
+<h2 id="1-scoring-with-python-flask-kafka-pickle">1- Scoring with Python Flask, Kafka, pickle</h2>
+<h2 id="2-java-micro-profile-30-with-cloud-pak-for-application">2- Java Micro Profile 3.0 with Cloud Pak for Application</h2>
+<p>In this implementation we use the <a href="https://appsody.dev/">Appsody</a> Java microprofile stack to create the project template and deploy with appsody CLI. 
+As the <code>scoring-mp</code> component is consuming message from Kafka and produce messages, we want to use the Reactive messaging extension to microprofile. We are reusing the approach presented in <a href="https://github.com/Emily-Jiang/reactive-service-a">this repository</a> based on SmallRye Reactive Messaging (https://smallrye.io/smallrye-reactive-messaging/).</p>
 <h2 id="further-readings">Further Readings</h2>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=cKIkhhONBKM&amp;t=46s">Cloud Pak for Application demo video</a></li>
+<li><a href="https://www.eclipse.org/codewind/mdt-vsc-getting-started.html">Use Codewind for VScode</a></li>
 </ul>
                 
                   
