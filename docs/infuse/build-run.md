@@ -1,12 +1,5 @@
 
 
-
-## Development approach
-
-The app is done using Flask, and the code is generated using `Appsody` template and adapted.
-
-
-
 ### An alternate approach is to setup a CI/CD pipeline
 
 We have adopted the Git Action to manage the [continuous integration](https://github.com/ibm-cloud-architecture/refarch-kc-gitops/blob/master/KContainer-CI-Strategy.md), and ArgoCD for the continuous deployment. The build process will build the following images:

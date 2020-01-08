@@ -1,28 +1,35 @@
 site_name: Reefer Container Predictive Maintenance
 repo_url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
 nav:
-  - Introduction: index.md
+  - Introduction: 
+      - What you will learn: index.md
+      - Reefer anomaly detection problem: analyze/predictive-maintenance.md
   - Enablement Content:
     - Methodology used: https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/methodology/
     - Cloud Pak approach: cp-approach.md
     - Open source approach: oos-approach.md
-  - Collect:
-    - Event Streams environment: collect/event-streams.md
-    - Preparing data for demonstration:
-      - Define products reference data: collect/products-postgres.md
-      - Generate telemetry data: collect/generate-telemetry.md
-    - Collect data with open source solution: collect/oss-collect-data.md
-    - Collect data with cloud pak for data: collect/cp4d-collect-data.md
-  - Organize: organize/readme.md
-  - Analyze: 
-    - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md
-    - Reefer anomaly detection problem: analyze/predictive-maintenance.md
-  - Infuse:
-    - Develop the simulation app: infuse/simul-app.md
-    - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
-    - Build and run the solution on Openshift: infuse/build-run.md
-    - Run integration tests: infuse/integration-tests.md
-    - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
+  - Environments:
+    - Event Streams environment: environments/event-streams.md
+    - MongoDB on IBM Cloud: environments/mongo.md
+    - Postgresql on IBM Cloud: environments/postgresql.md
+    - Cloud pak for Data: environments/cp4d.md
+  - AI Ladder:
+    - Collect:
+      - Preparing data for demonstration:
+        - Define products reference data: collect/products-postgres.md
+        - Generate telemetry data: collect/generate-telemetry.md
+      - Collect data with open source solution: collect/oss-collect-data.md
+      - Collect data with cloud pak for data: collect/cp4d-collect-data.md
+    - Organize: organize/readme.md
+    - Analyze: 
+      - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md
+      - Define the anomaly detection scoring model with Watson Studio: analyze/ws-ml-dev.md
+    - Infuse:
+      - Develop the simulation app: infuse/simul-app.md
+      - Develop scoring app with cloud pak for application: infuse/dev-scoring.md
+      - Build and run the solution on Openshift: infuse/build-run.md
+      - Run integration tests: infuse/integration-tests.md
+      - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
   - Devops: devops.md
   - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
   - Do it yourself - Workshop: workshop.md
