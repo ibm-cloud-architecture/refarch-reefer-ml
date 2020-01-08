@@ -230,10 +230,46 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="../.." title="Introduction" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
+    
+    <label class="md-nav__link" for="nav-1">
       Introduction
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        Introduction
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="What you will learn" class="md-nav__link">
+      What you will learn
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../analyze/predictive-maintenance/" title="Reefer anomaly detection problem" class="md-nav__link">
+      Reefer anomaly detection problem
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -301,19 +337,17 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
     
     <label class="md-nav__link" for="nav-3">
-      Collect
+      Environments
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-3">
-        Collect
+        Environments
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -324,11 +358,73 @@
 
 
   <li class="md-nav__item">
-    <a href="../event-streams/" title="Event Streams environment" class="md-nav__link">
+    <a href="../../environments/event-streams/" title="Event Streams environment" class="md-nav__link">
       Event Streams environment
     </a>
   </li>
 
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../environments/mongo/" title="MongoDB on IBM Cloud" class="md-nav__link">
+      MongoDB on IBM Cloud
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../environments/postgresql/" title="Postgresql on IBM Cloud" class="md-nav__link">
+      Postgresql on IBM Cloud
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../environments/cp4d/" title="Cloud pak for Data" class="md-nav__link">
+      Cloud pak for Data
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    
+    <label class="md-nav__link" for="nav-4">
+      AI Ladder
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        AI Ladder
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
         
           
           
@@ -339,13 +435,34 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1" checked>
     
-    <label class="md-nav__link" for="nav-3-2">
-      Preparing data for demonstration
+    <label class="md-nav__link" for="nav-4-1">
+      Collect
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-3-2">
+      <label class="md-nav__title" for="nav-4-1">
+        Collect
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-1-1" type="checkbox" id="nav-4-1-1" checked>
+    
+    <label class="md-nav__link" for="nav-4-1-1">
+      Preparing data for demonstration
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="3">
+      <label class="md-nav__title" for="nav-4-1-1">
         Preparing data for demonstration
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -388,15 +505,15 @@
     Populate the products data with the Simulator repository
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#connect-with-psql" title="Connect with psql" class="md-nav__link">
     Connect with psql
   </a>
   
-</li>
+    <nav class="md-nav">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#list-relations" title="List relations..." class="md-nav__link">
@@ -466,10 +583,10 @@
     </nav>
   </li>
 
-    
-      
-      
-      
+        
+          
+          
+          
 
 
   <li class="md-nav__item">
@@ -478,21 +595,21 @@
     </a>
   </li>
 
-    
-      
-      
-      
+        
+          
+          
+          
 
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-3" type="checkbox" id="nav-4-3">
     
-    <label class="md-nav__link" for="nav-5">
+    <label class="md-nav__link" for="nav-4-3">
       Analyze
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-3">
         Analyze
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -516,8 +633,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../analyze/predictive-maintenance/" title="Reefer anomaly detection problem" class="md-nav__link">
-      Reefer anomaly detection problem
+    <a href="../../analyze/ws-ml-dev/" title="Define the anomaly detection scoring model with Watson Studio" class="md-nav__link">
+      Define the anomaly detection scoring model with Watson Studio
     </a>
   </li>
 
@@ -526,21 +643,21 @@
     </nav>
   </li>
 
-    
-      
-      
-      
+        
+          
+          
+          
 
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-4" type="checkbox" id="nav-4-4">
     
-    <label class="md-nav__link" for="nav-6">
+    <label class="md-nav__link" for="nav-4-4">
       Infuse
     </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-6">
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-4">
         Infuse
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -603,6 +720,11 @@
     <a href="../../bpm/readme/" title="Engineer dispatching with Business process with Cloud Pak for Automation" class="md-nav__link">
       Engineer dispatching with Business process with Cloud Pak for Automation
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -684,15 +806,15 @@
     Populate the products data with the Simulator repository
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
   <a href="#connect-with-psql" title="Connect with psql" class="md-nav__link">
     Connect with psql
   </a>
   
-</li>
+    <nav class="md-nav">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#list-relations" title="List relations..." class="md-nav__link">
@@ -726,37 +848,16 @@
                 
                 
                 <h1 id="define-the-products-data-into-postgresql">Define the products data into postgresql</h1>
-<p>If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the <a href="https://cloud.ibm.com/docs/services/databases-for-postgresql">product documentation</a> to provision your own service. </p>
-<p><img alt="" src="../images/ibm-cloud-dbs.png" /></p>
-<p>using the default configuration. Once you create your own instance define the service credential for the host, user, password and the certificate.</p>
-<p><img alt="" src="../images/postgres-credential.png" /></p>
-<p>Something like that:</p>
-<div class="codehilite"><pre><span></span>&quot;host=bd2d0216-0b7d-4575-8c0b-d2e934843e41.6131b73286f34215871dfad7254b4f7d.databases.appdomain.cloud port=31384 
-dbname=ibmclouddb 
-user=ibm_cloud_c958... 
-&quot;PGPASSWORD&quot;: &quot;2d1c526.....3&quot;
-</pre></div>
-
-<p>First be sure to set at least the following environment variables in the <code>scripts/setenv.sh</code> file. (if not done before rename the <code>scripts/setenv-tmpl.sh</code> to <code>scripts/setenv.sh</code>)</p>
-<div class="codehilite"><pre><span></span>POSTGRES_URL,  POSTGRES_DBNAME,
-</pre></div>
-
-<p>You need to get the SSL certificate as a <code>postgres.pem</code> file, using the following commands to get the certificate:</p>
-<div class="codehilite"><pre><span></span>ibmcloud login
-ibmcloud cdb deployment-cacert &lt;database deployment name&gt;
-</pre></div>
-
-<p>Then in <code>setenv.sh</code> set <code>POSTGRES_SSL_PEM</code> variable to the path where to find this file (<code>export POSTGRES_SSL_PEM="./simulator/postgres.pem"</code>). </p>
 <h2 id="populate-the-products-data-with-the-simulator-repository">Populate the products data with the Simulator repository</h2>
-<p>The simulator code includes the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py">infrastructure/ProductRepository.py</a> that can create tables and add some product definitions inside the table.</p>
-<p>The following command using docker and python interpreter will create the database:</p>
+<p>The simulator code includes the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py">infrastructure/ProductRepository.py</a> that creates tables and adds some product definitions inside the table.</p>
+<p>The following command is using our python environment docker image and the python code:</p>
 <div class="codehilite"><pre><span></span>./scripts/createPGTables.sh IBMCLOUD
 </pre></div>
 
 <p>And alternate techniques is to use <a href="https://www.postgresql.org/docs/9.3/app-psql.html">psql</a> as described below.</p>
-<h3 id="connect-with-psql">Connect with psql</h3>
+<h2 id="connect-with-psql">Connect with psql</h2>
 <p>We use a docker image to run psql:</p>
-<div class="codehilite"><pre><span></span><span class="c1"># under the data_schema/rdbms/postgresql folder</span>
+<div class="codehilite"><pre><span></span>$ <span class="nb">cd</span> scripts
 $ ./startPsql.sh IBMCLOUD
 $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$POSTGRES_PWD</span> psql --host<span class="o">=</span><span class="nv">$HOST</span> --port<span class="o">=</span><span class="nv">$PORT</span> --username<span class="o">=</span><span class="nv">$POSTGRES_USER</span> --dbname<span class="o">=</span><span class="nv">$POSTGRES_DB</span>
 <span class="nv">ibmclouddb</span> <span class="o">=</span>&gt; 
@@ -818,7 +919,7 @@ $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$PO
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../event-streams/" title="Event Streams environment" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../environments/cp4d/" title="Cloud pak for Data" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -827,7 +928,7 @@ $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$PO
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Event Streams environment
+                Cloud pak for Data
               </span>
             </div>
           </a>
