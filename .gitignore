@@ -5,6 +5,7 @@ simulator/api/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
 simulator/templates/
+simulator/certs/
 scoring/webapp/__pycache__/
 scoring/webapp/infrastructure/__pycache__
 scoring/webapp/domain/__pycache__
