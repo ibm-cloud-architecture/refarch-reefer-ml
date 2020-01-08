@@ -1,8 +1,8 @@
-# Generate telemetry data
+# Generate telemetry data in MongoDB
 
 We are using the simulator to generate data. In the industry, when developing new manufactured product, the engineers do not have a lot of data so they also use a mix of real sensors with simulators to create fake but realistic data to develop and test their models.
 
-The historical data need to represent failure, and represent the characteristics of a Reefer container. We have define some sensors to get interesting correlated or independant features.
+The historical data need to represent failure, and represent the characteristics of a Reefer container. We have defined some sensors to get interesting correlated or independant features.
 
 As of now our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema/reefer_telemetry_value.avsc).
 
@@ -15,7 +15,7 @@ The simulator can run as a standalone tool (1) to create training and test data 
 
 We use [mongodb as a service](https://cloud.ibm.com/catalog?category=databases) on IBM cloud.
 
-![IBM Cloud Database](images/ibm-cloud-dbs.png)
+![IBM Cloud Database](../environments/images/ibm-cloud-dbs.png)
 **IBM Cloud Database**
 
 ## Isolated python environment

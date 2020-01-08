@@ -1,7 +1,8 @@
 # The Simulator as web app
 
-The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation and as effect it is producing Reefer telemetry events to kafka `reeferTelemetry` topic. 
-The POST operation in on the `/control` url and send a jsong control object, like:
+The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation to run and to produce Reefer telemetry events to kafka `reeferTelemetry` topic. 
+
+A POST operation in the `/control` URL with a json control object like below will create 1000 records simulating issue on the CO2 sensor for the container C02 which carry the product referenced as P02:
 
 ```json
     { 'containerID': 'C02',
@@ -22,8 +23,67 @@ We recommend to follow [Flask tutorial](https://flask.palletsprojects.com/en/1.1
 Flask is a simple library to implement REST based microservice and web application in python. It has other related projects to add interesting features to develop production application. The standard development includes defining routes, function to support handling the request and generating HTTP response, but also defining APIs... Read more with the [explore Flask book online](http://exploreflask.com/en/latest/).
 Flask is mono threaded so it fits well in a simple web application for development purpose, but for production it is recommended to add a web server like [Gunicorn](https://gunicorn.org/) to handle multiple concurrent requests.
 
-- explain swaggers
-- explain blueprint
+## Code approach
+
+The app is done using Flask, and the code is generated using `appsody init python-flask` command with the Python Flask appsody stack and template. 
+
+![Appsody components](images/appsody-concept.png)
+
+Appsody helps developer to do not worry about the details of k8s deployment and build. During a Appsody run, debug or test step (2), Appsody creates a Docker container based on the parent stack Dockerfile, and combines application code with the source code in the template.
+
+We recommend reading [the Python Flask Stack git hub repo](https://github.com/appsody/stacks/tree/master/incubator/python-flask) to get familiar with appsody python stack.
+
+This appsody stack is defining the Flask application, and import the 'userapp' then use blueprints to define APIs. 
+
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+from userapp import *
+
+from server.routes.health import health_bp
+app.register_blueprint(health_bp)
+from server.routes.prometheus import metrics_bp
+app.register_blueprint(metrics_bp)
+```
+
+This code is not updatable as it is part of the image. But we can add our business logic as part of the `simulator/__init__.py` code and within [Flask blueprints](https://flask.palletsprojects.com/en/1.1.x/blueprints/) modules.
+
+The `userapp` module is defined when appsody integrates our code with the stack base image using Docker. Below is an extract of the docker file managing module installation and defining what appsody does during build, run and test:
+
+```
+ENV APPSODY_MOUNTS=/:/project/userapp
+ENV APPSODY_DEPS=/project/deps
+WORKDIR /project
+RUN python -m pip install -r requirements.txt -t /project/deps
+ENV FLASK_APP=server/__init__.py
+```
+
+Looking at the content of the final docker container running the application we can see this structure:
+```
+/project
+|-- Dockerfile  
+    Pipfile  
+    Pipfile.lock  
+    constraints.txt  
+    requirements.txt
+    deps/    
+    server/
+    test/  
+    userapp/
+```
+
+The basic concept of blueprints is that they record operations to execute when registered on an application. So to add the operation to support the control we add a blueprint, and then register it in the main application: `__init__py`.
+
+```python
+from userapp.api.controller import control_blueprint
+app.register_blueprint(control_blueprint)
+```
+
+To define the API, we use [Flasgger](https://github.com/flasgger/flasgger) as an extension to Flask to extract [Open API specification](https://swagger.io/docs/specification/about/) from the code. It comes with Swagger UI, so we can see the API documentation of the microservice at the URL `/apidocs`.  It can also validate the data according to the schema defined. 
+
+For the POST /control we define the using Swagger 2.0 the API in a separate file: `api/controlapi.yml` and import it at the method level to support the POSt operation. This method is defined in its blueprint as a REST resource. The code `controller.py` is under `api` folder.
 
 The pipfile defines the dependencies for this component. 
 
