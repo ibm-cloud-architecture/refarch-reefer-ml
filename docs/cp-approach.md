@@ -1,6 +1,8 @@
 # IBM Cloud Pak Approach
 
-The goal of this approach is to use the following cloud Pak to develop and deploy the solution. The following diagram illustrates the features or components used in each cloud paks to support the implementation.
+The goal of this approach is to use the following IBM Cloud Paks to develop and deploy the solution. 
+
+The following diagram illustrates the features or components used in each cloud paks to support the implementation.
 
 ![](images/cp-approach.png)
 
@@ -14,7 +16,7 @@ The numbered figure below, illustrates the step by step environment setup:
 
 ### 1- PostgreSQL Service
 
-The products database is defined in PostgreSQL service within IBM Cloud public. See [this note](collect/products-postgres.md) for details on how to use this service and the python code in the simulator folder or the psql tool to create the product database. 
+The products database is defined in PostgreSQL service within IBM Cloud public. To provision the environment you can read [this note](environments/postgresql.md), and then to populate the data use [this note](collect/products-postgres.md) to see how we use this service and the python code in the simulator folder or the psql tool to create the product database. 
 
 ### 2- MongoDB Service
 
@@ -26,7 +28,7 @@ To install Openshift 4.2 cluster we recommend following Red Hat tutorials and [o
 
 ### 4- Deploy event streams and defines topics
 
-We are presenting a quick overview of deploying IBM Event Streams from Cloud pak for Integration and how to configure the needed Kafka topics in [this note](collect/event-streams.md).
+We are presenting a quick overview of deploying IBM Event Streams from Cloud pak for Integration and how to configure the needed Kafka topics in [this note](environments/event-streams.md).
 
 
 ### 5- Deploy Cloud Pak for Application

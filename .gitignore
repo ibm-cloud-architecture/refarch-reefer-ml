@@ -1,6 +1,7 @@
 simulator/scripts/setenv.sh
 ml/.ipynb_checkpoints/
 simulator/__pycache__/
+simulator/api/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
 simulator/templates/
@@ -12,12 +13,15 @@ scoring-mp/.vscode/
 scoring-mp/target/
 consumer/__pycache__/
 certs/*.pem
+certs/ocp/*.pem
 scoring/eventConsumer/*.pem
 scoring/eventConsumer/__pycache__/
 scoring/eventConsumer/infrastructure/__pycache__
 scoring/eventConsumer/domain/__pycache__
 site/
 docker/postgres-data/
+docker/kafka1/
+docker/zookeeper1/
 scripts/setenv.sh
 .vscode/
 .postgresql/

@@ -6,7 +6,7 @@ metadata:
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /reefer-simulation
     commit.image.appsody.dev/date: Sun Dec 1 10:24:55 2019 -0800
-    commit.image.appsody.dev/message: add requiremetns for simulator
+    commit.image.appsody.dev/message: add requirements for simulator
     image.opencontainers.org/created: "2019-12-04T18:01:40+01:00"
     image.opencontainers.org/documentation: https://github.com/jbcodeforce/refarch-reefer-ml
     image.opencontainers.org/revision: 158db291e7a8ed49302451a909d24ad95ac8d239-modified
@@ -18,11 +18,11 @@ metadata:
     stack.appsody.dev/tag: appsody/python-flask:0.1.6
   creationTimestamp: null
   labels:
-    image.opencontainers.org/title: reefer-simulation
+    image.opencontainers.org/title: reefer-simulator
     stack.appsody.dev/version: 0.1.6
-  name: reefer-simulation
+  name: reefer-simulator
 spec:
-  applicationImage: dev.local/reefer-simulation
+  applicationImage: dev.local/reefer-simulator
   createKnativeService: false
   expose: true
   livenessProbe:
@@ -34,7 +34,7 @@ spec:
     periodSeconds: 2
   monitoring:
     labels:
-      k8s-app: reefer-simulation
+      k8s-app: reefer-simulator
   service:
     annotations:
       prometheus.io/scrape: "true"

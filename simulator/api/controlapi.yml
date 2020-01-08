@@ -1,0 +1,38 @@
+Control the reefer telemetry simulation. The supported simulations are: co2sensor, power, o2sensor
+---
+consumes:
+    - application-json
+parameters:
+  - in: body
+    name: control
+    description: Mandatory control json object
+    required: true
+    schema:
+        $ref: "#/definitions/Control"
+    example:
+        containerID: C02
+        simulation: co2sensor
+        nb_of_records: 25
+        product_id: P02
+responses:
+    202:
+        description: A successful reply
+        examples:
+            text/plain: Simulation started!
+    400:
+        description: Container ID is missing
+    404:
+        description: Wrong simulation controller data error
+definitions:
+    Control:
+        title: A control object to control the reefer telemetry simulation
+        type: object
+        properties:
+            containerID:
+                type: string
+            simulation:
+                type: string
+            nb_of_records:
+                type: integer
+            product_id: 
+                type: string

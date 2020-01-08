@@ -1,43 +1,10 @@
 # Define the products data into postgresql
 
-If you plan to use Postgresql as a data source instead of using csv file, then you need to provision a Postgresql service in IBM Cloud. Use the [product documentation](https://cloud.ibm.com/docs/services/databases-for-postgresql) to provision your own service. 
-
-![](images/ibm-cloud-dbs.png)
-
-using the default configuration. Once you create your own instance define the service credential for the host, user, password and the certificate.
-
-
-![](images/postgres-credential.png)
-
-Something like that:
-
-```
-"host=bd2d0216-0b7d-4575-8c0b-d2e934843e41.6131b73286f34215871dfad7254b4f7d.databases.appdomain.cloud port=31384 
-dbname=ibmclouddb 
-user=ibm_cloud_c958... 
-"PGPASSWORD": "2d1c526.....3"
-```
-
-First be sure to set at least the following environment variables in the `scripts/setenv.sh` file. (if not done before rename the `scripts/setenv-tmpl.sh` to `scripts/setenv.sh`)
-
-```
-POSTGRES_URL,  POSTGRES_DBNAME,
-```
-
-You need to get the SSL certificate as a `postgres.pem` file, using the following commands to get the certificate:
-        
-```shell
-ibmcloud login
-ibmcloud cdb deployment-cacert <database deployment name>
-```
-
-Then in `setenv.sh` set `POSTGRES_SSL_PEM` variable to the path where to find this file (`export POSTGRES_SSL_PEM="./simulator/postgres.pem"`). 
-
 ## Populate the products data with the Simulator repository
 
-The simulator code includes the [infrastructure/ProductRepository.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py) that can create tables and add some product definitions inside the table.
+The simulator code includes the [infrastructure/ProductRepository.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py) that creates tables and adds some product definitions inside the table.
 
-The following command using docker and python interpreter will create the database:
+The following command is using our python environment docker image and the python code:
 
 ```
 ./scripts/createPGTables.sh IBMCLOUD
@@ -45,12 +12,12 @@ The following command using docker and python interpreter will create the databa
 
 And alternate techniques is to use [psql](https://www.postgresql.org/docs/9.3/app-psql.html) as described below.
 
-### Connect with psql
+## Connect with psql
 
 We use a docker image to run psql:
 
 ```shell
-# under the data_schema/rdbms/postgresql folder
+$ cd scripts
 $ ./startPsql.sh IBMCLOUD
 $ PGPASSWORD=$POSTGRES_PWD psql --host=$HOST --port=$PORT --username=$POSTGRES_USER --dbname=$POSTGRES_DB
 ibmclouddb => 
