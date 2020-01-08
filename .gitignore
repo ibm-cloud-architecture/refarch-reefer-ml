@@ -5,6 +5,8 @@ simulator/api/__pycache__/
 simulator/domain/__pycache__/
 simulator/infrastructure/__pycache__
 simulator/templates/
+simulator/certs/*.pem
+simulator/certs/ocp/*.pem
 scoring/webapp/__pycache__/
 scoring/webapp/infrastructure/__pycache__
 scoring/webapp/domain/__pycache__
@@ -12,6 +14,8 @@ scoring/templates/
 scoring-mp/.vscode/
 scoring-mp/target/
 consumer/__pycache__/
+simulator/*.pem
+simulator-old/*.pem
 certs/*.pem
 certs/ocp/*.pem
 scoring/eventConsumer/*.pem
