@@ -16,6 +16,8 @@ scoring-mp/target/
 consumer/__pycache__/
 simulator/*.pem
 simulator-old/*.pem
+certs/*.pem
+certs/ocp/*.pem
 scoring/eventConsumer/*.pem
 scoring/eventConsumer/__pycache__/
 scoring/eventConsumer/infrastructure/__pycache__
