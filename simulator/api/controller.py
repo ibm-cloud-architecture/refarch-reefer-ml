@@ -52,7 +52,7 @@ class SimulationController(Resource):
         elif  control["simulation"]  == ReeferSimulator.SIMUL_O2:
             metrics=simulator.generateO2Tuples(control["containerID"],nb_records,control["product_id"])
         else:
-            return jsonify("Wrong simulation controller data"),404
+            return jsonify({"error":"Wrong simulation controller data"}),404
     
         if nb_records < 500:
             sendEvents(metrics)

@@ -83,10 +83,41 @@ app.register_blueprint(control_blueprint)
 
 To define the API, we use [Flasgger](https://github.com/flasgger/flasgger) as an extension to Flask to extract [Open API specification](https://swagger.io/docs/specification/about/) from the code. It comes with Swagger UI, so we can see the API documentation of the microservice at the URL `/apidocs`.  It can also validate the data according to the schema defined. 
 
-For the POST /control we define the using Swagger 2.0 the API in a separate file: `api/controlapi.yml` and import it at the method level to support the POSt operation. This method is defined in its blueprint as a REST resource. The code `controller.py` is under `api` folder.
+For the POST /control we define the using Swagger 2.0 the API in a separate file: `api/controlapi.yml` and import it at the method level to support the POSt operation. This method is defined in its blueprint as a REST resource. The code [controller.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/api/controller.py) is under `api` folder.
 
-The pipfile defines the dependencies for this component. 
+Below is a code extract to illustrate the use of Flask-RESTful and blueprint and the swagger annotation:
 
+```python
+from flasgger import swag_from
+from flask_restful import Resource, Api
+
+control_blueprint = Blueprint("control", __name__)
+api = Api(control_blueprint)
+
+class SimulationController(Resource):
+    @swag_from('controlapi.yml')
+    def post(self):
+        # ..
+api.add_resource(SimulationController, "/control")
+```
+
+The `Pipfile` defines the dependencies for this component, and is used during the automatic build process within `appsody build`.
+
+To launch the web application in development mode, using the event streams remote use the following commands:
+
+```shell
+# set environment variables - from simulator folder
+$ source ../scripts/setenv.sh OCP
+# Start appsody with the environment variables: in simulator folder
+$ appsody run --docker-options="-e KAFKA_BROKERS=$KAFKA_BROKERS -e KAFKA_APIKEY=$KAFKA_APIKEY -e KAFKA_CERT=$KAFKA_CERT -e TELEMETRY_TOPIC=$TELEMETRY_TOPIC -e CONTAINER_TOPIC=$CONTAINER_TOPIC"
+```
+
+The trace shows the Kafka configuration options:
+
+```
+Kafka options are:
+[Container] {'bootstrap.servers': 'eventstream140-ibm-es-proxy-route-broker-0-eventstreams.apps.green.ocp.csplab.local:443', 'group.id': 'ReeferTelemetryProducers', 'security.protocol': 'SASL_SSL', 'sasl.mechanisms': 'PLAIN', 'sasl.username': 'token', 'sasl.password': 'xCByo4478xQH...EVdcbGNCtLLuItKgVDc', 'ssl.ca.location': '/project/userapp/certs/ocp/es-cert.pem'}
+```
 
 ## Testing
 
@@ -104,7 +135,11 @@ root@1de81b16f940:/# python tests/unit/TestSimulator.py
 
 ## Build
 
-We have multiple build approaches depending of the environment: local, openshift source to image, github actions.
+With Appsody the build is:
+
+```
+appsody build
+```
 
 ### Build locally with docker
 
@@ -120,7 +155,7 @@ docker push ibmcase/kcontainer-reefer-simulator
 
 The scripts: `scripts/runReeferSimulatorApp.sh IBMCLOUD` should run the simulator docker image with Event Streams on IBM Cloud.
 
-### Openshift  source to image
+### Openshift deploy from existing image
 
 To build and deploy the code to an OpenShift cluster, using the source 2 image approach, do the following steps:
 

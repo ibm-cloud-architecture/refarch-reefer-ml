@@ -19,7 +19,7 @@ class MetricsEventsProducer:
             options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
         if (EventBackboneConfiguration.isEncrypted()):
             options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
-        print("Kafka options are: \n\t")
+        print("Kafka options are:")
         print(options)
         self.producer = Producer(options)
 
@@ -34,6 +34,7 @@ class MetricsEventsProducer:
 
     def publishEvent(self, eventToSend, keyName):
         dataStr = json.dumps(eventToSend)
+        print(dataStr)
         self.producer.produce(EventBackboneConfiguration.getTelemetryTopicName(),
                             key=eventToSend[keyName],
                             value=dataStr.encode('utf-8'), 

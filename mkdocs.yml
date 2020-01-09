@@ -32,8 +32,12 @@ nav:
       - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
   - Devops: devops.md
   - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
-  - Do it yourself - Workshop: workshop.md
+  - Do it yourself - Workshop: 
+    - Preparation: workshop.md
+    - Develop the simulation app: infuse/simul-app.md
   - Reefer solution implementation project: https://ibm-cloud-architecture.github.io/refarch-kc/
+  - Compendium: compendium.md
+
 theme: 
   name: material
 extra_css: ["extra.css"]
