@@ -36,7 +36,7 @@
     
     
       
-        <title>Do it yourself - Workshop - Reefer Container Predictive Maintenance</title>
+        <title>Preparation - Reefer Container Predictive Maintenance</title>
       
     
     
@@ -121,7 +121,7 @@
               Reefer Container Predictive Maintenance
             </span>
             <span class="md-header-nav__topic">
-              Do it yourself - Workshop
+              Preparation
             </span>
           
         </div>
@@ -700,6 +700,27 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+    
+    <label class="md-nav__link" for="nav-7">
+      Do it yourself - Workshop
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Do it yourself - Workshop
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
@@ -708,11 +729,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Do it yourself - Workshop
+        Preparation
       </label>
     
-    <a href="./" title="Do it yourself - Workshop" class="md-nav__link md-nav__link--active">
-      Do it yourself - Workshop
+    <a href="./" title="Preparation" class="md-nav__link md-nav__link--active">
+      Preparation
     </a>
     
       
@@ -760,8 +781,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deploy-reefer-container" title="Deploy Reefer Container" class="md-nav__link">
-    Deploy Reefer Container
+  <a href="#deploy-reefer-containermicroservice" title="Deploy Reefer Containermicroservice" class="md-nav__link">
+    Deploy Reefer Containermicroservice
   </a>
   
     <nav class="md-nav">
@@ -789,6 +810,23 @@
     
   </li>
 
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
+      Develop the simulation app
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
     
       
       
@@ -798,6 +836,18 @@
   <li class="md-nav__item">
     <a href="https://ibm-cloud-architecture.github.io/refarch-kc/" title="Reefer solution implementation project" class="md-nav__link">
       Reefer solution implementation project
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../compendium/" title="Compendium" class="md-nav__link">
+      Compendium
     </a>
   </li>
 
@@ -857,8 +907,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deploy-reefer-container" title="Deploy Reefer Container" class="md-nav__link">
-    Deploy Reefer Container
+  <a href="#deploy-reefer-containermicroservice" title="Deploy Reefer Containermicroservice" class="md-nav__link">
+    Deploy Reefer Containermicroservice
   </a>
   
     <nav class="md-nav">
@@ -912,23 +962,26 @@
 <li>The business process definition (7) is in the twx file under the <code>bpm</code> folder.</li>
 </ul>
 <h3 id="building-a-python-development-environment-as-docker-image">Building a python development environment as docker image</h3>
-<p>To avoid impacting our laptop environment (specially macbook which use python), we use a dockerfile to get the basic of python 3.7.x and the python modules like kafka, http requests, pandas, sklearn, pytest... we need to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:</p>
+<p>To avoid impacting our laptop environment (specially macbook which uses python a lot), we use a Dockerfile to get the basic of python 3.7.x and the python modules we need, like kafka, http requests, pandas, sklearn, pytest.... To build your python image with all the needed libraries, use the following commands:</p>
 <div class="codehilite"><pre><span></span>cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 </pre></div>
 
-<p>To use this python environment you can use the script: <code>startPythonEnv</code>. </p>
+<p>To use this python environment you can use the script: <code>startPythonEnv.sh</code>. </p>
 <p>When running with Event Stream and Postgres DB on the cloud use IBMCLOUD argument, if you use and on-premise Openshif cluster use the OCP argument.</p>
 <div class="codehilite"><pre><span></span># refarch-reefer-ml project folder
 ./startPythonEnv.sh IBMCLOUD
+# or for Openshift on premise:
+./startPythonEnv.sh OCP
 </pre></div>
 
 <h3 id="set-environment-variables">Set environment variables</h3>
 <p>As part of the <a href="https://12factor.net/">12 factors practice</a>, we externalize the end points configuration in environment variables. We are providing a script template (<code>scripts/setenv-tmp.sh</code>) to set those variables for your local development. Rename this file as <code>setenv.sh</code>. This file is git ignored, to do not share keys and passwords in public domain.</p>
 <p>The variables help the different code in the solution to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.</p>
-<h2 id="deploy-reefer-container">Deploy Reefer Container</h2>
+<h2 id="deploy-reefer-containermicroservice">Deploy Reefer Containermicroservice</h2>
+<p>The Reefer container is a microservice we developed in the context of managing Reefer containers, as part of the end to end solution. We are reusing it in the context of this anomaly detection solution. When a container will be in maintenace mode, this microservice will call BPM to create a process instance. Consider it as a black box. </p>
 <h3 id="deploy-on-openshift">Deploy on Openshift</h3>
-<p>We use image deployment with the following command:</p>
+<p>We use Openshift image deployment capability with the following command:</p>
 <div class="codehilite"><pre><span></span>oc new-app ibmcase/kcontainer-spring-container-ms
 oc expose svc/kcontainer-spring-container-ms
 </pre></div>
@@ -966,6 +1019,20 @@ oc expose svc/kcontainer-spring-container-ms
             </div>
           </a>
         
+        
+          <a href="../infuse/simul-app/" title="Develop the simulation app" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Develop the simulation app
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
         
       </nav>
     </div>
