@@ -4,15 +4,15 @@ metadata:
   annotations:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
-    commit.image.appsody.dev/contextDir: /reefer-simulation
-    commit.image.appsody.dev/date: Sun Dec 1 10:24:55 2019 -0800
-    commit.image.appsody.dev/message: add requirements for simulator
-    image.opencontainers.org/created: "2019-12-04T18:01:40+01:00"
+    commit.image.appsody.dev/contextDir: /simulator
+    commit.image.appsody.dev/date: Tue Jan 7 21:42:49 2020 -0800
+    commit.image.appsody.dev/message: Merge branch 'master' of https://github.com/jbcodeforce/refarch-reefer-ml
+    image.opencontainers.org/created: "2020-01-08T17:00:34-08:00"
     image.opencontainers.org/documentation: https://github.com/jbcodeforce/refarch-reefer-ml
-    image.opencontainers.org/revision: 158db291e7a8ed49302451a909d24ad95ac8d239-modified
+    image.opencontainers.org/revision: 44ee771eaa7eb8d5392717ef971f5d7009d8aa3c-modified
     image.opencontainers.org/source: https://github.com/jbcodeforce/refarch-reefer-ml/tree/master
     image.opencontainers.org/url: https://github.com/jbcodeforce/refarch-reefer-ml
-    stack.appsody.dev/configured: appsody/python-flask:0.1
+    stack.appsody.dev/configured: docker.io/appsody/python-flask:0.1
     stack.appsody.dev/created: 2019-11-14T10:29:19+0000
     stack.appsody.dev/revision: b3e8a19b0a4b66a69daa8d1106f37bbe4167693a
     stack.appsody.dev/tag: appsody/python-flask:0.1.6

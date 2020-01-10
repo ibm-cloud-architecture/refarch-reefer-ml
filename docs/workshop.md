@@ -22,22 +22,23 @@ The solution to implement includes the following components:
 
 ### Building a python development environment as docker image
 
-To avoid impacting our laptop environment (specially macbook which use python), we use a dockerfile to get the basic of python 3.7.x and the python modules like kafka, http requests, pandas, sklearn, pytest... we need to develop and test the different python code of this solution. To build your python image with all the needed libraries, use the following commands:
+To avoid impacting our laptop environment (specially macbook which uses python a lot), we use a Dockerfile to get the basic of python 3.7.x and the python modules we need, like kafka, http requests, pandas, sklearn, pytest.... To build your python image with all the needed libraries, use the following commands:
 
 ```
 cd docker
 docker build -f docker-python-tools -t ibmcase/python .
 ```
 
-To use this python environment you can use the script: `startPythonEnv`. 
+To use this python environment you can use the script: `startPythonEnv.sh`. 
 
 When running with Event Stream and Postgres DB on the cloud use IBMCLOUD argument, if you use and on-premise Openshif cluster use the OCP argument.
 
 ```
 # refarch-reefer-ml project folder
 ./startPythonEnv.sh IBMCLOUD
+# or for Openshift on premise:
+./startPythonEnv.sh OCP
 ```
-
 
 ### Set environment variables
 
@@ -46,11 +47,13 @@ As part of the [12 factors practice](https://12factor.net/), we externalize the 
 The variables help the different code in the solution to access the Event Stream broker cluster and the Postgresql service running on IBM Cloud.
 
 
-## Deploy Reefer Container
+## Deploy Reefer Containermicroservice
+
+The Reefer container is a microservice we developed in the context of managing Reefer containers, as part of the end to end solution. We are reusing it in the context of this anomaly detection solution. When a container will be in maintenace mode, this microservice will call BPM to create a process instance. Consider it as a black box. 
 
 ### Deploy on Openshift
 
-We use image deployment with the following command:
+We use Openshift image deployment capability with the following command:
 
 ```shell
 oc new-app ibmcase/kcontainer-spring-container-ms

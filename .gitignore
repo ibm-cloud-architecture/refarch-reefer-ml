@@ -3,7 +3,7 @@ ml/.ipynb_checkpoints/
 simulator/__pycache__/
 simulator/api/__pycache__/
 simulator/domain/__pycache__/
-simulator/infrastructure/__pycache__
+simulator/infrastructure/__pycache__/
 simulator/templates/
 simulator/certs/*.pem
 simulator/certs/ocp/*.pem
@@ -16,8 +16,6 @@ scoring-mp/target/
 consumer/__pycache__/
 simulator/*.pem
 simulator-old/*.pem
-certs/*.pem
-certs/ocp/*.pem
 scoring/eventConsumer/*.pem
 scoring/eventConsumer/__pycache__/
 scoring/eventConsumer/infrastructure/__pycache__
@@ -27,6 +25,7 @@ docker/postgres-data/
 docker/kafka1/
 docker/zookeeper1/
 scripts/setenv.sh
+simulator/kaf/
 .vscode/
 .postgresql/
 .local/

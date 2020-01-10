@@ -30,7 +30,7 @@ The copy the broker URL and api key in the `scripts/setenv.sh` file under the OC
 OCP)
     export KAFKA_BROKERS=eventstream140-ibm-es-proxy-route-bootstrap-eventstreams.apps.green.ocp.csplab.local:443
     export KAFKA_APIKEY="zb5Rv-81m11A0_"
-    export KAFKA_CERT="certs/ocp/es-cert.pem"
+    export KAFKA_CERT="/project/useapp/simulator/certs/ocp/es-cert.pem"
 ```
 
 And then download the pem and java key. We keep those files in the `certs/ocp` folder.
