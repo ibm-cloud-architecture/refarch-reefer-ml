@@ -1,5 +1,5 @@
 
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, abort
 from flasgger import swag_from
 from flask_restful import Resource, Api
 from concurrent.futures import ThreadPoolExecutor
@@ -38,7 +38,6 @@ class SimulationController(Resource):
     def post(self):
         print("post control received: ")
         print(request.data)
-        print(request.mimetype)
         control = request.get_json(force=True)
         print(control)
         if not 'containerID' in control:
@@ -52,7 +51,7 @@ class SimulationController(Resource):
         elif  control["simulation"]  == ReeferSimulator.SIMUL_O2:
             metrics=simulator.generateO2Tuples(control["containerID"],nb_records,control["product_id"])
         else:
-            return jsonify({"error":"Wrong simulation controller data"}),404
+            return {"error":"Wrong simulation controller data"},404
     
         if nb_records < 500:
             sendEvents(metrics)
@@ -60,7 +59,7 @@ class SimulationController(Resource):
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future = executor.submit(sendEvents,metrics)
             
-        return jsonify("{ \"reason\": \"Simulation started\""),202
+        return { "reason": "Simulation started"},202
     
 
 

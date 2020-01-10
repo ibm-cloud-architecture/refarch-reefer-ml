@@ -25,6 +25,7 @@ docker/postgres-data/
 docker/kafka1/
 docker/zookeeper1/
 scripts/setenv.sh
+simulator/kaf/
 .vscode/
 .postgresql/
 .local/
