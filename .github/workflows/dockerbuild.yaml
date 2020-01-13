@@ -67,8 +67,14 @@ jobs:
         IMAGE_NAME="${DOCKER_R}/${DOCKER_I}"
         docker login -u ${DOCKER_U} -p ${DOCKER_P}
         echo "Installing Appsody..."
-                wget https://github.com/appsody/appsody/releases/download/0.5.4/appsody_0.5.4_amd64.deb
-        sudo apt install -f ./appsody_0.5.4_amd64.deb
+        #wget https://github.com/appsody/appsody/releases/download/0.5.4/appsody_0.5.4_amd64.deb
+        APPSODY_RELEASE=$(curl -s https://api.github.com/repos/appsody/appsody/releases/latest \
+        | grep "browser_download_url.*deb" \
+        | cut -d : -f 2,3 \
+        | tr -d \")
+        echo "Latest Appsody Release found: ${APPSODY_RELEASE}"
+        wget -qi --output-document=appsody_latest_amd64.deb ${APPSODY_RELEASE}
+        sudo apt install -f ./appsody_latest_amd64.deb
         cd ${WORKDIR}
         appsody build --tag ${IMAGE_NAME}:${IMAGE_TAG} --push
         #docker build . --file ${DOCKERFILE} --tag ${IMAGE_NAME}:${IMAGE_TAG}
