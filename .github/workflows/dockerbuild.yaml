@@ -51,6 +51,8 @@ jobs:
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
         DOCKER_IMAGE_SIMULATOR: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
   build-docker-images:
+    needs:
+      validate-docker-secrets
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
