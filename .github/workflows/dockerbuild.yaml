@@ -12,33 +12,87 @@ on:
       - 'ml/'
       - 'postgresql/'
       - 'scripts/'
-      - '**/chart/'
+      - '*/chart/**'
 
 jobs:
+  validate-docker-secrets:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Validate docker registry secrets are defined
+      id: validate-docker-secrets
+      run: |
+        echo "Validating docker registry secrets are defined on the repository"
+
+        FAIL=false
+
+        validate_secret(){
+          FIELD=$1
+          VALUE=$2
+
+          if [ -z "${VALUE}" ]; then
+            echo "The secret ${FIELD} needs to be set on this repository."
+            FAIL=true
+          else
+            echo "The secret ${FIELD} is set on this repository."
+          fi
+        }
+
+        validate_secret DOCKER_USERNAME ${DOCKER_USERNAME}
+        validate_secret DOCKER_PASSWORD ${DOCKER_PASSWORD}
+        validate_secret DOCKER_REPOSITORY ${DOCKER_REPOSITORY}
+        validate_secret DOCKER_IMAGE_SIMULATOR ${DOCKER_IMAGE_SIMULATOR}
+
+        if [ "${FAIL}" = "true" ]; then
+          exit 1
+        fi
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_IMAGE_SIMULATOR: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
   build-docker-images:
-    if: startsWith(github.repository, 'ibm-cloud-architecture/')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Bump version and push tag
       id: bump-version-action
-      uses: anothrNick/github-tag-action@master
+      uses: osowski/github-tag-action@master
       env:
         DEFAULT_BUMP: patch
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the simulator docker image
       id: build-simulator-image
       run: |
+        echo "Build and push the docker image"
+        IMAGE_NAME="${DOCKER_R}/${DOCKER_I}"
         docker login -u ${DOCKER_U} -p ${DOCKER_P}
+        echo "Installing Appsody..."
+        #wget https://github.com/appsody/appsody/releases/download/0.5.4/appsody_0.5.4_amd64.deb
+        APPSODY_RELEASE=$(curl -s https://api.github.com/repos/appsody/appsody/releases/latest \
+        | grep "browser_download_url.*deb" \
+        | cut -d : -f 2,3 \
+        | tr -d \")
+        echo "Latest Appsody Release found: ${APPSODY_RELEASE}"
+        wget ${APPSODY_RELEASE}
+        sudo apt install -f ./appsody_*_amd64.deb
         cd ${WORKDIR}
-        docker build . --file ${DOCKERFILE} --tag ${IMAGE_NAME}:${IMAGE_TAG}
+        appsody build --tag ${IMAGE_NAME}:${IMAGE_TAG} --push
+        #docker build . --file ${DOCKERFILE} --tag ${IMAGE_NAME}:${IMAGE_TAG}
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
         docker push ${IMAGE_NAME}
       env:
         DOCKER_U: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_P: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_R: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_I: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
         WORKDIR: simulator
-        DOCKERFILE: Dockerfile
-        IMAGE_NAME: ibmcase/kcontainer-reefer-simulator
         IMAGE_TAG: ${{ steps.bump-version-action.outputs.new_tag }}
-    
+    - name: Webhook to GitOps repo
+      id: gitops-repo-webhook
+      uses: osowski/repository-dispatch@v1
+      if: startsWith(github.repository, 'ibm-cloud-architecture/')
+      with:
+        token: ${{ secrets.WEBHOOK_TOKEN }}
+        repository: ibm-cloud-architecture/refarch-kc-gitops
+        event-type: gitops-refresh
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "source": "${{ github.repository }}"}'
