@@ -46,28 +46,39 @@ spec:
               echo "-- END --"
               echo "---------"
         env:
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # Following https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#using-postgresql-hosted-on-ibm-cloud,
+        # this will be in the required format of 'jdbc:postgresql://<hostname>:<port>/<database-name>?...'
+        # oc create secret generic postgresql-url --from-literal=binding='jdbc:postgresql://69ea8ac7...appdomain.cloud:31137/ibmclouddb?...'
         - name: POSTGRES_URL
           valueFrom:
             secretKeyRef:
               name: "postgresql-url"
               key: binding
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # oc create secret generic postgresql-user --from-literal=binding='ibm_cloud_...'
         - name: PGUSER
           valueFrom:
             secretKeyRef:
               name: "postgresql-user"
               key: binding
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # oc create secret generic postgresql-pwd --from-literal=binding='3abc...9xyz.'
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
               name: "postgresql-pwd"
               key: binding
+        # Default database name which does not typically need to be changed.
         - name: PGDATABASE
           value: "ibmclouddb"
+        # Default SSL Mode when connecting to Databases for PostgreSQL on IBM Cloud
         - name: PGSSLMODE
           value: "verify-full"
+        # Location where the Postgresql SSL certificate is stored on the running container.
         - name: PGSSLROOTCERT
           value: "/tmp/certs/pg-ssl.pem"
-        # Location where the Postgres SSL certificate contained in the postgresql-ca-pem secret will be loaded to.
+        # Mounting the Postgresql SSL certificate from the defined Secret to the container's filesystem
         volumeMounts:
         - mountPath: "/tmp/certs"
           name: postgresql-ca-pem
