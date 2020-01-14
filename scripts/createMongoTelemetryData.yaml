@@ -1,0 +1,99 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-telemetry-data
+spec:
+  template:
+    metadata:
+      name: create-telemetry-data
+    spec:
+      containers:
+      - name: create-telemetry-data
+        image: ibmcase/kcontainer-reefer-simulator-appsody:0.1.18
+        imagePullPolicy: Always
+        command:
+        - /bin/bash
+        - -c
+        - |
+              echo "-----------------------------------------------------------------"
+              echo "-- Generating Telemetry Data                                   --"
+              echo "-----------------------------------------------------------------"
+              echo
+
+              mkdir ${WORKING_DIR} && cd ${WORKING_DIR}
+
+              # Clone the repository where the integration tests to be executed are and checkout the specific branch
+              git clone ${GITHUB_REPO} repo && cd repo && if [ "master" != "${BRANCH}" ]; then git checkout ${BRANCH}; fi
+              cd simulator
+
+              ## UPDATE PARAMETERS MANUALLY AS NEEDED ##
+              ## ADDITIONAL COMMANDS & COMBINATIONS CAN BE ADDED NEEDED ##
+              echo
+              python reefer_simulator_tool.py --stype poweroff  --cid C01 --product_id P03 --records 100  --db
+              echo
+              python reefer_simulator_tool.py --stype co2sensor --cid C02 --product_id P04 --records 100  --db
+              echo
+              python reefer_simulator_tool.py --stype o2sensor  --cid C03 --product_id P01 --records 100  --db
+              echo
+              python reefer_simulator_tool.py --stype normal    --cid C04 --product_id P02 --records 100  --db
+              echo
+
+              echo "---------"
+              echo "-- END --"
+              echo "---------"
+        env:
+        # Your working directory within the container
+        - name: WORKING_DIR
+          value: "/tmp/github"
+        # Github repository containing the database code to be executed
+        - name: GITHUB_REPO
+          value: "https://github.com/ibm-cloud-architecture/refarch-reefer-ml.git"
+        # Specific branch for the integration tests
+        - name: BRANCH
+          value: "master"
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # Note that this will contain TWO unique hostnames in the connection parameter, as it is a replica set.
+        # oc create secret generic mongodb-url --from-literal=binding='1a2...domain.cloud:30796,1a2c....cloud:30796'
+        - name: MONGO_DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: "mongodb-url"
+              key: binding
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # oc create secret generic mongodb-user --from-literal=binding='ibm_cloud_...'
+        - name: MONGODB_USER
+          valueFrom:
+            secretKeyRef:
+              name: "mongodb-user"
+              key: binding
+        # Available from the 'Service Credentials' tab on IBM Cloud.
+        # oc create secret generic mongodb-password --from-literal=binding='335....223'
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "mongodb-password"
+              key: binding
+        # Default database name which does not typically need to be changed.
+        - name: MONGO_DATABASE
+          value: "ibmclouddb"
+        # Comment out this EnvVar name & value if using a MongoDB connection without SSL
+        - name: MONGO_SSL_PEM
+          value: "/tmp/certs/mongodb-ca.pem"
+        # Location where the MongoDB SSL certificate contained in the mongodb-ca-pem secret will be stored inside the container.
+        volumeMounts:
+        - mountPath: "/tmp/certs"
+          name: mongodb-ca-pem
+      volumes:
+         # You MUST create this secret with the MongoDB CA PEM certificate in advance. Examples below:
+         # First, download the pem certificate using the IBM Cloud DB CLI.
+         # 1.  ibmcloud cdb deployment-cacert $IC_MONGODB_SERV > mongodb.crt
+         # 2.  oc create secret generic postgresql-ca-pem --from-literal=binding="$(cat mongodb.crt)"
+         - name: mongodb-ca-pem
+           secret:
+             secretName: "mongodb-ca-pem"
+             items:
+             - key: binding
+               path: mongodb-ca.pem
+           optional: true
+      restartPolicy: Never
+  backoffLimit: 0
