@@ -30,15 +30,17 @@ Now we need to define data source...
 ## Data Virtualization
 
 To do not copy or move the data, we can add `Data virtualization` to a remote data source. 
-First we need to get the connection information for the MongoDB database. Going to the IBM Cloud account, under the Services resource, select the mongo instance:
+First we need to get the connection information for the MongoDB database. 
+
+* Going to the IBM Cloud account, under the Services resource, select the mongo instance:
 
 ![](images/ibm-cloud-res-mongo.png)
 
-And get the information about the data connection.
+* get the information about the data connection.
 
 ![](images/mongo-connection.png)
 
-And download the TLS certificate as pem file:
+* Then download the TLS certificate as pem file:
 
 ```shell
 ibmcloud login -a https://cloud.ibm.com -u passcode -p <somecode-you-get-from-your-login>
@@ -47,11 +49,8 @@ ibmcloud target -g gse-eda
 ibmcloud cdb deployment-cacert gse-eda-mongodb > certs/mongodbca.pem
 ```
 
-Back to Cloud pak for data, an administrator can define a connection as a reusable object by entering the data source information. The figure below illustrates the configuration for the Mongo DB on IBM Cloud:
+Back to Cloud pak for data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:
 
 ![](images/add-connection.png)
 
-Once done a Data scientist can define in the Collect menu a new `Data virtualization`
-
-
-
+Once define a Data scientist use this connection in the Collect menu to define a new `Data virtualization` definition to discover the telemetries data.

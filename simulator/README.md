@@ -7,11 +7,14 @@ The _simulator_ component is a Python-based application for generating anomalous
 The application is built using [Appsody](https://appsody.dev) as the developer experience tooling.  The Appsody CLI is required locally to build and deploy the application properly, while the Appsody Operator is required on the target cluster to deploy the generated `AppsodyApplication`.
 
 ### Docker build
+
 The Docker image can be built from this directory by using the `appsody build` command:
+
 1. Ensure you are logged in to the desired remote Docker registry through your local Docker client.
 2. The `appsody build -t ibmcase/kcontainer-reefer-simulator:appsody-v1 --push` command will build and push the application's Docker image to the specified remote image registry.
 
 ### Application deployment
+
 The application can be deployed to a remote OpenShift cluster by using the `appsody deploy` command:
 1. There are three required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
   - A `ConfigMap` named `kafka-brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
