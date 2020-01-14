@@ -1,0 +1,86 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-postgres-tables
+spec:
+  template:
+    metadata:
+      name: create-postgres-tables
+    spec:
+      containers:
+      - name: ibmcase-postgres
+        image: postgres:12.1
+        imagePullPolicy: Always
+        command:
+        - /bin/bash
+        - -c
+        - |
+              echo "-----------------------------------------------------------------"
+              echo "-- Creating Postgresql Tables for Products Reference Data      --"
+              echo "-----------------------------------------------------------------"
+              echo
+
+              export PGHOST=$(echo $POSTGRES_URL | awk -F "/" '{print $3}' | awk -F "\:" '{print $1}')
+              export PGPORT=$(echo $POSTGRES_URL | awk -F "/" '{print $3}' | awk -F "\:" '{print $2}')
+
+              psql -v ON_ERROR_STOP=1 <<-EOSQL
+                DROP TABLE IF EXISTS products;
+
+                CREATE TABLE products (
+                  product_id varchar(64) NOT NULL PRIMARY KEY,
+                  description varchar(100),
+                  target_temperature REAL,
+                  target_humidity_level REAL
+                  );
+
+                INSERT INTO products(product_id,description,target_temperature,target_humidity_level) VALUES
+                  ('P01','Carrots',4,0.4),
+                  ('P02','Banana',6,0.6),
+                  ('P03','Salad',4,0.4),
+                  ('P04','Avocado',6,0.4),
+                  ('P05','Tomato',4,0.4);
+              EOSQL
+
+              echo "---------"
+              echo "-- END --"
+              echo "---------"
+        env:
+        - name: POSTGRES_URL
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-url"
+              key: binding
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-user"
+              key: binding
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-pwd"
+              key: binding
+        - name: PGDATABASE
+          value: "ibmclouddb"
+        - name: PGSSLMODE
+          value: "verify-full"
+        - name: PGSSLROOTCERT
+          value: "/tmp/certs/pg-ssl.pem"
+        # Location where the Postgres SSL certificate contained in the postgresql-ca-pem secret will be loaded to.
+        volumeMounts:
+        - mountPath: "/tmp/certs"
+          name: postgresql-ca-pem
+      volumes:
+         # You MUST create this secret with the Postgresql CA PEM certificate in advance. Examples below:
+         # First, download the pem certificate using the IBM Cloud DB CLI.
+         # 1.  ibmcloud cdb deployment-cacert $IC_POSTGRES_SERV > postgresql.crt
+         # 2.  oc create secret generic postgresql-ca-pem --from-literal=binding="$(cat postgresql.crt)"
+         - name: postgresql-ca-pem
+           secret:
+             secretName: "postgresql-ca-pem"
+             items:
+             - key: binding
+               path: pg-ssl.pem
+             optional: true
+      restartPolicy: Never
+  backoffLimit: 0
