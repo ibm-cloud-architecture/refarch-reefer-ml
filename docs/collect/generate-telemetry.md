@@ -11,7 +11,7 @@ For the machine learning environment we can use csv file or mongodb database or 
 ![Data collection Simulation](images/data-collect.png)
 **Figure 1: Data collection Simulation**
 
-The simulator can run as a standalone tool (1) to create training and test data to be saved in a remote mongodb database or can be used to save to csv file. when it runs to simulate reefer container telemetry generation (2), it creates events to Kafka topic, and a stream application can save telemetry records to mongodb too.
+The simulator can run as a standalone tool (1) to create training and test data to be saved in a remote mongodb database or can be used to save to csv file. when it runs to simulate reefer container telemetry generation (2), it creates events to Kafka topic, and a stream application can save telemetry records to MongoDB too.
 
 We use [mongodb as a service](https://cloud.ibm.com/catalog?category=databases) on IBM cloud.
 

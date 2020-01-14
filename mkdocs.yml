@@ -30,11 +30,16 @@ nav:
       - Build and run the solution on Openshift: infuse/build-run.md
       - Run integration tests: infuse/integration-tests.md
       - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
-  - Devops: devops.md
+  - Devops: 
+    - Develop the simulation app: infuse/simul-app.md
+    - Develop the scoring app with event messaging and microprofile: infuse/dev-scoring.md
+    - Continuous integration: devops/ci.md
+    - Continuous deployment: devops/cd.md
   - Engineer dispatching with Business process with Cloud Pak for Automation: bpm/readme.md
   - Do it yourself - Workshop: 
     - Preparation: workshop.md
     - Develop the simulation app: infuse/simul-app.md
+    - Develop the scoring app using open source stack: infuse/oss-scoring-app.md
   - Reefer solution implementation project: https://ibm-cloud-architecture.github.io/refarch-kc/
   - Compendium: compendium.md
 
