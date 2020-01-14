@@ -26,19 +26,20 @@ spec:
               psql -v ON_ERROR_STOP=1 <<-EOSQL
                 DROP TABLE IF EXISTS products;
 
-                CREATE TABLE products (
-                  product_id varchar(64) NOT NULL PRIMARY KEY,
+                CREATE TABLE IF NOT EXISTS products (
+                  product_id varchar(10) NOT NULL PRIMARY KEY,
                   description varchar(100),
                   target_temperature REAL,
-                  target_humidity_level REAL
-                  );
+                  target_humidity_level REAL,
+                  content_type INT
+                );
 
-                INSERT INTO products(product_id,description,target_temperature,target_humidity_level) VALUES
-                  ('P01','Carrots',4,0.4),
-                  ('P02','Banana',6,0.6),
-                  ('P03','Salad',4,0.4),
-                  ('P04','Avocado',6,0.4),
-                  ('P05','Tomato',4,0.4);
+                INSERT INTO products(product_id,description,content_type,target_temperature,target_humidity_level) VALUES
+                  ('P01','Carrots',1,4,0.4),
+                  ('P02','Banana',2,6,0.6),
+                  ('P03','Salad',1,4,0.4),
+                  ('P04','Avocado',2,6,0.4),
+                  ('P05','Tomato',6,6,0.3);
               EOSQL
 
               echo "---------"
