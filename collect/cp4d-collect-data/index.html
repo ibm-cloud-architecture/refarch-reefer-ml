@@ -723,10 +723,70 @@
       
 
 
-  <li class="md-nav__item">
-    <a href="../../devops/" title="Devops" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
       Devops
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Devops
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
+      Develop the simulation app
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../infuse/dev-scoring/" title="Develop the scoring app with event messaging and microprofile" class="md-nav__link">
+      Develop the scoring app with event messaging and microprofile
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../devops/ci/" title="Continuous integration" class="md-nav__link">
+      Continuous integration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../devops/cd/" title="Continuous deployment" class="md-nav__link">
+      Continuous deployment
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -781,6 +841,18 @@
   <li class="md-nav__item">
     <a href="../../infuse/simul-app/" title="Develop the simulation app" class="md-nav__link">
       Develop the simulation app
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../infuse/oss-scoring-app/" title="Develop the scoring app using open source stack" class="md-nav__link">
+      Develop the scoring app using open source stack
     </a>
   </li>
 
@@ -883,20 +955,27 @@
 <p>Now we need to define data source...</p>
 <h2 id="data-virtualization">Data Virtualization</h2>
 <p>To do not copy or move the data, we can add <code>Data virtualization</code> to a remote data source. 
-First we need to get the connection information for the MongoDB database. Going to the IBM Cloud account, under the Services resource, select the mongo instance:</p>
+First we need to get the connection information for the MongoDB database. </p>
+<ul>
+<li>Going to the IBM Cloud account, under the Services resource, select the mongo instance:</li>
+</ul>
 <p><img alt="" src="../images/ibm-cloud-res-mongo.png" /></p>
-<p>And get the information about the data connection.</p>
+<ul>
+<li>get the information about the data connection.</li>
+</ul>
 <p><img alt="" src="../images/mongo-connection.png" /></p>
-<p>And download the TLS certificate as pem file:</p>
+<ul>
+<li>Then download the TLS certificate as pem file:</li>
+</ul>
 <div class="codehilite"><pre><span></span>ibmcloud login -a https://cloud.ibm.com -u passcode -p &lt;somecode-you-get-from-your-login&gt;
 <span class="c1"># Define your resource group</span>
 ibmcloud target -g gse-eda
 ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; certs/mongodbca.pem
 </pre></div>
 
-<p>Back to Cloud pak for data, an administrator can define a connection as a reusable object by entering the data source information. The figure below illustrates the configuration for the Mongo DB on IBM Cloud:</p>
+<p>Back to Cloud pak for data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:</p>
 <p><img alt="" src="../images/add-connection.png" /></p>
-<p>Once done a Data scientist can define in the Collect menu a new <code>Data virtualization</code></p>
+<p>Once define a Data scientist use this connection in the Collect menu to define a new <code>Data virtualization</code> definition to discover the telemetries data.</p>
                 
                   
                 
