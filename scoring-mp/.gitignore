@@ -1,6 +1,8 @@
 /target/*
 !.keep
 
+### MP Config
+**/microprofile-config.properties
 
 ### STS ###
 .apt_generated
