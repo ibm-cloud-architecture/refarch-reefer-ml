@@ -553,7 +553,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#save-local-telemetry-data-to-mongodb" class="md-nav__link">
     Save local telemetry data to MongoDB
   </a>
@@ -593,11 +598,6 @@
   <a href="#verify-data-with-mongo-cli" class="md-nav__link">
     Verify data with mongo CLI
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1070,7 +1070,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#save-local-telemetry-data-to-mongodb" class="md-nav__link">
     Save local telemetry data to MongoDB
   </a>
@@ -1110,11 +1115,6 @@
   <a href="#verify-data-with-mongo-cli" class="md-nav__link">
     Verify data with mongo CLI
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1167,38 +1167,42 @@
 <p>We use <a href="https://cloud.ibm.com/catalog/services/databases-for-mongodb">MongoDB as a Service</a> on <a href="https://cloud.ibm.com/catalog?category=databases">IBM Cloud</a> in our reference implementations.</p>
 <p><img alt="IBM Cloud Database" src="../../environments/images/ibm-cloud-dbs.png" />
 <strong>IBM Cloud Database</strong></p>
-<p>We have provided the following documented methods for populating the Product database:
-1. <a href="#create-and-save-telemetry-data-with-kubernetes-job-running-on-remote-cluster">Create and save telemetry data with Kubernetes Job running on remote cluster</a> <em>(RECOMMENDED)</em>
-2. <a href="#create-local-telemetry-data-manually">Create local telemetry data manually</a>
-3. <a href="#save-local-telemetry-data-to-mongodb">Save local telemetry data to MongoDB</a></p>
+<p>We have provided the following documented methods for populating the Product database:</p>
+<ol>
+<li><a href="#create-and-save-telemetry-data-with-kubernetes-job-running-on-remote-cluster">Create and save telemetry data with Kubernetes Job running on remote cluster</a> <em>(RECOMMENDED)</em></li>
+<li><a href="#create-local-telemetry-data-manually">Create local telemetry data manually</a></li>
+<li><a href="#save-local-telemetry-data-to-mongodb">Save local telemetry data to MongoDB</a></li>
+</ol>
 <h2 id="create-and-save-telemetry-data-with-kubernetes-job-running-on-remote-cluster">Create and save telemetry data with Kubernetes Job running on remote cluster</h2>
 <p>In an effort to keep development systems as clean as possible and speed up deployment of various scenarios, our deployment tasks have been encapsulated in <a href="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/">Kubernetes Jobs</a>. These are runnable on any Kubernetes platform, including OpenShift.</p>
 <p>The predefined job for this task will create the required telemetry data and save it directly to the configured MongoDB database instance. This is the most direct method for telemetry data generation and what is necessary for the "happy path" version of the environment deployment. If you have use case needs that require other locations for data to be saved or transmitted, you can either adapt the Job here or follow the other sections of this document.</p>
 <ol>
-<li>Utilizing <a href="https://cloud.ibm.com/catalog/services/databases-for-mongodb">Databases for MongoDB</a> on IBM Cloud, the following Kubernetes Secrets are required to be created from the auto-generated <em>Service credentials</em> in the target namespace:</li>
+<li>
+<p>Utilizing <a href="https://cloud.ibm.com/catalog/services/databases-for-mongodb">Databases for MongoDB</a> on IBM Cloud, the following Kubernetes Secrets are required to be created from the auto-generated <em>Service credentials</em> in the target namespace:</p>
+<ol>
 <li><code>mongodb-url</code> <em>(in the format of <code>hostname-a,hostname-b</code>, as the endpoint is a paired replica set)</em>
-      <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-url --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;1a2...domain.cloud:30796,1a2c....cloud:30796&#39;</span>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-url --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;1a2...domain.cloud:30796,1a2c....cloud:30796&#39;</span>
 </pre></div></li>
 <li><code>mongodb-user</code>
-      <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-user --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;ibm_cloud_...&#39;</span>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-user --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;ibm_cloud_...&#39;</span>
 </pre></div></li>
-<li><code>mongodb-password</code>
-      <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-password --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;335....223&#39;</span>
+<li><code>mongodb-pwd</code>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic mongodb-pwd --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;335....223&#39;</span>
 </pre></div></li>
-<li>
-<p><code>mongodb-ca-pem</code> <em>(this requires use of the <a href="https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference">Cloud Databases CLI Plug-in</a> for the IBM Cloud CLI)</em>
-      <div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert <span class="o">[</span>MongoDB on IBM Cloud service instance name<span class="o">]</span> &gt; mongodb.crt
-kubectl create secret generic postgresql-ca-pem --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>cat mongodb.crt<span class="k">)</span><span class="s2">&quot;</span>
-</pre></div></p>
+<li><code>mongodb-ca-pem</code> <em>(this requires use of the <a href="https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference">Cloud Databases CLI Plug-in</a> for the IBM Cloud CLI)</em>
+  <div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert <span class="o">[</span>MongoDB on IBM Cloud service instance name<span class="o">]</span> &gt; mongodb.crt
+kubectl create secret generic mongodb-ca-pem --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>cat mongodb.crt<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div></li>
+</ol>
 </li>
 <li>
 <p>Review <code>/scripts/createMongoTelemetryData.yaml</code> and update <strong>lines 32, 34, 36, or 38</strong> with any additional modifications to the generated telemetry data. Additional rows can be added as needed in the same job execution. The following fields are acceptable inputs:</p>
-</li>
+<ol>
 <li><code>stype</code> can the <code>normal</code>, <code>poweroff</code>, <code>o2sensor</code>, and <code>co2sensor</code>.</li>
 <li><code>cid</code> can be <code>C01</code>, <code>C02</code>, <code>C03</code>, or <code>C04</code>.</li>
 <li><code>pid</code> can be <code>P01</code>, <code>P02</code>, <code>P03</code>, or <code>P04</code>.</li>
-<li>
-<p><code>records</code> can be any positive integer (within reason).</p>
+<li><code>records</code> can be any positive integer (within reason).</li>
+</ol>
 </li>
 <li>
 <p>Create the <code>create-telemetry-data</code> Job from the root of the <code>refarch-reefer-ml</code> repository:
@@ -1290,7 +1294,7 @@ ibmcase/python                                  latest                 a89153c0e
 <div class="codehilite"><pre><span></span>python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records <span class="m">1000</span> --file basedata --stype o2sensor --append
 </pre></div>
 
-<h3 id="save-local-telemetry-data-to-mongodb">Save local telemetry data to MongoDB</h3>
+<h2 id="save-local-telemetry-data-to-mongodb">Save local telemetry data to MongoDB</h2>
 <p>MongoDB is a popular document-based database that allows developers to quickly build projects without worrying about schema. Mongo components include:</p>
 <ul>
 <li>mongod - the core process that runs the actual database</li>
@@ -1298,14 +1302,14 @@ ibmcase/python                                  latest                 a89153c0e
 <li>config servers (CSRS) - stores the metadata in a sharded environment.</li>
 </ul>
 <p>We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside Mongodb.</p>
-<h4 id="using-mongodb-as-service-on-ibm-cloud">Using Mongodb as service on IBM Cloud</h4>
+<h3 id="using-mongodb-as-service-on-ibm-cloud">Using Mongodb as service on IBM Cloud</h3>
 <p>Create the MongoDB service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as <code>mongodb://ibm_cloud_e154ff52_ed</code>) username and password.</p>
 <p>Set those environment variables in <code>scripts/setenv.sh</code> the <code>export MONGO_DB_URL="mongodb://ibm_c..."</code></p>
 <p>Get the TLS certificate as pem file:</p>
 <div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; certs/mongodbca.pem
 </pre></div>
 
-<h4 id="start-python-environment">Start python environment</h4>
+<h3 id="start-python-environment">Start python environment</h3>
 <p>Use IBMCLOUD if you use mongodb, postgresql and kafka on cloud, or LOCAL for kafka and postgresql running via docker compose.</p>
 <div class="codehilite"><pre><span></span> ./startPythonEnv IBMCLOUD
 
@@ -1329,7 +1333,7 @@ root@03721594782f: <span class="nb">cd</span> /home
 
 <p>See the rest of the code in <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/ml/data/ToMongo.py">ml/data/ToMongo.py</a> to load records from CSV file, or the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ReeferRepository.py">simulator/infrastructure/ReeferRepository.py</a> for the one generating metrics and uploading them directly to MongoDB.</p>
 <p>We propose two approaches to load data to MongoDB: use created csv file, or run the simulator tool connected to MongoDB.</p>
-<h4 id="add-data-from-csv-file">Add data from csv file</h4>
+<h3 id="add-data-from-csv-file">Add data from csv file</h3>
 <p>Using the <code>ToMongo.py</code> script we can load the data from the <code>ml/data/telemetries.csv</code> file to mongodb. In a Terminal window uses the following commmand:</p>
 <div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
 
@@ -1338,7 +1342,7 @@ root@03721594782f: <span class="nb">cd</span> /home
 python ToMongo.py
 </pre></div>
 
-<h4 id="add-data-using-the-telemetry-repository-of-the-simulator">Add data using the telemetry repository of the simulator</h4>
+<h3 id="add-data-using-the-telemetry-repository-of-the-simulator">Add data using the telemetry repository of the simulator</h3>
 <p>Verify your MONGO* environment variables are set according to your created service in the <code>scriptssetenv.sh</code> file.</p>
 <div class="codehilite"><pre><span></span>./startPythonEnv.sh IBMCLOUD
 
@@ -1351,7 +1355,7 @@ python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records <
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records <span class="m">1000</span>  --stype o2sensor --db
 </pre></div>
 
-<h4 id="verify-data-with-mongo-cli">Verify data with mongo CLI</h4>
+<h3 id="verify-data-with-mongo-cli">Verify data with mongo CLI</h3>
 <p>To verify the data loaded into the database we use <a href="https://docs.mongodb.com/manual/installation/">mongo</a> CLI with the following command:</p>
 <div class="codehilite"><pre><span></span><span class="c1"># to connect</span>
 mongo -u <span class="nv">$USERNAME</span> -p <span class="nv">$PASSWORD</span> --tls --tlsCAFile mongodb.pem --authenticationDatabase admin --host replset/1a2ce8ca-&lt;&gt;.bn&lt;&gt;c0.databases.appdomain.cloud:30796 --tlsAllowInvalidCertificates

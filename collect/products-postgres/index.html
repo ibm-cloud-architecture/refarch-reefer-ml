@@ -954,18 +954,31 @@
                 
                 <h1 id="define-the-products-data-into-postgresql">Define the products data into postgresql</h1>
 <p>The Simulator references product data stored in a Postgresql database.  There are multiple ways to populate this database depending on your level of experience with Postgresql, database services, and your local development environment.</p>
-<p>We have provided the following documented methods for populating the Product database:
-1. <a href="#kubernetes-job-running-on-remote-cluster">Kubernetes Job running on remote cluster</a> <em>(RECOMMENDED)</em>
-2. <a href="#docker-image-running-on-local-machine">Docker image running on local machine</a>
-3. <a href="#postgresql-cli-psql-running-on-local-machine">Postgresql CLI (psql) running on local machine</a></p>
+<p>We have provided the following documented methods for populating the Product database:</p>
+<ol>
+<li><a href="#kubernetes-job-running-on-remote-cluster">Kubernetes Job running on remote cluster</a> <em>(RECOMMENDED)</em></li>
+<li><a href="#docker-image-running-on-local-machine">Docker image running on local machine</a></li>
+<li><a href="#postgresql-cli-psql-running-on-local-machine">Postgresql CLI (psql) running on local machine</a></li>
+</ol>
 <h2 id="kubernetes-job-running-on-remote-cluster">Kubernetes Job running on remote cluster</h2>
 <p>In an effort to keep development systems as clean as possible and speed up deployment of various scenarios, our deployment tasks have been encapsulated in <a href="https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/">Kubernetes Jobs</a>. These are runnable on any Kubernetes platform, including OpenShift.</p>
 <ol>
-<li>Following the configuration prerequisistes defined in the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#using-postgresql-hosted-on-ibm-cloud">Backing Services</a> documentation for using <a href="https://cloud.ibm.com/catalog/services/databases-for-postgresql">Databases for PostgreSQL</a> on IBM Cloud, you should already have the following Kubernetes Secrets defined in your target namespace:</li>
-<li><code>postgresql-url</code> <em>(in the format of <code>jdbc:postgresql://&lt;hostname&gt;:&lt;port&gt;/&lt;database-name&gt;?sslmode=...</code>)</em></li>
-<li><code>postgresql-user</code></li>
-<li><code>postgresql-pwd</code></li>
-<li><code>postgresql-ca-pem</code></li>
+<li>Following the configuration prerequisistes defined in the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#using-postgresql-hosted-on-ibm-cloud">Backing Services</a> documentation for using <a href="https://cloud.ibm.com/catalog/services/databases-for-postgresql">Databases for PostgreSQL</a> on IBM Cloud, you should already have the following Kubernetes Secrets defined in your target namespace:<ol>
+<li><code>postgresql-url</code> <em>(in the format of <code>jdbc:postgresql://&lt;hostname&gt;:&lt;port&gt;/&lt;database-name&gt;?sslmode=...</code>)</em>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic postgresql-url --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;jdbc:postgresql://&lt;hostname&gt;:&lt;port&gt;/&lt;database-name&gt;?sslmode=...&#39;</span>
+</pre></div></li>
+<li><code>postgresql-user</code>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic postgresql-user --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;ibm_cloud_...&#39;</span>
+</pre></div></li>
+<li><code>postgresql-pwd</code>
+  <div class="codehilite"><pre><span></span>kubectl create secret generic postgresql-pwd --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s1">&#39;1a2...9z0&#39;</span>
+</pre></div></li>
+<li><code>postgresql-ca-pem</code> <em>(this requires use of the <a href="https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference">Cloud Databases CLI Plug-in</a> for the IBM Cloud CLI)</em>
+  <div class="codehilite"><pre><span></span>ibmcloud cdb deployment-cacert <span class="o">[</span>PostgreSQL on IBM Cloud service instance name<span class="o">]</span> &gt; postgres.crt
+kubectl create secret generic postgresql-ca-pem --from-literal<span class="o">=</span><span class="nv">binding</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>cat postgres.crt<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div></li>
+</ol>
+</li>
 <li>Create the <code>create-postgres-tables</code> Job from the root of the <code>refarch-reefer-ml</code> repository:
 <div class="codehilite"><pre><span></span>kubectl apply -f scripts/createPGtables.yaml
 </pre></div></li>
@@ -977,7 +990,7 @@
 <p>The simulator code includes the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/infrastructure/ProductRepository.py">infrastructure/ProductRepository.py</a> that creates tables and adds some product definitions inside the table.</p>
 <ol>
 <li>Uncomment line 101 from <code>/simulator/infrastructure/ProductRepository.py</code>:
-<div class="codehilite"><pre><span></span>    <span class="c1"># repo.populateProductsReferenceData()</span>
+<div class="codehilite"><pre><span></span><span class="c1"># repo.populateProductsReferenceData()</span>
 </pre></div></li>
 <li>The following command is using our python environment docker image and the python code:
 <div class="codehilite"><pre><span></span>./scripts/createPGTables.sh IBMCLOUD
@@ -985,24 +998,24 @@
 </ol>
 <h2 id="postgresql-cli-psql-running-on-local-machine">Postgresql CLI (psql) running on local machine</h2>
 <p>An alternate techniques is to use <a href="https://www.postgresql.org/docs/9.3/app-psql.html">psql</a> as described in this section. Previous experience with PSQL is recommended.</p>
-<ol>
+<ul>
 <li>We use a docker image to run psql:</li>
-</ol>
+</ul>
 <div class="codehilite"><pre><span></span>$ <span class="nb">cd</span> scripts
 $ ./startPsql.sh IBMCLOUD
 $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$POSTGRES_PWD</span> psql --host<span class="o">=</span><span class="nv">$HOST</span> --port<span class="o">=</span><span class="nv">$PORT</span> --username<span class="o">=</span><span class="nv">$POSTGRES_USER</span> --dbname<span class="o">=</span><span class="nv">$POSTGRES_DB</span>
 <span class="nv">ibmclouddb</span> <span class="o">=</span>&gt;
 </pre></div>
 
-<ol>
+<ul>
 <li>List relations...</li>
-</ol>
+</ul>
 <div class="codehilite"><pre><span></span><span class="gp">ibmclouddb =&gt;</span> <span class="kp">\d</span>
 </pre></div>
 
-<ol>
+<ul>
 <li>Then create table if not done before:</li>
-</ol>
+</ul>
 <div class="codehilite"><pre><span></span><span class="gp">ibmclouddb =&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">products</span> <span class="p">(</span>
     <span class="n">product_id</span> <span class="nb">varchar</span><span class="p">(</span><span class="mf">64</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">description</span> <span class="nb">varchar</span><span class="p">(</span><span class="mf">100</span><span class="p">),</span>
@@ -1011,9 +1024,9 @@ $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$PO
 <span class="p">);</span>
 </pre></div>
 
-<ol>
+<ul>
 <li>Populate the data:</li>
-</ol>
+</ul>
 <div class="codehilite"><pre><span></span><span class="gp">ibmclouddb =&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">products</span><span class="p">(</span><span class="n">product_id</span><span class="p">,</span><span class="n">description</span><span class="p">,</span><span class="n">target_temperature</span><span class="p">,</span><span class="n">target_humidity_level</span><span class="p">)</span> <span class="k">VALUES</span>
 <span class="p">(</span><span class="s1">&#39;P01&#39;</span><span class="p">,</span><span class="s1">&#39;Carrots&#39;</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">0.4</span><span class="p">),</span>
 <span class="p">(</span><span class="s1">&#39;P02&#39;</span><span class="p">,</span><span class="s1">&#39;Banana&#39;</span><span class="p">,</span><span class="mf">6</span><span class="p">,</span><span class="mf">0.6</span><span class="p">),</span>
@@ -1022,9 +1035,9 @@ $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$PO
 <span class="p">(</span><span class="s1">&#39;P05&#39;</span><span class="p">,</span><span class="s1">&#39;Tomato&#39;</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">0.4</span><span class="p">);</span>
 </pre></div>
 
-<ol>
+<ul>
 <li>List the products</li>
-</ol>
+</ul>
 <div class="codehilite"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">products</span><span class="p">;</span>
 </pre></div>
 
@@ -1037,11 +1050,11 @@ $ <span class="nv">PGPASSWORD</span><span class="o">=</span><span class="nv">$PO
  <span class="n">P04</span>        <span class="o">|</span> <span class="n">Avocado</span>     <span class="o">|</span>                  <span class="mf">6</span> <span class="o">|</span>                   <span class="mf">0.4</span> <span class="o">|</span>            <span class="mf">2</span>
  <span class="n">P05</span>        <span class="o">|</span> <span class="n">Tomato</span>      <span class="o">|</span>                  <span class="mf">6</span> <span class="o">|</span>                   <span class="mf">0.3</span> <span class="o">|</span>            <span class="mf">6</span>
 </pre></div></p>
-<ol>
-<li>Exit the PSQL environment
+<ul>
+<li>Exit the PSQL environment</li>
+</ul>
 <div class="codehilite"><pre><span></span><span class="gp">ibmclouddb =&gt;</span> <span class="kp">\q</span>
-</pre></div></li>
-</ol>
+</pre></div>
                 
                   
                 
