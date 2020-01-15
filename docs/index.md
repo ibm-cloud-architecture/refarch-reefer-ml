@@ -5,12 +5,12 @@ This project aims to demonstrate how to perform real time analytics on data stre
 !!! note
     This project is part of the [reference implementation solution](https://ibm-cloud-architecture.github.io/refarch-kc/) to demonstrate the IBM [event driven reference architecture](https://ibm-cloud-architecture.github.io/refarch-eda) and represents one use case for the [IBM Data, AI and Analytics reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics) but it also presents how to combine different IBM cloud paks to build the solution: Cloud pak for data,  Cloud pak for automation,  Cloud pak for integration and  Cloud pak for application.
 
-The implementation is using two approaches: 
+The implementation is using two different approaches:
 
-* one using open sources mostly from Apache projects 
+* one using open sources mostly from Apache projects
 * one using IBM Cloud Pak products
 
-As we will detail in [next section](#mvp-component-view) there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process. 
+As we will detail in [next section](#mvp-component-view), there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process. 
 
 ![](images/cp-solution-view.png)
 
@@ -18,11 +18,11 @@ As we will detail in [next section](#mvp-component-view) there are five componen
 
 ## Problem statements
 
-The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. 
+The Reefer container is an IoT device, which emits container telemetries every 3 minutes via the MQTT protocol. 
 
 ![Reefer](analyze/images/reefer.png)
 
-We want to detect sensor anomaly and trigger a field engineer dispatch to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
+We want to detect sensor anomaly and trigger a field engineer dispatch job to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone (kafka) for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database (Cassandra or Mongo) or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
 
 Going into this content you will learn the following:
 
@@ -118,5 +118,7 @@ To use Jupyter, Sparks and kubeflow see [this note](analyze/oss-ml-dev.md)
 
 * [Data AI reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/)
 * [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
-* [Romeo Kienzler anomaly detection article 2](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
-* [Romeo Kienzler anomaly detection article 3](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
+* [Romeo Kienzler anomaly detection - Generating data for anomaly detection](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
+* [Romeo Kienzler anomaly detection with Deeplearning4j](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
+* [Romeo Kienzler anomaly detection using Apache SystemML](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-4/)
+* [Romeo Kienzler anomaly detection using Tensoflow and Keras](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-5/)

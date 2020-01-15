@@ -1,4 +1,4 @@
-# Develop the scoring agent with cloud pak for application
+# Develop the scoring agent with Cloud Pak for Application
 
 We have two approaches to build the predictive scoring agent: 
 

@@ -12,14 +12,15 @@ nav:
     - Event Streams environment: environments/event-streams.md
     - MongoDB on IBM Cloud: environments/mongo.md
     - Postgresql on IBM Cloud: environments/postgresql.md
-    - Cloud pak for Data: environments/cp4d.md
+    - Cloud Pak for Data: environments/cp4d.md
   - AI Ladder:
     - Collect:
       - Preparing data for demonstration:
         - Define products reference data: collect/products-postgres.md
         - Generate telemetry data: collect/generate-telemetry.md
+      - Data ingestion and in motion with Cloud Pak for Integration: collect/cp4i-es.md
       - Collect data with open source solution: collect/oss-collect-data.md
-      - Collect data with cloud pak for data: collect/cp4d-collect-data.md
+      - Collect data with Cloud Pak for Data: collect/cp4d-collect-data.md
     - Organize: organize/readme.md
     - Analyze: 
       - Define the anomaly detection scoring model with OSS: analyze/oss-ml-dev.md

@@ -2,11 +2,16 @@
 
 The goal of this approach is to use the following IBM Cloud Paks to develop and deploy the solution. 
 
-The following diagram illustrates the features or components used in each cloud paks to support the implementation.
+The following diagram below, illustrates the features or components used in each cloud paks to support the implementation.
 
 ![](images/cp-approach.png)
 
 The grey components are part of the solution implementation. 
+
+* As part of **Cloud pak for Application**, we are using [Appsody](https://appsody.dev/) to generate the code and the development build, test, deploy for the Reefer simulator done in Python / Flask, and for the scoring app that is a Java Microprofile 3.0 running on Liberty server. The microprofile app is also generated using Appsody and build and deploy. As part of the CI/CD tooling, we use public github (This repository !), with Github action and [Tekton](https://tekton.dev/) for the pipeline deployment. Cloud Pak for Application is deployed on Openshift 4.2
+* **Cloud Pak for Integration** is used to deploy IBM Event Streams, the IBM event backbone based on Apache Kafka. We wrote a lot of [content and best practices around Kafka](https://ibm-cloud-architecture.github.io/refarch-eda/kafka/readme/) in the Event Driven Architecture (EDA) repository. In the EDA reference implementation solution we present other CP4I assets.
+* **Cloud Pak for Automation** is used to define the Field engineer dispatching process, and we deliver the process App for that.
+* Finally **Cloud Pak for Data** is used to support the AI ladder: collecting and govern the data, develop the model, and publish the model as a service.
 
 ## Preparing the different environments
 
@@ -42,13 +47,25 @@ We are presenting how we used the Appsody python template as a based to implemen
 
 ### 7- Scoring microservice as Java Microprofile app
 
+We are detailing in [this note](infuse/dev-scoring.md), how to leverage Appsody, Liberty profile server, Microprofile 3.0 with the new Reactive Messaging to integrate with Kafka.
+
 ### 8- Data Virtualization 
 
+The data management is done using the Data Virtualization, on a remote Mongo DB datasource. We used this approach, to illustrate how easy, it is to define virtual tables, join them to prepare a data set for machine learning work. The Telemetries are saved in a [MongoDB instance provisioned](environments/mongo.md) on the IBM Cloud.  
+
+You can read the detail in [this note](collect/cp4d-collect-data.md).
+
 ### 9- Anomaly detection notebook
+
+[this note](analyze/ws-ml-dev.md)
 
 ### 10- Anomaly detection service
 
 ### 11- Cloud Pak for Automation
 
+To be done. 
+
 ### 12- Reefer Maintenance business process
+
+The reefer maintenance process is explain in [this note](bpm/readme.md).
 
