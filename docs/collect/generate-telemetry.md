@@ -19,6 +19,7 @@ We use [MongoDB as a Service](https://cloud.ibm.com/catalog/services/databases-f
 **IBM Cloud Database**
 
 We have provided the following documented methods for populating the Product database:
+
 1. [Create and save telemetry data with Kubernetes Job running on remote cluster](#create-and-save-telemetry-data-with-kubernetes-job-running-on-remote-cluster) _(RECOMMENDED)_
 2. [Create local telemetry data manually](#create-local-telemetry-data-manually)
 3. [Save local telemetry data to MongoDB](#save-local-telemetry-data-to-mongodb)
@@ -30,29 +31,29 @@ In an effort to keep development systems as clean as possible and speed up deplo
 The predefined job for this task will create the required telemetry data and save it directly to the configured MongoDB database instance. This is the most direct method for telemetry data generation and what is necessary for the "happy path" version of the environment deployment. If you have use case needs that require other locations for data to be saved or transmitted, you can either adapt the Job here or follow the other sections of this document.
 
 1. Utilizing [Databases for MongoDB](https://cloud.ibm.com/catalog/services/databases-for-mongodb) on IBM Cloud, the following Kubernetes Secrets are required to be created from the auto-generated _Service credentials_ in the target namespace:
-   1. `mongodb-url` _(in the format of `hostname-a,hostname-b`, as the endpoint is a paired replica set)_
+    1. `mongodb-url` _(in the format of `hostname-a,hostname-b`, as the endpoint is a paired replica set)_
       ```shell
       kubectl create secret generic mongodb-url --from-literal=binding='1a2...domain.cloud:30796,1a2c....cloud:30796'
       ```
-   2. `mongodb-user`
+    2. `mongodb-user`
       ```shell
       kubectl create secret generic mongodb-user --from-literal=binding='ibm_cloud_...'
       ```
-   3. `mongodb-password`
+    3. `mongodb-pwd`
       ```shell
-      kubectl create secret generic mongodb-password --from-literal=binding='335....223'
+      kubectl create secret generic mongodb-pwd --from-literal=binding='335....223'
       ```
-   4. `mongodb-ca-pem` _(this requires use of the [Cloud Databases CLI Plug-in](https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference) for the IBM Cloud CLI)_
+    4. `mongodb-ca-pem` _(this requires use of the [Cloud Databases CLI Plug-in](https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference) for the IBM Cloud CLI)_
       ```shell
       ibmcloud cdb deployment-cacert [MongoDB on IBM Cloud service instance name] > mongodb.crt
-      kubectl create secret generic postgresql-ca-pem --from-literal=binding="$(cat mongodb.crt)"
+      kubectl create secret generic mongodb-ca-pem --from-literal=binding="$(cat mongodb.crt)"
       ```
 
 2. Review `/scripts/createMongoTelemetryData.yaml` and update **lines 32, 34, 36, or 38** with any additional modifications to the generated telemetry data. Additional rows can be added as needed in the same job execution. The following fields are acceptable inputs:
-   1. `stype` can the `normal`, `poweroff`, `o2sensor`, and `co2sensor`.
-   2. `cid` can be `C01`, `C02`, `C03`, or `C04`.
-   3. `pid` can be `P01`, `P02`, `P03`, or `P04`.
-   4. `records` can be any positive integer (within reason).
+    1. `stype` can the `normal`, `poweroff`, `o2sensor`, and `co2sensor`.
+    2. `cid` can be `C01`, `C02`, `C03`, or `C04`.
+    3. `pid` can be `P01`, `P02`, `P03`, or `P04`.
+    4. `records` can be any positive integer (within reason).
 
 3. Create the `create-telemetry-data` Job from the root of the `refarch-reefer-ml` repository:
 ```shell
@@ -161,7 +162,7 @@ python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype o2sensor --append
 ```
 
-### Save local telemetry data to MongoDB
+## Save local telemetry data to MongoDB
 
 MongoDB is a popular document-based database that allows developers to quickly build projects without worrying about schema. Mongo components include:
 
@@ -171,7 +172,7 @@ MongoDB is a popular document-based database that allows developers to quickly b
 
 We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside Mongodb.
 
-#### Using Mongodb as service on IBM Cloud
+### Using Mongodb as service on IBM Cloud
 
 Create the MongoDB service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as `mongodb://ibm_cloud_e154ff52_ed`) username and password.
 
@@ -183,7 +184,7 @@ Get the TLS certificate as pem file:
 ibmcloud cdb deployment-cacert gse-eda-mongodb > certs/mongodbca.pem
 ```
 
-#### Start python environment
+### Start python environment
 
 Use IBMCLOUD if you use mongodb, postgresql and kafka on cloud, or LOCAL for kafka and postgresql running via docker compose.
 
@@ -215,7 +216,7 @@ See the rest of the code in [ml/data/ToMongo.py](https://github.com/ibm-cloud-ar
 
 We propose two approaches to load data to MongoDB: use created csv file, or run the simulator tool connected to MongoDB.
 
-#### Add data from csv file
+### Add data from csv file
 
 Using the `ToMongo.py` script we can load the data from the `ml/data/telemetries.csv` file to mongodb. In a Terminal window uses the following commmand:
 
@@ -227,7 +228,7 @@ cd ml/data
 python ToMongo.py
 ```
 
-#### Add data using the telemetry repository of the simulator
+### Add data using the telemetry repository of the simulator
 
 Verify your MONGO* environment variables are set according to your created service in the `scriptssetenv.sh` file.
 
@@ -243,7 +244,7 @@ python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000  --stype o2sensor --db
 ```
 
-#### Verify data with mongo CLI
+### Verify data with mongo CLI
 
 To verify the data loaded into the database we use [mongo](https://docs.mongodb.com/manual/installation/) CLI with the following command:
 
