@@ -394,8 +394,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../environments/cp4d/" title="Cloud pak for Data" class="md-nav__link">
-      Cloud pak for Data
+    <a href="../../environments/cp4d/" title="Cloud Pak for Data" class="md-nav__link">
+      Cloud Pak for Data
     </a>
   </li>
 
@@ -497,6 +497,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../collect/cp4i-es/" title="Data ingestion and in motion with Cloud Pak for Integration" class="md-nav__link">
+      Data ingestion and in motion with Cloud Pak for Integration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../collect/oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
       Collect data with open source solution
     </a>
@@ -509,8 +521,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../collect/cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
-      Collect data with cloud pak for data
+    <a href="../../collect/cp4d-collect-data/" title="Collect data with Cloud Pak for Data" class="md-nav__link">
+      Collect data with Cloud Pak for Data
     </a>
   </li>
 
@@ -951,7 +963,7 @@
                   <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/edit/master/docs/infuse/dev-scoring.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="develop-the-scoring-agent-with-cloud-pak-for-application">Develop the scoring agent with cloud pak for application</h1>
+                <h1 id="develop-the-scoring-agent-with-cloud-pak-for-application">Develop the scoring agent with Cloud Pak for Application</h1>
 <p>We have two approaches to build the predictive scoring agent: </p>
 <ol>
 <li>one using a python Flask app listening to telemetry events coming from Kafka, run the predictive scoring within the same app. The model was developed with Jupiter notebook and serialized with <a href="https://docs.python.org/3/library/pickle.html">pickle</a>, so it responds in microseconds and generates anomaly to a second kafka topic. The code is under <code>scoring</code> folder, and uses essentially open source components. See <a href="../oss-scoring-app/">this article</a> to understand how it is built.</li>

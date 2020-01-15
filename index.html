@@ -502,8 +502,8 @@
 
 
   <li class="md-nav__item">
-    <a href="environments/cp4d/" title="Cloud pak for Data" class="md-nav__link">
-      Cloud pak for Data
+    <a href="environments/cp4d/" title="Cloud Pak for Data" class="md-nav__link">
+      Cloud Pak for Data
     </a>
   </li>
 
@@ -605,6 +605,18 @@
 
 
   <li class="md-nav__item">
+    <a href="collect/cp4i-es/" title="Data ingestion and in motion with Cloud Pak for Integration" class="md-nav__link">
+      Data ingestion and in motion with Cloud Pak for Integration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="collect/oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
       Collect data with open source solution
     </a>
@@ -617,8 +629,8 @@
 
 
   <li class="md-nav__item">
-    <a href="collect/cp4d-collect-data/" title="Collect data with cloud pak for data" class="md-nav__link">
-      Collect data with cloud pak for data
+    <a href="collect/cp4d-collect-data/" title="Collect data with Cloud Pak for Data" class="md-nav__link">
+      Collect data with Cloud Pak for Data
     </a>
   </li>
 
@@ -1065,18 +1077,18 @@
 <p class="admonition-title">Note</p>
 <p>This project is part of the <a href="https://ibm-cloud-architecture.github.io/refarch-kc/">reference implementation solution</a> to demonstrate the IBM <a href="https://ibm-cloud-architecture.github.io/refarch-eda">event driven reference architecture</a> and represents one use case for the <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics">IBM Data, AI and Analytics reference architecture</a> but it also presents how to combine different IBM cloud paks to build the solution: Cloud pak for data,  Cloud pak for automation,  Cloud pak for integration and  Cloud pak for application.</p>
 </div>
-<p>The implementation is using two approaches: </p>
+<p>The implementation is using two different approaches:</p>
 <ul>
-<li>one using open sources mostly from Apache projects </li>
+<li>one using open sources mostly from Apache projects</li>
 <li>one using IBM Cloud Pak products</li>
 </ul>
-<p>As we will detail in <a href="#mvp-component-view">next section</a> there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process. </p>
+<p>As we will detail in <a href="#mvp-component-view">next section</a>, there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process. </p>
 <p><img alt="" src="images/cp-solution-view.png" /></p>
 <p><em>The open source version integrate the model and the agent, so components 4 and 5 are integrated into the same process.</em></p>
 <h2 id="problem-statements">Problem statements</h2>
-<p>The Reefer container is an IoT device, which emits container telemetries every 10 minutes via the MQTT protocol. </p>
+<p>The Reefer container is an IoT device, which emits container telemetries every 3 minutes via the MQTT protocol. </p>
 <p><img alt="Reefer" src="analyze/images/reefer.png" /></p>
-<p>We want to detect sensor anomaly and trigger a field engineer dispatch to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database or an object storage like <a href="https://docs.ceph.com/docs/master/">Ceph</a>.  </p>
+<p>We want to detect sensor anomaly and trigger a field engineer dispatch job to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone (kafka) for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database (Cassandra or Mongo) or an object storage like <a href="https://docs.ceph.com/docs/master/">Ceph</a>.  </p>
 <p>Going into this content you will learn the following:</p>
 <ul>
 <li>how to apply anomaly detection on telemetry data using Waston Studio or Jupiter notebook and python library</li>
@@ -1143,8 +1155,10 @@
 <ul>
 <li><a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/">Data AI reference architecture</a></li>
 <li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1">Romeo Kienzler anomaly detection article 1</a></li>
-<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2">Romeo Kienzler anomaly detection article 2</a></li>
-<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/">Romeo Kienzler anomaly detection article 3</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2">Romeo Kienzler anomaly detection - Generating data for anomaly detection</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/">Romeo Kienzler anomaly detection with Deeplearning4j</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-4/">Romeo Kienzler anomaly detection using Apache SystemML</a></li>
+<li><a href="https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-5/">Romeo Kienzler anomaly detection using Tensoflow and Keras</a></li>
 </ul>
                 
                   

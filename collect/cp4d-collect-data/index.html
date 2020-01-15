@@ -36,7 +36,7 @@
     
     
       
-        <title>Collect data with cloud pak for data - Reefer Container Predictive Maintenance</title>
+        <title>Collect data with Cloud Pak for Data - Reefer Container Predictive Maintenance</title>
       
     
     
@@ -121,7 +121,7 @@
               Reefer Container Predictive Maintenance
             </span>
             <span class="md-header-nav__topic">
-              Collect data with cloud pak for data
+              Collect data with Cloud Pak for Data
             </span>
           
         </div>
@@ -394,8 +394,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../environments/cp4d/" title="Cloud pak for Data" class="md-nav__link">
-      Cloud pak for Data
+    <a href="../../environments/cp4d/" title="Cloud Pak for Data" class="md-nav__link">
+      Cloud Pak for Data
     </a>
   </li>
 
@@ -501,6 +501,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../cp4i-es/" title="Data ingestion and in motion with Cloud Pak for Integration" class="md-nav__link">
+      Data ingestion and in motion with Cloud Pak for Integration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../oss-collect-data/" title="Collect data with open source solution" class="md-nav__link">
       Collect data with open source solution
     </a>
@@ -522,11 +534,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Collect data with cloud pak for data
+        Collect data with Cloud Pak for Data
       </label>
     
-    <a href="./" title="Collect data with cloud pak for data" class="md-nav__link md-nav__link--active">
-      Collect data with cloud pak for data
+    <a href="./" title="Collect data with Cloud Pak for Data" class="md-nav__link md-nav__link--active">
+      Collect data with Cloud Pak for Data
     </a>
     
       
@@ -540,6 +552,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#define-connection" title="Define connection" class="md-nav__link">
+    Define connection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-a-new-project" title="Create a new project" class="md-nav__link">
     Create a new project
   </a>
@@ -549,6 +568,13 @@
         <li class="md-nav__item">
   <a href="#data-virtualization" title="Data Virtualization" class="md-nav__link">
     Data Virtualization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-joined-view" title="Create a joined view" class="md-nav__link">
+    Create a joined view
   </a>
   
 </li>
@@ -907,6 +933,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#define-connection" title="Define connection" class="md-nav__link">
+    Define connection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-a-new-project" title="Create a new project" class="md-nav__link">
     Create a new project
   </a>
@@ -916,6 +949,13 @@
         <li class="md-nav__item">
   <a href="#data-virtualization" title="Data Virtualization" class="md-nav__link">
     Data Virtualization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-joined-view" title="Create a joined view" class="md-nav__link">
+    Create a joined view
   </a>
   
 </li>
@@ -941,27 +981,23 @@
                 
                 <h1 id="ibm-cloud-pak-for-data-data-collection">IBM Cloud Pak for Data: data collection</h1>
 <p>To develop the anomaly predictive service we first need to access the data. We have two datasources in this example: the product information and the telemetries data coming from the different Reefer Containers. With the telemetries we should be able to assess anomaly. The Telemetries are saved to a noSQL database. We are using MongoDB on IBM Cloud.</p>
-<h2 id="create-a-new-project">Create a new project</h2>
-<p>Once logged into Cloud Pak for Data, create a new project. From the main page select the project view: </p>
-<p><img alt="" src="../images/create-project-0.png" /></p>
-<p>and then new project, and select <code>analytics</code>:</p>
-<p><img alt="" src="../images/create-project-1.png" /></p>
-<p>Select an empty project: </p>
-<p><img alt="" src="../images/create-project-2.png" /></p>
-<p>Enter basic information about your project</p>
-<p><img alt="" src="../images/create-project-3.png" /></p>
-<p>The result is the access to the main project page:</p>
-<p><img alt="" src="../images/create-project-4.png" /></p>
-<p>Now we need to define data source...</p>
-<h2 id="data-virtualization">Data Virtualization</h2>
-<p>To do not copy or move the data, we can add <code>Data virtualization</code> to a remote data source. 
-First we need to get the connection information for the MongoDB database. </p>
+<p>Here is an example of telemetry documents save into Mongodb</p>
+<p><img alt="" src="../images/telemetry-mongo.png" /></p>
+<p>It is important to note that the Json document has sensors document embedded. They will be mapp to different tables.</p>
+<p>As part of the Cloud Pak for data data governance capability,a user with data engineer role can do the following:</p>
+<ul>
+<li>Define one to many connections to the remote different data sources</li>
+<li>Create virtual assets to materialize tables and views from the different data sources</li>
+<li>Assign an asset to an exisint project or a data request (governance object to ask to access data)</li>
+</ul>
+<h2 id="define-connection">Define connection</h2>
+<p>First we need to get the connection information for the MongoDB database. </p>
 <ul>
 <li>Going to the IBM Cloud account, under the Services resource, select the mongo instance:</li>
 </ul>
 <p><img alt="" src="../images/ibm-cloud-res-mongo.png" /></p>
 <ul>
-<li>get the information about the data connection.</li>
+<li>Get the information about the data connection.</li>
 </ul>
 <p><img alt="" src="../images/mongo-connection.png" /></p>
 <ul>
@@ -973,9 +1009,40 @@ ibmcloud target -g gse-eda
 ibmcloud cdb deployment-cacert gse-eda-mongodb &gt; certs/mongodbca.pem
 </pre></div>
 
-<p>Back to Cloud pak for data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:</p>
+<p>Back to Cloud pak for Data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:</p>
 <p><img alt="" src="../images/add-connection.png" /></p>
+<p>. Virtualization can help automatically group tables, so it simplify to group different data elements into a single schema.</p>
 <p>Once define a Data scientist use this connection in the Collect menu to define a new <code>Data virtualization</code> definition to discover the telemetries data.</p>
+<h2 id="create-a-new-project">Create a new project</h2>
+<p>Once logged into Cloud Pak for Data, create a new project. A project is a collection of assets the analytics team work on. It can include data assets and Notebooks, RStudio files
+Models, scripts...</p>
+<p>From the main page select the project view:</p>
+<p><img alt="" src="../images/create-project-0.png" /></p>
+<p>and then new project, and select <code>analytics</code>:</p>
+<p><img alt="" src="../images/create-project-1.png" /></p>
+<p>Select an empty project:</p>
+<p><img alt="" src="../images/create-project-2.png" /></p>
+<p>Enter basic information about your project</p>
+<p><img alt="" src="../images/create-project-3.png" /></p>
+<p>The result is the access to the main project page:</p>
+<p><img alt="" src="../images/create-project-4.png" /></p>
+<p>Now we need to define data assets into our project...</p>
+<h2 id="data-virtualization">Data Virtualization</h2>
+<p>As introduced in <a href="https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/architecture/collect-org-data/">this paragraph</a>, we want to use data virtualization to access the historical telemetries records. The data engineer uses the <code>Data virtualization</code> capability to search for existing tables and add the tables he wants in the <code>cart</code>. For that, he uses the <code>Virtualize</code> menu </p>
+<p><img alt="" src="../images/virtualize-1.png" /></p>
+<p>and then selects mongodb in the <code>Filters</code> column and may be apply some search on specific database name. </p>
+<p><img alt="" src="../images/virtualization.png" /></p>
+<p>Once done, he selects the expected tables and then use <code>Add to cart</code> link. It is important to note that we have two tables to match the telemetry json document and the sensors sub json document.</p>
+<p>The next step is to assign them to a project:</p>
+<p><img alt="" src="../images/virtualize-tables.png" /></p>
+<h2 id="create-a-joined-view">Create a joined view</h2>
+<p>We need to join the telemetries and the sensors data into the same table, to flatten the records. As there is 1 to 1 relationship as of now.
+In the Data Virtualization, a data steward selects <code>My Virutalized data</code>, and then 
+select TELEMETRIES and TELEMETRY_SENSORS tables, then the <code>Join view</code>. Within this new panel, he needs to create a join key, by drag the <code>TELEMETRICS_ID</code> and <code>_ID</code> together:</p>
+<p><img alt="" src="../images/join-tables.png" /></p>
+<p>Once joined and the view is created, he can get those new assets as part of his project.</p>
+<p><img alt="" src="../images/telemetries-asset.png" /></p>
+<p>Next is to start working within a notebook <a href="../../analyze/ws-ml-dev/">&rarr; Next &rarr;</a></p>
                 
                   
                 
