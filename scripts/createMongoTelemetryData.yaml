@@ -67,11 +67,11 @@ spec:
               name: "mongodb-user"
               key: binding
         # Available from the 'Service Credentials' tab on IBM Cloud.
-        # oc create secret generic mongodb-password --from-literal=binding='335....223'
+        # oc create secret generic mongodb-pwd --from-literal=binding='335....223'
         - name: MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: "mongodb-password"
+              name: "mongodb-pwd"
               key: binding
         # Default database name which does not typically need to be changed.
         - name: MONGO_DATABASE
@@ -87,7 +87,7 @@ spec:
          # You MUST create this secret with the MongoDB CA PEM certificate in advance. Examples below:
          # First, download the pem certificate using the IBM Cloud DB CLI.
          # 1.  ibmcloud cdb deployment-cacert $IC_MONGODB_SERV > mongodb.crt
-         # 2.  oc create secret generic postgresql-ca-pem --from-literal=binding="$(cat mongodb.crt)"
+         # 2.  oc create secret generic mongodb-ca-pem --from-literal=binding="$(cat mongodb.crt)"
          - name: mongodb-ca-pem
            secret:
              secretName: "mongodb-ca-pem"
