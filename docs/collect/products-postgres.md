@@ -3,11 +3,11 @@
 The Simulator references product data stored in a Postgresql database.  There are multiple ways to populate this database depending on your level of experience with Postgresql, database services, and your local development environment.
 
 We have provided the following documented methods for populating the Product database:
-1. [Kubernetes Job running remote cluster](#kubernetes-job-running-remote-cluster) _(RECOMMENDED)_
+1. [Kubernetes Job running on remote cluster](#kubernetes-job-running-on-remote-cluster) _(RECOMMENDED)_
 2. [Docker image running on local machine](#docker-image-running-on-local-machine)
 3. [Postgresql CLI (psql) running on local machine](#postgresql-cli-psql-running-on-local-machine)
 
-## Kubernetes Job running remote cluster
+## Kubernetes Job running on remote cluster
 
 In an effort to keep development systems as clean as possible and speed up deployment of various scenarios, our deployment tasks have been encapsulated in [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/). These are runnable on any Kubernetes platform, including OpenShift.
 

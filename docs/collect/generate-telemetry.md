@@ -2,23 +2,69 @@
 
 We are using the simulator to generate data. In the industry, when developing new manufactured product, the engineers do not have a lot of data so they also use a mix of real sensors with simulators to create fake but realistic data to develop and test their models.
 
-The historical data need to represent failure, and represent the characteristics of a Reefer container. We have defined some sensors to get interesting correlated or independant features.
+The historical data need to represent failure and represent the characteristics of a Reefer container. We have defined some sensors to get interesting correlated or independent features.
 
-As of now our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema/reefer_telemetry_value.avsc).
+As of now, our telemetry event structure can be seen in this [avro schema](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/data_schema/reefer_telemetry_value.avsc).
 
-For the machine learning environment we can use csv file or mongodb database or kafka topic as data source.  The data generation environment looks like in the figure below:
+For the machine learning environment we can use a csv file or mongodb database or kafka topic as data source.  The data generation environment looks like in the figure below:
 
 ![Data collection Simulation](images/data-collect.png)
 **Figure 1: Data collection Simulation**
 
 The simulator can run as a standalone tool (1) to create training and test data to be saved in a remote mongodb database or can be used to save to csv file. when it runs to simulate reefer container telemetry generation (2), it creates events to Kafka topic, and a stream application can save telemetry records to MongoDB too.
 
-We use [mongodb as a service](https://cloud.ibm.com/catalog?category=databases) on IBM cloud.
+We use [MongoDB as a Service](https://cloud.ibm.com/catalog/services/databases-for-mongodb) on [IBM Cloud](https://cloud.ibm.com/catalog?category=databases) in our reference implementations.
 
 ![IBM Cloud Database](../environments/images/ibm-cloud-dbs.png)
 **IBM Cloud Database**
 
-## Isolated python environment
+We have provided the following documented methods for populating the Product database:
+1. [Create and save telemetry data with Kubernetes Job running on remote cluster](#create-and-save-telemetry-data-with-kubernetes-job-running-on-remote-cluster) _(RECOMMENDED)_
+2. [Create local telemetry data manually](#create-local-telemetry-data-manually)
+3. [Save local telemetry data to MongoDB](#save-local-telemetry-data-to-mongodb)
+
+## Create and save telemetry data with Kubernetes Job running on remote cluster
+
+In an effort to keep development systems as clean as possible and speed up deployment of various scenarios, our deployment tasks have been encapsulated in [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/). These are runnable on any Kubernetes platform, including OpenShift.
+
+The predefined job for this task will create the required telemetry data and save it directly to the configured MongoDB database instance. This is the most direct method for telemetry data generation and what is necessary for the "happy path" version of the environment deployment. If you have use case needs that require other locations for data to be saved or transmitted, you can either adapt the Job here or follow the other sections of this document.
+
+1. Utilizing [Databases for MongoDB](https://cloud.ibm.com/catalog/services/databases-for-mongodb) on IBM Cloud, the following Kubernetes Secrets are required to be created from the auto-generated _Service credentials_ in the target namespace:
+   1. `mongodb-url` _(in the format of `hostname-a,hostname-b`, as the endpoint is a paired replica set)_
+      ```shell
+      kubectl create secret generic mongodb-url --from-literal=binding='1a2...domain.cloud:30796,1a2c....cloud:30796'
+      ```
+   2. `mongodb-user`
+      ```shell
+      kubectl create secret generic mongodb-user --from-literal=binding='ibm_cloud_...'
+      ```
+   3. `mongodb-password`
+      ```shell
+      kubectl create secret generic mongodb-password --from-literal=binding='335....223'
+      ```
+   4. `mongodb-ca-pem` _(this requires use of the [Cloud Databases CLI Plug-in](https://cloud.ibm.com/docs/databases-cli-plugin?topic=cloud-databases-cli-cdb-reference) for the IBM Cloud CLI)_
+      ```shell
+      ibmcloud cdb deployment-cacert [MongoDB on IBM Cloud service instance name] > mongodb.crt
+      kubectl create secret generic postgresql-ca-pem --from-literal=binding="$(cat mongodb.crt)"
+      ```
+
+2. Review `/scripts/createMongoTelemetryData.yaml` and update **lines 32, 34, 36, or 38** with any additional modifications to the generated telemetry data. Additional rows can be added as needed in the same job execution. The following fields are acceptable inputs:
+   1. `stype` can the `normal`, `poweroff`, `o2sensor`, and `co2sensor`.
+   2. `cid` can be `C01`, `C02`, `C03`, or `C04`.
+   3. `pid` can be `P01`, `P02`, `P03`, or `P04`.
+   4. `records` can be any positive integer (within reason).
+
+3. Create the `create-telemetry-data` Job from the root of the `refarch-reefer-ml` repository:
+```shell
+kubectl apply -f scripts/createMongoTelemetryData.yaml
+```
+
+4. You can tail the created pod's output to see the progress of the database initialization:
+```shell
+kubectl logs -f --selector=job-name=create-telemetry-data
+```
+
+## Create local telemetry data manually
 
 If not done yet, you can use our docker image to get an isolated python environment. For that do the following preparation steps:
 
@@ -33,9 +79,9 @@ ibmcase/python                                  latest                 a89153c0e
 
 The dockerfile installed the needed dependencies and use pipenv. Also we preset the PYTHONPATH environment variable to `/home` to specify where python should find the application specifics modules.
 
-## Generate data as csv file
+### Generate data as csv file
 
-### Start the python environment
+#### Start the python environment
 
 From the docker image created before, use the provided script as:
 
@@ -44,7 +90,7 @@ From the docker image created before, use the provided script as:
 ./startPythonEnv.sh
 ```
 
-### Generate power off metrics
+#### Generate power off metrics
 
 When a reefer container loses power, restart and reloose it, it may become an issue. This is the goal of this simulation.
 
@@ -101,7 +147,7 @@ wc -l telemetries.csv
 2001 telemetries.csv
 ```
 
-### Generate Co2 sensor malfunction in same file
+#### Generate Co2 sensor malfunction in same file
 
 In the same way as above the simulator can generate data for Co2 sensor malfunction using the command:
 
@@ -109,13 +155,13 @@ In the same way as above the simulator can generate data for Co2 sensor malfunct
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype co2sensor --append
 ```
 
-### Generate O2 sensor malfunction in same file
+#### Generate O2 sensor malfunction in same file
 
 ```shell
 python simulator/reefer_simulator_tool.py --cid C03 --product_id P02 --records 1000 --file basedata --stype o2sensor --append
 ```
 
-## Saving to Mongodb
+### Save local telemetry data to MongoDB
 
 MongoDB is a popular document-based database that allows developers to quickly build projects without worrying about schema. Mongo components include:
 
@@ -125,7 +171,7 @@ MongoDB is a popular document-based database that allows developers to quickly b
 
 We propose to persist telemetry for a long time period. For example we can configure Kafka topic to persist telemetries over a period of 20 days, but have another component to continuously move events as JSON documents inside Mongodb.
 
-### Using Mongodb as service on IBM Cloud
+#### Using Mongodb as service on IBM Cloud
 
 Create the MongoDB service on IBM cloud using default configuration and add a service credentials to get the mongodb.composed url: (something starting as `mongodb://ibm_cloud_e154ff52_ed`) username and password.
 
@@ -206,7 +252,7 @@ To verify the data loaded into the database we use [mongo](https://docs.mongodb.
 mongo -u $USERNAME -p $PASSWORD --tls --tlsCAFile mongodb.pem --authenticationDatabase admin --host replset/1a2ce8ca-<>.bn<>c0.databases.appdomain.cloud:30796 --tlsAllowInvalidCertificates
 ```
 
-*The full host name is masked*. 
+*The full host name is masked*.
 
 The USERNAME and PASSWORD are environment variables you set from the IBM Cloud service credentials. Something like:
 
@@ -257,7 +303,7 @@ $ oc get pods
 NAME                                         READY     STATUS             RESTARTS   AGE
 mongodb-36-centos7-1-wcn7h                   1/1       Running            0          4d
 
-$ oc rsh mongodb-36-centos7-1-wcn7h 
+$ oc rsh mongodb-36-centos7-1-wcn7h
 bash-4.2$ mongo -u $MONGODB_USER -p $MONGODB_PASSWORD $MONGODB_DATABASE
 MongoDB shell version: 2.4.9
 connecting to: reeferdb
