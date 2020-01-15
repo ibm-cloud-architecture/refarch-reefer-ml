@@ -120,7 +120,7 @@ public class ScoringClient {
         
         WebTarget targetResource = client.target(endPointURL + predictionURL);
         ScoringTelemetry sc = new ScoringTelemetry(t);
-        Entity<String> entity = Entity.(parser.toJson(sc)); 
+        Entity<String> entity = Entity.json(parser.toJson(sc));
         
         Response  rep = targetResource.request().header("Content-Type", APPLICATION_JSON)
             .header("Authorization", "Bearer " + mlToken)

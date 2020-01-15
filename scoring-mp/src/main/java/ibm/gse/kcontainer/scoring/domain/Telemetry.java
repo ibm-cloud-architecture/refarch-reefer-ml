@@ -140,4 +140,23 @@ public class Telemetry {
     public void setFan_3(boolean fan_3) {
         this.fan_3 = fan_3;
     }
+
+    public String toString(){
+        return "{" +
+        "temperature=" + this.temperature +
+        " target_temperature=" + this.target_temperature +
+        " ambiant_temperature=" + this.ambiant_temperature +
+        " kilowatts=" + this.kilowatts +
+        " time_door_open=" + this.time_door_open +
+        " content_type=" + this.content_type +
+        " defrost_cycle=" + this.defrost_cycle +
+        " oxygen_level=" + this.oxygen_level +
+        " nitrogen_level=" + this.nitrogen_level +
+        " humidity_level=" + this.humidity_level +
+        " target_humidity_level=" + this.target_humidity_level +
+        " carbon_dioxide_level=" + this.carbon_dioxide_level +
+        " fan_1=" + this.fan_1 +
+        " fan_2=" + this.fan_2 +
+        " fan_3=" + this.fan_3 + "}" ;
+    }
 }

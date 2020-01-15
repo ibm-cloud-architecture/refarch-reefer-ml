@@ -5,40 +5,27 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!--APPSODY required parent POM
-    <parent>
+    <parent><!--required parent POM-->
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile</artifactId>
         <version>[0.2, 0.3)</version>
         <relativePath/>
     </parent>
 
-    <groupId>dev.appsody.starter.java-microprofile</groupId> -->
-    <groupId>com.ibm.gse.eda</groupId>
+    <groupId>dev.appsody.starter.java-microprofile</groupId>
     <artifactId>starter-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <!-- Added to compile withouth appsody -->
     <properties>
         <openliberty.maven.version>3.1</openliberty.maven.version>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
         <openliberty.version>[19.0.0.9,)</openliberty.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- The below were set since they are apparently inherited from appsody -->
-        <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
-        <version.maven-surefire-plugin>3.0.0-M4</version.maven-surefire-plugin>
-        <version.maven-failsafe-plugin>3.0.0-M4</version.maven-failsafe-plugin>
     </properties>
 
     <dependencies>
-        <!-- APPSODY
-        <dependency>
-            <groupId>io.openliberty.features</groupId>
-            <artifactId>microProfile-3.0</artifactId>
-            <type>esa</type>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
@@ -46,8 +33,17 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-    <!-- Added to compile withouth appsody -->
-        <!-- ADDED TO GET REACTIVE MESSAGING TO WORK -->
+        <!-- Open Liberty Features -->
+       <!--  <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>microProfile-3.2</artifactId>
+            <version>19.0.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>mpReactiveMessaging-1.0</artifactId>
+            <version>19.0.0.12</version>
+        </dependency> -->
         <dependency>
             <groupId>org.eclipse.microprofile.reactive.messaging</groupId>
             <artifactId>microprofile-reactive-messaging-api</artifactId>
@@ -63,7 +59,6 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.25</version>
         </dependency>
-        <!-- ADDED TO GET REACTIVE MESSAGING TO WORK -->
         <!-- For tests -->
         <dependency>
             <groupId>junit</groupId>
