@@ -19,7 +19,7 @@ metadata:
     stack.appsody.dev/version: 0.1.6
   name: reefer-simulator
 spec:
-  applicationImage: ibmcase/kcontainer-reefer-simulator:appsody-v2
+  applicationImage: ibmcase/kcontainer-reefer-simulator-appsody:0.1.21
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
