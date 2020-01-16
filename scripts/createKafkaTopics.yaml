@@ -20,6 +20,8 @@ spec:
               echo "-----------------------------------------------------------------"
               echo
 
+              # To skip specific topics, lines can be delete or commented out with the '#' character below.
+              # To add additional topics, add a newline and the desired name of the topic (keeping in mind the prefix to be applied)
               TOPICS=(
                 allocated-orders
                 bluewaterContainer
