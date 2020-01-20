@@ -41,11 +41,11 @@ See also the reference architecture [article for application modernization](http
 
 ### 6- Reefer simulator as Appsody Python
 
-We are presenting how we used the Appsody python template as a based to implement the Reefer simulator combined with other python development best practices, in [this note](infuse/simul-app.md).
+We are presenting how we used the [Appsody](https://appsody.dev) Python template as a base to implement the Reefer Simulator, combined with other Python development best practices in [this note](infuse/simul-app.md).
 
 ### 7- Scoring microservice as Java Microprofile app
 
-We are detailing in [this note](infuse/dev-scoring.md), how to leverage Appsody, Liberty profile server, Microprofile 3.0 with the new Reactive Messaging to integrate with Kafka.
+We are detailing how to leverage the Liberty profile server and MicroProfile 3.0 with the new Reactive Messaging to integrate with Kafka in [this note](infuse/dev-scoring.md).
 
 ### 8- Data Virtualization
 

@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-source-reefer-ml
+spec:
+  params:
+  - name: revision
+    value: master
+  - name: url
+    value: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
+  type: git

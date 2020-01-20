@@ -1,0 +1,29 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: eda-sandbox-user-full-access
+  namespace: eda-sandbox
+rules:
+- apiGroups: ["", "extensions", "apps", "autoscaling", "appsody.dev", "rbac.authorization.k8s.io"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  - cronjobs
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: eda-sandbox-user-full-access-binding
+  namespace: eda-sandbox
+subjects:
+- kind: ServiceAccount
+  name: reefer-simulator
+  namespace: eda-sandbox
+roleRef:
+  kind: Role
+  name: eda-sandbox-user-full-access
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  generateName: appsody-deploy-pipeline-run-
+  annotations:
+  labels:
+    app: tekton-app
+    tekton.dev/pipeline: appsody-deploy-pipeline
+spec:
+  serviceAccount: reefer-simulator
+  pipelineRef:
+    name: appsody-deploy-pipeline
+  resources:
+  - name: git-source
+    resourceRef:
+      name: git-source-reefer-ml
+  params:
+  - name: context
+    value: simulator

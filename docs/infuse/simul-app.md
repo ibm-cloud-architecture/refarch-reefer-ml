@@ -1,17 +1,17 @@
 # The Simulator as web app
 
-The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation to run and to produce Reefer telemetry events to kafka `reeferTelemetry` topic. 
+The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation to run and to produce Reefer telemetry events to kafka `reeferTelemetry` topic.
 
 !!! What_to_learn
-    In this article we shortly present the design and implementation approaches used for this application, as well as how to use appsody to jumpstart the implementation, and continously run and debug the application. We are presenting some best practice on TDD with python.
+    In this article we shortly present the design and implementation approaches used for this application, as well as how to use [Appsody](https://appsody.dev) to jumpstart the implementation, and continously run and debug the application. We are presenting some best practice on TDD with python.
 
 ## Requirements: Job Stories
 
-The simulator is not in the critical path for production like component. It is here to help us develop the other components of the solution as we do not have real life Reefer container. To try something different, we are not using user stories to present what the simulator should do but we are using [job stories](https://jtbd.info/replacing-the-user-story-with-the-job-story-af7cdee10c27). 
+The simulator is not in the critical path for production like component. It is here to help us develop the other components of the solution as we do not have real life Reefer container. To try something different, we are not using user stories to present what the simulator should do but we are using [job stories](https://jtbd.info/replacing-the-user-story-with-the-job-story-af7cdee10c27).
 
 1. when I want to generate mockup telemetries data for my data scientist friend, I want to start the simulator tool from command line so I can get a csv file with data
 1. when I want to generate mockup telemetries data for my data scientist friend, I want to be able to simulate co2 sensor, o2 sensor and power sensor issue so I can get relevant data for the machine learning model to make sense
-1. when I want to generate mockup telemetries data for my data scientist friend, I want to start the simulator tool from command line using parameter so I can get save data to a remote document oriented database: mongodb on IBM cloud. 
+1. when I want to generate mockup telemetries data for my data scientist friend, I want to start the simulator tool from command line using parameter so I can get save data to a remote document oriented database: mongodb on IBM cloud.
 1. when I want to demonstrate the solution, I want to call a REST api to control the generation of faulty sensor data so I can get the scoring service returning maintenance needed.
 
 The simulator needs to integrate with kafka / event stream deployed as service on the cloud or on-premise on openshift.
@@ -45,7 +45,7 @@ Flask is mono threaded so it fits well in a simple web application for developme
 
 The application is built using [Appsody](https://appsody.dev) as the developer experience tooling. The [Appsody CLI](https://appsody.dev/docs/getting-started/installation) is required locally to build and deploy the application properly.
 
-The app is done using Flask, and the code is generated using `appsody init python-flask` command with the Python Flask appsody stack and template.  
+The app is done using Flask, and the code is generated using `appsody init python-flask` command with the Python Flask appsody stack and template.
 
 ![Appsody components](images/appsody-concept.png)
 
@@ -53,7 +53,7 @@ Appsody helps developer to do not worry about the details of k8s deployment and 
 
 We recommend reading [the Python Flask Appsody Stack git hub repo](https://github.com/appsody/stacks/tree/master/incubator/python-flask) to get familiar with appsody python stack.
 
-This stack is defining the Flask application, and import the 'userapp' where the application code resides, then use blueprints to define health and metrics APIs: 
+This stack is defining the Flask application, and import the 'userapp' where the application code resides, then use blueprints to define health and metrics APIs:
 
 ```python
 from flask import Flask
@@ -83,14 +83,14 @@ ENV FLASK_APP=server/__init__.py
 Looking at the content of the final docker container running the application we can see this structure:
 ```
 /project
-|-- Dockerfile  
-    Pipfile  
-    Pipfile.lock  
-    constraints.txt  
+|-- Dockerfile
+    Pipfile
+    Pipfile.lock
+    constraints.txt
     requirements.txt
-    deps/    
+    deps/
     server/
-    test/  
+    test/
     userapp/
 ```
 
@@ -101,7 +101,7 @@ from userapp.api.controller import control_blueprint
 app.register_blueprint(control_blueprint)
 ```
 
-To define the API, we use [Flasgger](https://github.com/flasgger/flasgger) as an extension to Flask to extract [Open API specification](https://swagger.io/docs/specification/about/) from the code. It comes with Swagger UI, so we can see the API documentation of the microservice at the URL `/apidocs`.  It can also validate the data according to the schema defined. 
+To define the API, we use [Flasgger](https://github.com/flasgger/flasgger) as an extension to Flask to extract [Open API specification](https://swagger.io/docs/specification/about/) from the code. It comes with Swagger UI, so we can see the API documentation of the microservice at the URL `/apidocs`.  It can also validate the data according to the schema defined.
 
 For the POST /control we define the using Swagger 2.0 the API in a separate file: `api/controlapi.yml` and import it at the method level to support the POSt operation. This method is defined in its blueprint as a REST resource. The code [controller.py](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/api/controller.py) is under `api` folder.
 
@@ -143,14 +143,14 @@ Kafka options are:
 
 ### Unit test the Simulator
 
-The test coverage is not yet great. To run the test use `appsody test`. 
+The test coverage is not yet great. To run the test use `appsody test`.
 
 ```
 cd simulator
 ./startPythonEnv
 root@1de81b16f940:/# export PYTHONPATH=/home/simulator
 root@1de81b16f940:/# cd /home/simulator
-root@1de81b16f940:/# python tests/unit/TestSimulator.py 
+root@1de81b16f940:/# python tests/unit/TestSimulator.py
 ```
 
 ### Functional testing
@@ -164,9 +164,9 @@ root@1de81b16f940:/# python tests/unit/TestSimulator.py
   * A `Secret` named `eventstreams-api-key` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-api-key_1)**
   * A `Secret` named `eventstreams-cert-pem` _(if connecting to an on-premise version of IBM Event Streams)_ **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-certificates)**
 
-1. Once those elements are defined it is important to configure the app so it can retrieve those information via environment variables. With Appsody the file `appsody-config.yaml` is supporting these configurations. See the [lines 24 to 40](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/fa5001d89d70bd200c6aef5ee9cee3c5bf9b9fbc/simulator/app-deploy.yaml#L24) to get the settings to map environment variables to config maps or secrets. 
+1. Once those elements are defined it is important to configure the app so it can retrieve those information via environment variables. With Appsody the file `appsody-config.yaml` is supporting these configurations. See the [lines 24 to 40](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/app-deploy.yaml#L24-L40) to get the settings to map environment variables to Config Maps or Secrets.
 
-When using TSL connection, the TLS certificate is mounted inside the container via mounted file system. Inside the container the directory will be `/certs` and the volume is in fact a secret containing the pem certificate as string.
+When using TLS connection, the TLS certificate is mounted inside the container via mounted file system. Inside the container the directory will be `/certs` and the volume is in fact a Secret containing the pem certificate as string.
 
 ```yaml
 volumeMounts:
@@ -177,7 +177,6 @@ volumeMounts:
     secret:
       optional: true
       secretName: eventstreams-cert-pem
-
 ```
 
 ## Build
@@ -201,7 +200,7 @@ oc login --token=rR.... --server=https://api.green.ocp.csplab.local:6443
 appsody deploy -t ibmcase/kcontainer-reefer-simulator:appsody-v1 --namespace eda-sandbox --no-build
 ```
 
-You can verify the deployment with the CLI 
+You can verify the deployment with the CLI
 ```
 oc get pods
 ```
@@ -210,7 +209,7 @@ or the via the Openshift console:
 
 ![](images/simul-app-ocp.png)
 
-* To make the webapp visible externally to the cluster, you need to add a `route` for this deployment. Login to the admin console and use `Create Route` button on top right of the screen, 
+* To make the webapp visible externally to the cluster, you need to add a `route` for this deployment. Login to the admin console and use `Create Route` button on top right of the screen,
 
 ![](images/create-routes.png)
 
