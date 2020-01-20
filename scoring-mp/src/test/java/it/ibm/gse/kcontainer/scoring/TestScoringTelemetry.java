@@ -30,7 +30,6 @@ public class TestScoringTelemetry {
 	   telemetryEvent.setHumidity_level(.4);
        telemetryEvent.setKilowatts(10);
        telemetryEvent.setNitrogen_level(.5);
-       telemetryEvent.setTarget_humidity_level(.4);
        telemetryEvent.setTarget_temperature(6);
        telemetryEvent.setTemperature(5);
        telemetryEvent.setTime_door_open(0);

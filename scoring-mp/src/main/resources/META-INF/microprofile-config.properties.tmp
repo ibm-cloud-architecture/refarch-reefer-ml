@@ -24,3 +24,7 @@ mp.messaging.connector.liberty-kafka.security.protocol=SASL_SSL
 mp.messaging.connector.liberty-kafka.ssl.protocol=TLSv1.2
 mp.messaging.connector.liberty-kafka.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="<api key username>" password="<api key>";
 mp.messaging.connector.liberty-kafka.sasl.mechanism=PLAIN
+
+### For Event Streams we need SSL certificate
+mp.messaging.connector.liberty-kafka.ssl.truststore.location=<location to your JKS truststore file>
+mp.messaging.connector.liberty-kafka.ssl.truststore.password=<truststore password>

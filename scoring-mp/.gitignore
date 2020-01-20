@@ -3,6 +3,7 @@
 
 ### MP Config
 **/microprofile-config.properties
+**/*.jks
 
 ### STS ###
 .apt_generated

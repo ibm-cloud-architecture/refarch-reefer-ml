@@ -19,12 +19,11 @@ public class ScoringTelemetry {
     "oxygen_level", 
     "nitrogen_level", 
     "humidity_level",
-    "target_humidity_level", 
     "carbon_dioxide_level", 
     "fan_1", "fan_2", "fan_3"};
 
     String[] fields = FEATURE_NAMES;
-    String[][] values = new String[1][15];
+    String[][] values = new String[1][14];
 
     public ScoringTelemetry() {}
     
@@ -39,11 +38,10 @@ public class ScoringTelemetry {
     	values[0][7] = Double.toString(inEvent.getOxygen_level());
     	values[0][8] = Double.toString(inEvent.getNitrogen_level());
     	values[0][9] = Double.toString(inEvent.getHumidity_level());
-    	values[0][10] = Double.toString(inEvent.getTarget_humidity_level());
-    	values[0][11] = Double.toString(inEvent.getCarbon_dioxide_level());
-    	values[0][12] = Boolean.toString(inEvent.isFan_1());
-    	values[0][13] = Boolean.toString(inEvent.isFan_2());
-    	values[0][14] = Boolean.toString(inEvent.isFan_3());
+    	values[0][10] = Double.toString(inEvent.getCarbon_dioxide_level());
+    	values[0][11] = Boolean.toString(inEvent.isFan_1());
+    	values[0][12] = Boolean.toString(inEvent.isFan_2());
+    	values[0][13] = Boolean.toString(inEvent.isFan_3());
     }
 
 	public String[][] getValues() {
