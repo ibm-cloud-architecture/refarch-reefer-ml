@@ -2,13 +2,14 @@
 
 To develop the anomaly predictive service we first need to access the data. We have two datasources in this example: the product information and the telemetries data coming from the different Reefer Containers. With the telemetries we should be able to assess anomaly. The Telemetries are saved to a noSQL database. We are using MongoDB on IBM Cloud.
 
-Here is an example of telemetry documents save into Mongodb
+Using [Mongo Compass](../environments/mongodb-compass.md), we can see one of telemetry document as saved into MongoDB.
 
-![](images/telemetry-mongo.png)
+![Telemetries in Mongo](images/telemetry-mongo.png)
+**Figure 1: Mongo DB Compass: ibmcloud.telemetries collection**
 
-It is important to note that the Json document has sensors document embedded. They will be mapp to different tables.
+It is important to note that the Json document has sensors document embedded. As we will see later they will be mapped to different tables in Cloud Pak Virtualization.
 
-As part of the Cloud Pak for data data governance capability,a user with data engineer role can do the following:
+As part of the data governance capability, a user with data engineer role can do the following tasks:
 
 * Define one to many connections to the remote different data sources
 * Create virtual assets to materialize tables and views from the different data sources
@@ -16,15 +17,13 @@ As part of the Cloud Pak for data data governance capability,a user with data en
 
 ## Define connection
 
-First we need to get the connection information for the MongoDB database. 
+First we need to get the connection information for the MongoDB database. See [this note](../environments/mongo.md) for information about Mongo DB instance on IBM Cloud.
 
-* Going to the IBM Cloud account, under the Services resource, select the mongo instance:
-
-![](images/ibm-cloud-res-mongo.png)
 
 * Get the information about the data connection.
 
-![](images/mongo-connection.png)
+![Mongo connection](images/mongo-connection.png)
+**Figure 2: Mongo DB on IBM Cloud connection information**
 
 * Then download the TLS certificate as pem file:
 
@@ -37,9 +36,12 @@ ibmcloud cdb deployment-cacert gse-eda-mongodb > certs/mongodbca.pem
 
 Back to Cloud pak for Data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:
 
-![](images/add-connection.png)
+![CP4D add connection](images/add-connection.png)
+**Figure 3: Define connection in CP4D**
 
-. Virtualization can help automatically group tables, so it simplify to group different data elements into a single schema.
+**Add connection in Cloud Pak for Data**
+
+. Virtualization can help automatically group tables, so it simplifies to group different data elements into a single schema.
 
 Once define a Data scientist use this connection in the Collect menu to define a new `Data virtualization` definition to discover the telemetries data.
 
@@ -50,7 +52,7 @@ Models, scripts...
 
 From the main page select the project view:
 
-![](images/create-project-0.png)
+![Analytic project](images/create-project-0.png)
 
 and then new project, and select `analytics`:
 
@@ -98,4 +100,4 @@ Once joined and the view is created, he can get those new assets as part of his 
 
 ![](images/telemetries-asset.png)
 
-Next is to start working within a notebook [--> Next -->](../analyze/ws-ml-dev.md)
+Next is to start working within a model [--> Next -->](../analyze/ws-ml-dev.md)

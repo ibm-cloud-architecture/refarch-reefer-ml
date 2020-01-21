@@ -16,7 +16,7 @@ The simulator can run as a standalone tool (1) to create training and test data 
 We use [MongoDB as a Service](https://cloud.ibm.com/catalog/services/databases-for-mongodb) on [IBM Cloud](https://cloud.ibm.com/catalog?category=databases) in our reference implementations.
 
 ![IBM Cloud Database](../environments/images/ibm-cloud-dbs.png)
-**IBM Cloud Database**
+**Figure 2: IBM Cloud Database**
 
 We have provided the following documented methods for populating the Product database:
 

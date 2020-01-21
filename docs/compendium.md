@@ -7,6 +7,7 @@
 
 ## Cloud Pak for Application
 
+* [IBM Cloud Pak for Applications](https://www.ibm.com/cloud/cloud-pak-for-applications)
 * [Kabanero architecture and workflows](https://kabanero.io/docs/ref/general/overview/architecture-overview.html)
 
 ## Cloud Pak for Data
@@ -31,8 +32,11 @@
 
 * [Gitops](https://www.weave.works/technologies/gitops/)
 * [Our Git action to update gitops](https://github.com/ibm-cloud-architecture/actions-update-gitops)
-* [Appsody]()
-* [Git action]()
+* [Kabanero](https://kabanero.io/)
+* [Appsody](https://appsody.dev/)
+* [Git action](https://github.com/features/actions)
+* [Tekton - kubernetes native pipeline tool](https://tekton.dev/)
+
 ## Anomaly detection
 
 * [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
