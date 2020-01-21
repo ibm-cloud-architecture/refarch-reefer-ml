@@ -1,4 +1,9 @@
 # Open Source Approach
+ 
+UNDER Construction !
+
+![](images/oss-solution-view.png)
+**Figure 1: The open source components**
 
 ## Build the docker image for Jupyter notebook
 
