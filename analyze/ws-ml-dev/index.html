@@ -593,9 +593,65 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Define the anomaly detection scoring model with Watson Studio
+      </label>
+    
     <a href="./" title="Define the anomaly detection scoring model with Watson Studio" class="md-nav__link md-nav__link--active">
       Define the anomaly detection scoring model with Watson Studio
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-analysis-and-refinery" title="Data analysis and refinery" class="md-nav__link">
+    Data analysis and refinery
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoai" title="AutoAI" class="md-nav__link">
+    AutoAI
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-deployment" title="Model Deployment" class="md-nav__link">
+    Model Deployment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notebook" title="Notebook" class="md-nav__link">
+    Notebook
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -879,6 +935,49 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-analysis-and-refinery" title="Data analysis and refinery" class="md-nav__link">
+    Data analysis and refinery
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoai" title="AutoAI" class="md-nav__link">
+    AutoAI
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-deployment" title="Model Deployment" class="md-nav__link">
+    Model Deployment
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notebook" title="Notebook" class="md-nav__link">
+    Notebook
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -893,14 +992,69 @@
                 
                 
                 <h1 id="watson-studio-developing-the-predictive-model">Watson Studio: developing the predictive model</h1>
-<p>In this chapter, we are developing a notebook on the telemetries dataset. We have already a project, and defined a data set from <a href="../../collect/cp4d-collect-data/">the data collection step</a>.</p>
-<p>In the project view, use <code>Add to project</code> </p>
-<p><img alt="" src="../images/add-to-project.png" /></p>
-<p>and select the Notebook</p>
-<p><img alt="" src="../images/add-asset.png" /></p>
-<p><img alt="" src="../images/notebook-1.png" /></p>
+<p>Cloud Pak for data integrate a well known product called Watson Studio. In this chapter we are using two approaches to develop the model, one using <a href="https://www.ibm.com/cloud/watson-studio/autoai">AutoAI</a> and one use <a href="#notebook">notebooks</a>.</p>
+<p>The Data Steward prepared a dataset with joined tables, but did not pay attention to the column semantic for building a machine learning. So the Data Scientist will start to review and adapt the model</p>
+<h2 id="data-analysis-and-refinery">Data analysis and refinery</h2>
+<p>The longitude and lattitude will not have any value to assess the sensor anomaly so those columns can be removed from the model.
+Also we want to transform the problem to be a classification so we need to add a column to be used for labels. For that we use the <code>Data Refinery</code> capability:</p>
+<p><img alt="Access to Refinery" src="../images/access-refine.png" /></p>
+<p>and then clean and shape the data to prepare for the model. For example remove columns like latitude, longitude, timestamp, _id, telemetry_id:</p>
+<p><img alt="Remove columns" src="../images/remove-column.png" /></p>
+<p>To define a new column to be used as label,we use the Operation to add <code>Conditional replace</code> to apply some basic logic on the sensor columns by using two thresholds: test the value of the O2 to be less then a threshold (11) with a second condition on the CO2 to be greater than another threshold (12):</p>
+<p><img alt="Define condition" src="../images/anomaly-flag-1.png" /></p>
+<p>We add the new label (Issue, NoIssue) in the Anomaly Flag column:</p>
+<p><img alt="To add column" src="../images/anomaly-flag-2.png" /></p>
+<p>Which translates to something like: "Replaced values for AnomalyFlag: CARBON_DIOXIDE_LEVEL where value is greater than 12 as 'Issue', OXYGEN_LEVEL where value is less than 12 as 'Issue'. Replaced all remaining values with 'NoIssue'."</p>
+<p>Once the label column is added, and any new derived data are added, we can start a <code>refinery job</code>, that will create a new dataset in our project:</p>
+<p><img alt="Refinery job" src="../images/refinery-job.png" /></p>
+<h2 id="autoai">AutoAI</h2>
+<p>AutoAI uses data to automatically select the best supervised algorithm to determine the best classification or regression models with optimized hyper parameters.</p>
+<p>Within a project, we can add an <code>Auto AI Experiment</code>:</p>
+<p><img alt="Auto AI Experiment" src="../images/autoai-experiment.png" /></p>
+<p>Then specify a name and server configuration:</p>
+<p><img alt="Auto AI Experiment name" src="../images/autoai-experiment-2.png" /></p>
+<p>Add a existing data source (the one prepared by the refinery job), and then specify the column to use for prediction (AnomalyFlag column):</p>
+<p><img alt="" src="../images/autoai-class-column.png" /></p>
+<p>Then execute the prediction experiment.</p>
+<p>AutoAI will do different steps, split the data, prepare data, and then select model or algorithm that may better address the problem. For classification model, it will select among 30 potential candidates: decision tree, random forest, LGBM, XGBoost... Each algorithm selection will generate a pipeline which will be scored to present the most accurate one:</p>
+<p><img alt="autoai" src="../images/autoai-1.png" /></p>
+<p>The resulting experiments are ranked.</p>
+<p><img alt="autoai" src="../images/autoai-2.png" /></p>
+<p>When models or pipelines are created, we can see the details of each model, to see how they performed.</p>
+<p><img alt="model-evaluation" src="../images/model-evaluation.png" /></p>
+<p>The confusion matrix for the experiment ranked #1:</p>
+<p><img alt="confusion-matrix" src="../images/confusion-matrix.png" /></p>
+<p>The tool offers nice capabilities like the feature transformation:</p>
+<p><img alt="feature-transform" src="../images/feature-transform.png" /></p>
+<p>And the feature importance ranking, which helps to assess what are the features that impact the classification.</p>
+<p><img alt="feature-importance" src="../images/feature-importance.png" /></p>
+<p>Once the model is saved, it can be added to a Catalog, and then being deployed.</p>
+<p><img alt="saved-models" src="../images/saved-models.png" /></p>
+<h3 id="model-deployment">Model Deployment</h3>
+<p>Once a model is created is promoted to a "space".</p>
+<p><img alt="model-to-promote" src="../images/model-to-promote.png" /></p>
+<p>A <strong>space</strong> contains an overview of deployment status, the deployable assets, associated input and output data, and the associated environments.</p>
+<p>To access the deployment space, use the main left menu under <code>Analyze -&gt; Analytics deployment spaces</code>.</p>
+<p><img alt="spaces" src="../images/spaces.png" /></p>
+<p>And under a given space we can see the assets and deployments in this space:</p>
+<p><img alt="space" src="../images/aspace.png" /></p>
+<p>On the Assets page, you can view the assets in the deployment space (Here we have our AutoAI experimental model deployed). You can see how many deployments each asset has and whether the asset is configured for performance monitoring. The following figure displays the deployed model</p>
+<p><img alt="service" src="../images/online-service.png" /></p>
+<p>And going into the deployed model view, we can see the API end point:</p>
+<p><img alt="api" src="../images/model-api.png" /></p>
+<p>And even test the prediction from the user interface.</p>
+<p><img alt="test" src="../images/test-api.png" /></p>
+<p>A next step is to infuse this model into the scoring application...</p>
+<h2 id="notebook">Notebook</h2>
+<p>In this section, we are developing a notebook on the telemetries dataset. We have already a project, and defined a data set from <a href="../../collect/cp4d-collect-data/">the data collection step</a>, so we need to add a notebook. For that, in the project view, use <code>Add to project</code> ...</p>
+<p><img alt="add-to-project" src="../images/add-to-project.png" /></p>
+<p>and select the Notebook, </p>
+<p><img alt="add-asset" src="../images/add-asset.png" /></p>
+<p>specify a name and select python 3.6 runtime...</p>
+<p><img alt="notebook" src="../images/notebook-1.png" /></p>
 <p>Add a cell to access pandas, and maplablib in the first cell, and then get the code for accessing the dataset, by using the top right button:</p>
-<p><img alt="" src="../images/notebook-2.png" /></p>
+<p><img alt="first cells" src="../images/notebook-2.png" /></p>
+<p>To Be Continued...</p>
                 
                   
                 
