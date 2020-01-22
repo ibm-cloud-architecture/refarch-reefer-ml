@@ -24,11 +24,13 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import com.google.gson.Gson;
 
 import ibm.gse.kcontainer.scoring.domain.Telemetry;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Call remote predictive scoring deploy on CP for data via WML.
  * Use JAX RS client code to stay dependant to other library
  */
+@ApplicationScoped
 public class ScoringClient {
 
 
@@ -93,12 +95,18 @@ public class ScoringClient {
         try {
             final WebTarget targetAuth = client.target(endPointURL + "/v1/preauth/validateAuth");
             
+            System.out.println("Getting Authentication token for the prediction service..."); 
             resAuth = targetAuth.request().header("username", username).header("password", password).get();
-            System.out.println(resAuth.getStatus());
-            JsonReader reader = Json.createReader(new StringReader(resAuth.readEntity(String.class)));
-            JsonObject ibmAMResponse = reader.readObject();
+    
+            if (resAuth.getStatus() == 200){
+                System.out.println("IAM service returned: " + resAuth.getStatus());
+                JsonReader reader = Json.createReader(new StringReader(resAuth.readEntity(String.class)));
+                JsonObject ibmAMResponse = reader.readObject();
            
-            token = ibmAMResponse.getString("accessToken");
+                token = ibmAMResponse.getString("accessToken");
+            } else {
+                System.out.println("[ERROR] - The IAM service returned: " + resAuth.getStatus());
+            }
             resAuth.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +115,7 @@ public class ScoringClient {
                 resAuth.close();
             }
         }
-        System.out.println("Token = " + token);
+        // System.out.println("Token = " + token);
         return token;
     }
 
@@ -117,19 +125,19 @@ public class ScoringClient {
                     mlToken = getIAMToken();
                 }
         }
-        
         WebTarget targetResource = client.target(endPointURL + predictionURL);
         ScoringTelemetry sc = new ScoringTelemetry(t);
-        Entity<String> entity = Entity.json(parser.toJson(sc));
-        
+        ScoringTelemetryWrapper stw = new ScoringTelemetryWrapper(sc);
+        System.out.println("Payload for the prediction service call: " + parser.toJson(stw));
+        Entity<String> entity = Entity.json(parser.toJson(stw));
+
         Response  rep = targetResource.request().header("Content-Type", APPLICATION_JSON)
             .header("Authorization", "Bearer " + mlToken)
             .accept(APPLICATION_JSON)
             .post(entity);
         
         ScoringResult result = parser.fromJson(rep.readEntity(String.class),ScoringResult.class);
-       
-       return result;
+        return result;
     }
 
 	public void setPredictiveURL(String pURL) {

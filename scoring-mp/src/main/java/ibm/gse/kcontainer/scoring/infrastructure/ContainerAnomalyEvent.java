@@ -2,19 +2,20 @@ package ibm.gse.kcontainer.scoring.infrastructure;
 
 import ibm.gse.kcontainer.scoring.domain.Telemetry;
 import ibm.gse.kcontainer.scoring.domain.ContainerAnomaly;
+import java.sql.Timestamp;
 
 public class ContainerAnomalyEvent {
 
     String containerID;
     ContainerAnomaly payload;
-    String timestamp;
+    long timestamp;
     String type;
 
     public ContainerAnomalyEvent(){}
 
     public ContainerAnomalyEvent(String ContainerID, String timestamp, Telemetry payload){
         this.containerID = ContainerID;
-        this.timestamp = timestamp;
+        this.timestamp = Timestamp.valueOf(timestamp).getTime();
         this.type = "ContainerAnomaly";
         this.payload = new ContainerAnomaly(payload);
     }
@@ -31,10 +32,10 @@ public class ContainerAnomalyEvent {
     public void setPayload(ContainerAnomaly payload){
         this.payload=payload;
     }
-    public String getTimestamp(){
+    public long getTimestamp(){
         return timestamp;
     }
-    public void setTimestamp(String timestamp){
+    public void setTimestamp(long timestamp){
         this.timestamp=timestamp;
     }
     public String getType(){

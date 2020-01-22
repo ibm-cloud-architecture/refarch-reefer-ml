@@ -14,6 +14,7 @@ public class Telemetry {
     double oxygen_level; 
     double nitrogen_level; 
     double humidity_level;
+    double target_humidity_level;
     double carbon_dioxide_level; 
     boolean fan_1; 
     boolean fan_2; 
@@ -42,6 +43,7 @@ public class Telemetry {
             this.oxygen_level = Double.parseDouble(arrayValues[10].trim());
             this.nitrogen_level = Double.parseDouble(arrayValues[11].trim());
             this.humidity_level = Double.parseDouble(arrayValues[12].trim());
+            this.target_humidity_level = Double.parseDouble(arrayValues[12].trim());
             this.carbon_dioxide_level = Double.parseDouble(arrayValues[13].trim());
             this.fan_1 = Boolean.valueOf(arrayValues[14].trim());
             this.fan_2 = Boolean.valueOf(arrayValues[15].trim());
@@ -156,6 +158,14 @@ public class Telemetry {
         this.humidity_level = humidity_level;
     }
 
+    public double getTarget_humidity_level() {
+        return target_humidity_level;
+    }
+
+    public void setTarget_humidity_level(double target_humidity_level) {
+        this.target_humidity_level = target_humidity_level;
+    }
+
     public double getCarbon_dioxide_level() {
         return carbon_dioxide_level;
     }
@@ -227,6 +237,7 @@ public class Telemetry {
         "oxygen_level: " + this.oxygen_level + ", " +
         "nitrogen_level: " + this.nitrogen_level + ", " +
         "humidity_level: " + this.humidity_level + ", " +
+        "target_humidity_level: " + this.target_humidity_level + ", " +
         "carbon_dioxide_level: " + this.carbon_dioxide_level + ", " +
         "fan_1: " + this.fan_1 + ", " +
         "fan_2: " + this.fan_2 + ", " +

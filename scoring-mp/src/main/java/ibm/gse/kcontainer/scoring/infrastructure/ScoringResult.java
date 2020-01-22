@@ -16,4 +16,7 @@ public class ScoringResult {
 		this.predictions = predictions;
 	}
 
+	public ScoringPredictionValues getScoringPredictionValues(){
+		return predictions[0].getScoringPredictionValues();
+	}
 }

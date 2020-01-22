@@ -46,12 +46,12 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-    <!-- Added to compile withouth appsody -->
-        <!-- ADDED TO GET REACTIVE MESSAGING TO WORK -->
+        <!-- REACTIVE MESSAGING + REACTIVE STREAMS + KAFKA CONNECT -->
         <dependency>
             <groupId>org.eclipse.microprofile.reactive.messaging</groupId>
             <artifactId>microprofile-reactive-messaging-api</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -59,22 +59,11 @@
             <version>2.3.0</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.microprofile.reactive.streams</groupId>
-            <artifactId>microprofile-reactive-streams-operators</artifactId>
-            <version>1.0-RC3</version>
+            <groupId>org.eclipse.microprofile.reactive-streams-operators</groupId>
+            <artifactId>microprofile-reactive-streams-operators-api</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
         </dependency>
-        <!-- Included io.smallrye.reactive below
-            <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-        <dependency>
-            <groupId>io.smallrye.reactive</groupId>
-            <artifactId>smallrye-reactive-messaging-kafka</artifactId>
-            <version>1.0.3</version>
-        </dependency>-->
-        <!-- ADDED TO GET REACTIVE MESSAGING TO WORK -->
         <!-- For tests -->
         <dependency>
             <groupId>junit</groupId>
