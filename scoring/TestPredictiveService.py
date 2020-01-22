@@ -33,17 +33,15 @@ FEATURE_NAMES = [ "temperature",
                 "ambiant_temperature", 
                 "kilowatts", 
                 "time_door_open",
-                "content_type", 
                 "defrost_cycle",
                 "oxygen_level", 
                 "nitrogen_level", 
                 "humidity_level",
-                "target_humidity_level", 
                 "carbon_dioxide_level", 
                 "FAN_1", "FAN_2", "FAN_3"]
 payload_scoring = {"input_data": [{
     "fields": FEATURE_NAMES, 
-    "values": [[8,4,25,2,0,2,5,.2,0.78,0.6,.5,10,True,True,True]]
+    "values": [[8,4,25,2,0,2,5,12,78,60,50,10,True,True,True]]
     }
     ]}
 response_scoring = requests.post(BASE_URL + PREDICTION_URL, json=payload_scoring,verify=False, headers=header)
