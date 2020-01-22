@@ -225,7 +225,7 @@ Add the host name in your local /etc/hosts or be sure the hostname is defined in
 
 ### Continuous deployment with Tekton
 
-The general approach to use Tekton to deploy the components of the solution is defined in [this note](../devops/cd.md).
+The general approach to use Tekton to deploy the components of the solution is defined in [this note](../devops/cd.md#tekton-appsody-deployments).
 
 ## Usage
 
