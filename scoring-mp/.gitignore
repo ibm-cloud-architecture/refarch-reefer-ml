@@ -2,7 +2,6 @@
 !.keep
 
 ### MP Config
-**/microprofile-config.properties
 **/*.jks
 
 ### STS ###

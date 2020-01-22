@@ -22,6 +22,10 @@ public class Receiver {
 
     @Inject ScoringClient scoringClient;
 
+    @Inject
+    @ConfigProperty(name = "mockup")
+    private String mockup;
+
     @Incoming("reeferTelemetry")
     @Outgoing("containers")
     @Acknowledgment(Acknowledgment.Strategy.MANUAL)
@@ -44,12 +48,17 @@ public class Receiver {
         System.out.println("This is the prediction: " + result.getPrediction());
         System.out.println("This is the probability: " + "[" + result.getMetrics()[0] + "," + result.getMetrics()[1] + "]");
 
-        // Boolean anomaly = result.getPrediction().equalsIgnoreCase("Issue");
-        // Mockup
         Boolean anomaly = false;
-        int number = new Random().nextInt(10);
-        System.out.println("Number: " + number);
-        if (number > 6) anomaly = true;
+
+        if (mockup == "yes"){
+            // Mockup
+            int number = new Random().nextInt(10);
+            System.out.println("Number: " + number);
+            if (number > 6) anomaly = true;
+        }
+        else{
+            anomaly = result.getPrediction().equalsIgnoreCase("Issue");
+        }
 
         if (!anomaly){
             System.out.println("No container anomaly");
