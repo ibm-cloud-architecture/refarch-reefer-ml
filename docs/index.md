@@ -130,9 +130,4 @@ To use Jupyter, Sparks and kubeflow see [this note](analyze/oss-ml-dev.md)
 
 ## Further Readings
 
-* [Data AI reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/)
-* [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
-* [Romeo Kienzler anomaly detection - Generating data for anomaly detection](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
-* [Romeo Kienzler anomaly detection with Deeplearning4j](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
-* [Romeo Kienzler anomaly detection using Apache SystemML](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-4/)
-* [Romeo Kienzler anomaly detection using Tensoflow and Keras](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-5/)
+See the [compendium note](compendium.md)

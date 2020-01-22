@@ -16,6 +16,7 @@
 * [Cloud Pak for Data product documentation](https://www.ibm.com/support/producthub/icpdata/)
 * [Install CP4D on Openshift](https://cloudpak8s.io/data/install-managed-OCP/)
 * [Getting stared with Cloud Pak for data](https://developer.ibm.com/series/cloud-pak-for-data-learning-path/)
+* [Explore Knowledge Catalog's Data Governance Capabilities](https://www.ibm.com/cloud/garage/dte/producttour/ibm-watson-knowledge-catalog-guided-demo-explore-active-policy-management)
 * [Model deployment with Watson Machine Learning](https://www.ibm.com/support/producthub/icpdata/docs/content/SSQNUZ_current/wsj/wmls/wmls-deploy-overview.html)
 
 ## Cloud Pak for Automation
@@ -40,5 +41,7 @@
 ## Anomaly detection
 
 * [Romeo Kienzler anomaly detection article 1](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-1)
-* [Romeo Kienzler anomaly detection article 2](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
-* [Romeo Kienzler anomaly detection article 3](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
+* [Romeo Kienzler anomaly detection - Generating data for anomaly detection](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-2)
+* [Romeo Kienzler anomaly detection with Deeplearning4j](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-3/)
+* [Romeo Kienzler anomaly detection using Apache SystemML](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-4/)
+* [Romeo Kienzler anomaly detection using Tensoflow and Keras](https://developer.ibm.com/tutorials/iot-deep-learning-anomaly-detection-5/)
