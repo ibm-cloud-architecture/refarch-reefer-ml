@@ -39,42 +39,81 @@ spec:
             value: "{{ .Values.service.servicePort }}"
           - name: APPLICATION_NAME
             value: "{{ .Release.Name }}"
-          - name: KAFKA_BROKERS
+          ##################################
+          ### Predictive model configuration
+          ##################################
+          - name: MOCKUP
+            value: "{{ .Values.predictiveModel.mockup }}"
+          - name: CP4D_BASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.predictiveModel.predictiveModelConfigMap }}"
+                key: baseURL
+          - name: CP4D_PREDICTION_URL
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.predictiveModel.predictiveModelConfigMap }}"
+                key: predictionURL
+          - name: CP4D_USER
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.predictiveModel.predictiveModelSecret }}"
+                key: user
+          - name: CP4D_PWD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.predictiveModel.predictiveModelSecret }}"
+                key: password
+          #####################################
+          ### Messaging backbone configuration
+          #####################################
+          # Kafka bootstrap servers
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_BOOTSTRAP_SERVERS
             valueFrom:
               configMapKeyRef:
                 name: "{{ .Values.kafka.brokersConfigMap }}"
                 key: brokers
+          # If we are using ES on IBM Cloud or Kafka with security enabled (API key, etc)
+          {{ if .Values.kafka.security.required }}
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SECURITY_PROTOCOL
+            value: "{{ .Values.kafka.security.securityProtocol }}"
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_PROTOCOL
+            value: "{{ .Values.kafka.security.sslProtocol }}"
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SASL_MECHANISM
+            value: "{{ .Values.kafka.security.saslMechanism }}"
+          # We need to load this as a secret since it will containe user and password information
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SASL_JAAS_CONFIG
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.kafka.security.saslJaasConfigSecret }}"
+                key: saslJaasConfig
+          {{ end }}
+          # If we are using ES on OpenShift or Kafka requires certificates
+          {{ if .Values.kafka.security.truststoreRequired }}
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_TRUSTSTORE_LOCATION
+            value: "{{ .Values.kafka.security.truststorePath }}/{{ .Values.kafka.security.truststoreFile }}"
+          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_TRUSTSTORE_PASSWORD
+            value: "{{ .Values.kafka.security.truststorePassword }}"
+          {{ end }}
+          #############################
+          ### Reactive Messaging topics
+          #############################
           - name: TELEMETRY_TOPIC
             value: "{{ .Values.kafka.telemetryTopicName }}"
           - name: CONTAINERS_TOPIC
             value: "{{ .Values.kafka.containersTopicName }}"
-          {{- if .Values.eventstreams.enabled }}
-          - name: KAFKA_APIKEY
-            valueFrom:
-              secretKeyRef:
-                name: "{{ .Values.eventstreams.apikeyConfigMap }}"
-                key: binding
-          {{- end }}
-          {{- if .Values.eventstreams.truststoreRequired }}
-          - name: TRUSTSTORE_ENABLED
-            value: "{{ .Values.eventstreams.truststoreRequired }}"
-          - name: TRUSTSTORE_PWD
-            value: "{{ .Values.eventstreams.truststorePassword }}"
-          - name: TRUSTSTORE_PATH
-            value: "{{ .Values.eventstreams.truststorePath }}/{{ .Values.eventstreams.truststoreFile }}"
-          {{- end }}
 {{- if .Values.generatedBindings.enabled }}
 {{.Files.Get "bindings.yaml" | indent 10 }}
 {{- end }}
-        {{- if .Values.eventstreams.truststoreRequired }}
+        {{- if .Values.kafka.security.truststoreRequired }}
         volumeMounts:
-          - mountPath: "{{ .Values.eventstreams.truststorePath }}"
-            name: eventstreams-truststore
+          - mountPath: "{{ .Values.kafka.security.truststorePath }}"
+            name: kafka-truststore
             readOnly: true
         {{- end }}
-      {{- if .Values.eventstreams.truststoreRequired }}
+      {{- if .Values.kafka.security.truststoreRequired }}
       volumes:
-        - name: eventstreams-truststore
+        - name: kafka-truststore
           secret:
-            secretName: "{{ .Values.eventstreams.truststoreSecret }}"
+            secretName: "{{ .Values.kafka.security.truststoreSecret }}"
       {{- end }}

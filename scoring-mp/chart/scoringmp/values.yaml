@@ -37,15 +37,22 @@ route:
   path: /
   urlPrefix: kcontainer-scoringmp
 kafka:
-  brokersConfigMap: kafka-brokers
   telemetryTopicName: reeferTelemetry
-  containersdTopicName: containers
-eventstreams:
-  enabled: true
-  apikeyConfigMap: eventstreams-apikey
-  truststoreRequired: true
-  truststorePath: /config/resources/security/es-ssl
-  truststoreFile: es-cert.jks
-  truststoreSecret: es-truststore-jks
-  truststorePassword: password
+  containersTopicName: containers
+  brokersConfigMap: kafka-brokers
+  security:
+    enabled: true
+    securityProtocol: SASL_SSL
+    sslProtocol: TLSv1.2
+    saslMechanism: PLAIN
+    saslJaasConfigSecret: saslJaasConfigSecret
+    truststoreRequired: true
+    truststorePath: /config/resources/security
+    truststoreFile: es-cert.jks
+    truststorePassword: password
+    truststoreSecret: es-truststore-jks
+predictiveModel:
+  mockup: no
+  predictiveModelConfigMap: predictiveModelConfigMap
+  predictiveModelSecret: predictiveModelSecret
 serviceAccountName: default
