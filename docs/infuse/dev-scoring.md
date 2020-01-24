@@ -199,7 +199,28 @@ Secondly, we need to configure our build process through the [pom.xml](../../sco
 
 ### Deploy
 
-TBD
+1. Create a Kubernetes Secret for the required `bootstrap.properties` file which will pass the Kafka configuration details to the Reactive Messaging components. These values are the same as other existing ConfigMaps and Secrets, however they cannot be used in the same manner due to the order that they are required to be in the system when Liberty starts up.
+    - Download [bootstrap.properties.tmpl](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/scoring-mp/bootstrap.properties.tmpl)
+    - Set `mp.messaging.connector.liberty-kafka.bootstrap.servers` to the comma-separated list of Kafka brokers. _(This is the same value as the `kafka-brokers` ConfigMap.)_
+    - Update `mp.messaging.connector.liberty-kafka.sasl.jaas.config` to replace the `API-KEY` placeholder value with the Event Streams API key. _(This is the same value as the `eventstreams-apikey` Secret.)_
+    - Create the Secret via the following command:
+    ```shell
+    kubectl create secret generic openliberty-bootstrap --from-file=bootstrap.properties=./bootstrap.properties.tmpl
+    ```
+2. Create a Kubernetes ConfigMap and Secret for the Cloud Pak For Data remote endpoints.
+    - ConfigMap:
+    ```shell
+    kubectl create configmap predictive-model-configmap --from-literal=baseURL='https://zen-cpd-zen.demo.ibmcloudpack.com/' --from-literal=predictionURL='/v4/deployments/fb03738c-1234-abcd-wxyz-7e66106ee51c/predictions'
+    ```
+    - Secret:
+    ```shell
+    kubectl create secret generic predictive-model-secret --from-literal=user='replace-with-your-username' --from-literal=password='replace-with-your-password'
+    ```
+3. Create the necessary YAML files from the `scoring-mp` Helm Chart. A sample command is provided below:
+```shell
+helm template --output-dir . --set serviceAccountName=reefer-simulator --set route.enabled=true chart/scoringmp
+kubectl apply -f ./scoringmp/template
+```
 
 ### Run
 
