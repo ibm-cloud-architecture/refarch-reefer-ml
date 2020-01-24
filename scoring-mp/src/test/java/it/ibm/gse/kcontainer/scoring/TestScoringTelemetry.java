@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import ibm.gse.kcontainer.scoring.domain.Telemetry;
 import ibm.gse.kcontainer.scoring.infrastructure.ScoringClient;
 import ibm.gse.kcontainer.scoring.infrastructure.ScoringPrediction;
+import ibm.gse.kcontainer.scoring.infrastructure.ScoringPredictionValues;
 import ibm.gse.kcontainer.scoring.infrastructure.ScoringResult;
 import ibm.gse.kcontainer.scoring.infrastructure.ScoringTelemetry;
 
@@ -30,7 +31,6 @@ public class TestScoringTelemetry {
 	   telemetryEvent.setHumidity_level(.4);
        telemetryEvent.setKilowatts(10);
        telemetryEvent.setNitrogen_level(.5);
-       telemetryEvent.setTarget_humidity_level(.4);
        telemetryEvent.setTarget_temperature(6);
        telemetryEvent.setTemperature(5);
        telemetryEvent.setTime_door_open(0);
@@ -74,13 +74,18 @@ public class TestScoringTelemetry {
     	ScoringResult sr = new ScoringResult();
     	sr.predictions= new ScoringPrediction[1];
     	sr.predictions[0] = new ScoringPrediction();
-    	sr.predictions[0].fields = new String[] {"prediction", "probability"};
-    	sr.predictions[0].values = new Object[1][2];
-    	sr.predictions[0].values[0][0] = "N";
-   	  	List<BigDecimal> vs = new ArrayList<BigDecimal>();
-   	  	vs.add(0, new BigDecimal(0.7));
-   	  	vs.add(1,new BigDecimal(0.7));
-   	  	sr.predictions[0].values[0][1] = vs;
+        sr.predictions[0].fields = new String[] {"prediction", "probability"};
+        ScoringPredictionValues spv = new ScoringPredictionValues();
+        spv.prediction = "N";
+        spv.metrics = new Double[2];
+        spv.metrics[0] = new Double(0.7);
+        spv.metrics[1] = new Double(0.7);
+    	sr.predictions[0].values = new ScoringPredictionValues[1][1];
+    	sr.predictions[0].values[0][0] = spv;
+   	  	// List<BigDecimal> vs = new ArrayList<BigDecimal>();
+   	  	// vs.add(0, new BigDecimal(0.7));
+   	  	// vs.add(1,new BigDecimal(0.7));
+   	  	// sr.predictions[0].values[0][1] = vs;
    	  	Gson parser = new Gson();
    	  	System.out.println(parser.toJson(sr));
    	  	// the following code is generating an exception I was not able to fix quickly.

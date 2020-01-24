@@ -1,0 +1,58 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+revisionHistoryLimit: 1
+image:
+  repository: ibmcase/kcontainer-scoringmp-ms
+  tag: latest
+  pullPolicy: Always
+  pullSecret: null
+  resources:
+    requests:
+      cpu: 200m
+      memory: 300Mi
+service:
+  name: Node
+  type: NodePort
+  servicePort: 9080
+  servicePortHttps: 9443
+  nodePort: 30211
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    cpu:
+      targetAverageUtilization: 70
+    memory:
+      targetAverageUtilization: 70
+istio:
+  enabled: false
+  weight: 100
+generatedBindings:
+  enabled: false
+# Individual Routes are preferred over Ingresses on OCP
+route:
+  enabled: false
+  path: /
+  urlPrefix: kcontainer-scoringmp
+kafka:
+  telemetryTopicName: reeferTelemetry
+  containersTopicName: containers
+  brokersConfigMap: kafka-brokers
+  security:
+    enabled: true
+    securityProtocol: SASL_SSL
+    sslProtocol: TLSv1.2
+    saslMechanism: PLAIN
+    saslJaasConfigSecret: saslJaasConfigSecret
+    truststoreRequired: true
+    truststorePath: /config/resources/security
+    truststoreFile: es-cert.jks
+    truststorePassword: password
+    truststoreSecret: es-truststore-jks
+predictiveModel:
+  mockup: no
+  predictiveModelConfigMap: predictiveModelConfigMap
+  predictiveModelSecret: predictiveModelSecret
+serviceAccountName: default

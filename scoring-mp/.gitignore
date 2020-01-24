@@ -1,6 +1,9 @@
 /target/*
 !.keep
 
+### MP Config
+**/microprofile-config.properties
+**/*.jks
 
 ### STS ###
 .apt_generated
@@ -27,3 +30,5 @@
 
 ### VS Code ###
 .vscode/
+
+.DS_Store
