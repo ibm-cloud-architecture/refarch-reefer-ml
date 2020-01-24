@@ -24,7 +24,7 @@ public class Receiver {
     @Inject ScoringClient scoringClient;
 
     @Inject
-    @ConfigProperty(name = "mockup")
+    @ConfigProperty(name = "mockup", defaultValue="no")
     private String mockup;
 
     @Incoming("reeferTelemetry")
@@ -51,7 +51,7 @@ public class Receiver {
 
         Boolean anomaly = false;
 
-        if (mockup.equals("yes")){
+        if ("yes".equals(mockup)){
             // Mockup
             int number = new Random().nextInt(10);
             System.out.println("Number: " + number);
