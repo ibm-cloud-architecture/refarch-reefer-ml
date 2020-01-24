@@ -1224,7 +1224,30 @@
 </pre></div>
 
 <h3 id="deploy">Deploy</h3>
-<p>TBD</p>
+<ol>
+<li>Create a Kubernetes Secret for the required <code>bootstrap.properties</code> file which will pass the Kafka configuration details to the Reactive Messaging components. These values are the same as other existing ConfigMaps and Secrets, however they cannot be used in the same manner due to the order that they are required to be in the system when Liberty starts up.<ul>
+<li>Download <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master/scoring-mp/bootstrap.properties.tmpl">bootstrap.properties.tmpl</a></li>
+<li>Set <code>mp.messaging.connector.liberty-kafka.bootstrap.servers</code> to the comma-separated list of Kafka brokers. <em>(This is the same value as the <code>kafka-brokers</code> ConfigMap.)</em></li>
+<li>Update <code>mp.messaging.connector.liberty-kafka.sasl.jaas.config</code> to replace the <code>API-KEY</code> placeholder value with the Event Streams API key. <em>(This is the same value as the <code>eventstreams-apikey</code> Secret.)</em></li>
+<li>Create the Secret via the following command:
+<div class="codehilite"><pre><span></span>kubectl create secret generic openliberty-bootstrap --from-file<span class="o">=</span>bootstrap.properties<span class="o">=</span>./bootstrap.properties.tmpl
+</pre></div></li>
+</ul>
+</li>
+<li>Create a Kubernetes ConfigMap and Secret for the Cloud Pak For Data remote endpoints.<ul>
+<li>ConfigMap:
+<div class="codehilite"><pre><span></span>kubectl create configmap predictive-model-configmap --from-literal<span class="o">=</span><span class="nv">baseURL</span><span class="o">=</span><span class="s1">&#39;https://zen-cpd-zen.demo.ibmcloudpack.com/&#39;</span> --from-literal<span class="o">=</span><span class="nv">predictionURL</span><span class="o">=</span><span class="s1">&#39;/v4/deployments/fb03738c-1234-abcd-wxyz-7e66106ee51c/predictions&#39;</span>
+</pre></div></li>
+<li>Secret:
+<div class="codehilite"><pre><span></span>kubectl create secret generic predictive-model-secret --from-literal<span class="o">=</span><span class="nv">user</span><span class="o">=</span><span class="s1">&#39;replace-with-your-username&#39;</span> --from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span><span class="s1">&#39;replace-with-your-password&#39;</span>
+</pre></div></li>
+</ul>
+</li>
+<li>Create the necessary YAML files from the <code>scoring-mp</code> Helm Chart. A sample command is provided below:
+<div class="codehilite"><pre><span></span>helm template --output-dir . --set <span class="nv">serviceAccountName</span><span class="o">=</span>reefer-simulator --set route.enabled<span class="o">=</span><span class="nb">true</span> chart/scoringmp
+kubectl apply -f ./scoringmp/template
+</pre></div></li>
+</ol>
 <h3 id="run">Run</h3>
 <p>Once we have our application running, we can confirm the following by looking at the application logs:</p>
 <ol>
