@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-source-gitops
+spec:
+  params:
+  - name: revision
+    value: eda-sandbox/api-green-ocp-csplab-local
+  - name: url
+    value: https://github.com/ibm-cloud-architecture/refarch-kc-gitops
+  type: git

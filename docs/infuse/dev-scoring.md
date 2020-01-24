@@ -1,11 +1,11 @@
 # Develop the scoring agent with Cloud Pak for Application
 
-We have two approaches to build the predictive scoring agent: 
+We have two approaches to build the predictive scoring agent:
 
 1. One using a python Flask app listening to telemetry events coming from Kafka, run the predictive scoring within the same app. The model was developed with Jupiter notebook and serialized with [pickle](https://docs.python.org/3/library/pickle.html), so it responds in microseconds and generates anomaly to a second kafka topic. The code is under `scoring` folder, and uses essentially open source components. See [this article](oss-scoring-app.md) to understand how it is built.
 1. One using Java MicroProfile 3.0 with the Reactive Messaging annotations, to consume telemetry events and call a remote predictive scoring service, developed and deployed within Cloud Pak for Data. The code is under `scoping-mp` folder.
 
-The scoring service needs to use an analytics scoring model built using a machine learning techniques, and serialized so that it can be loaded in memory.
+The scoring service needs to use an analytics scoring model built using machine learning techniques, and serialized so that it can be loaded in memory.
 
 
 ## Java MicroProfile 3.0 with Cloud Pak for Application
@@ -235,6 +235,7 @@ A container anomaly has been predicted. Therefore, sending a ContainerAnomaly Ev
 
 ContainerAnomalyEvent object sent: {containerID: 1111, timestamp: 1579111185000, type: ContainerAnomaly, payload: {temperature: 5.02702153, target_temperature: 5.0, ambiant_temperature: 20.52035697, kilowatts: 2.62176459, time_door_open: 0.0, content_type: 1, defrost_cycle: 5, oxygen_level: 21.56977522, nitrogen_level: 75.97754859, humidity_level: 39.85714797, carbon_dioxide_level: 4.74727473, fan_1: true, fan_2: true, fan_3: true, latitude: 37.8226902168957, longitude: -122.324895}}
 ```
+
 ## Deploying the model using Watson Machine Learning
 
 TODO Cloud Pak model deployment
@@ -245,7 +246,6 @@ TODO Cloud Pak model deployment
 * [Appsody microprofile stack](https://github.com/appsody/stacks/tree/master/incubator/java-microprofile)
 * [Cloud Pak for Application demo video](https://www.youtube.com/watch?v=cKIkhhONBKM&t=46s)
 * [Use Codewind for VScode](https://www.eclipse.org/codewind/mdt-vsc-getting-started.html)
-
 * [Reactive messaging between microservices with MicroProfile on Open Liberty 19.0.0.9](https://openliberty.io/blog/2019/09/13/microprofile-reactive-messaging-19009.html)
 * [Sending and receiving messages between microservices with MicroProfile Reactive Messaging](https://openliberty.io/blog/2019/09/13/microprofile-reactive-messaging.html)
 * [MicroProfile Reactive Messaging Specification](https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html)

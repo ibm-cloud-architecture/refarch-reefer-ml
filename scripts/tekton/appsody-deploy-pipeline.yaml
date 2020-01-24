@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: appsody-deploy-pipeline
+spec:
+  params:
+  - description: Project context inside repository
+    name: context
+    type: string
+    default: .
+  resources:
+  - name: git-source
+    type: git
+  #- name: docker-image
+  #  type: image
+  tasks:
+  - name: appsody-deploy-task
+    params:
+      - name: context
+        value: "$(params.context)"
+    resources:
+      inputs:
+      - name: git-source
+        resource: git-source
+      #outputs:
+      #- name: docker-image
+      #  resource: docker-image
+    taskRef:
+      name: appsody-deploy-task
+  #- name: image-scan-task
+  #  resources:
+  #    inputs:
+  #    - name: git-source
+  #      resource: git-source
+  #    - name: docker-image
+  #      resource: docker-image
+  #  runAfter:
+  #  - build-push-deploy-task
+  #  taskRef:
+  #    name: java-microprofile-image-scan-task

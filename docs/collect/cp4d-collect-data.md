@@ -2,13 +2,14 @@
 
 To develop the anomaly predictive service we first need to access the data. We have two datasources in this example: the product information and the telemetries data coming from the different Reefer Containers. With the telemetries we should be able to assess anomaly. The Telemetries are saved to a noSQL database. We are using MongoDB on IBM Cloud.
 
-Here is an example of telemetry documents save into Mongodb
+Using [Mongo Compass](../environments/mongodb-compass.md), we can see one of telemetry document as saved into MongoDB.
 
-![](images/telemetry-mongo.png)
+![Telemetries in Mongo](images/telemetry-mongo.png)
+**Figure 1: Mongo DB Compass: ibmcloud.telemetries collection**
 
-It is important to note that the Json document has sensors document embedded. They will be mapp to different tables.
+It is important to note that the Json document has sensors document embedded. As we will see later they will be mapped to different tables in Cloud Pak Virtualization.
 
-As part of the Cloud Pak for data data governance capability,a user with data engineer role can do the following:
+As part of the data governance capability, a user with data engineer role can do the following tasks:
 
 * Define one to many connections to the remote different data sources
 * Create virtual assets to materialize tables and views from the different data sources
@@ -16,15 +17,13 @@ As part of the Cloud Pak for data data governance capability,a user with data en
 
 ## Define connection
 
-First we need to get the connection information for the MongoDB database. 
+First we need to get the connection information for the MongoDB database. See [this note](../environments/mongo.md) for information about Mongo DB instance on IBM Cloud.
 
-* Going to the IBM Cloud account, under the Services resource, select the mongo instance:
-
-![](images/ibm-cloud-res-mongo.png)
 
 * Get the information about the data connection.
 
-![](images/mongo-connection.png)
+![Mongo connection](images/mongo-connection.png)
+**Figure 2: Mongo DB on IBM Cloud connection information**
 
 * Then download the TLS certificate as pem file:
 
@@ -37,11 +36,12 @@ ibmcloud cdb deployment-cacert gse-eda-mongodb > certs/mongodbca.pem
 
 Back to Cloud pak for Data, an administrator may define connections as a reusable objects by entering the data sources information. The figure below illustrates the connection configuration to the Mongo DB running on IBM Cloud:
 
-![](images/add-connection.png)
+![CP4D add connection](images/add-connection.png)
+**Figure 3: Define connection in CP4D**
 
-. Virtualization can help automatically group tables, so it simplify to group different data elements into a single schema.
+**Add connection in Cloud Pak for Data**
 
-Once define a Data scientist use this connection in the Collect menu to define a new `Data virtualization` definition to discover the telemetries data.
+Virtualization may help automatically group tables without moving data, so we can group different data elements into a single schema.
 
 ## Create a new project
 
@@ -50,52 +50,79 @@ Models, scripts...
 
 From the main page select the project view:
 
-![](images/create-project-0.png)
+![Analytic project](images/create-project-0.png)
+**Figure 4: Top level navigation menu**
 
 and then new project, and select `analytics`:
 
-![](images/create-project-1.png)
+![Add project](images/create-project-1.png)
+
+**Figure 5: Add project**
 
 Select an empty project:
 
-![](images/create-project-2.png)
+![Select project type](images/create-project-2.png)
+**Figure 6: Select project type**
 
 Enter basic information about your project
 
-![](images/create-project-3.png)
+![Project metadata](images/create-project-3.png)
+**Figure 7: Project metadata**
 
 The result is the access to the main project page:
 
-![](images/create-project-4.png)
+![Project main page](images/create-project-4.png)
+**Figure 8: Project main page**
 
 Now we need to define data assets into our project...
 
 ## Data Virtualization
 
-As introduced in [this paragraph](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/architecture/collect-org-data/), we want to use data virtualization to access the historical telemetries records. The data engineer uses the `Data virtualization` capability to search for existing tables and add the tables he wants in the `cart`. For that, he uses the `Virtualize` menu 
+As introduced in [this paragraph](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics/architecture/collect-org-data/), we want to use data virtualization to access the historical telemetry records: The data engineer uses the `Data virtualization` capability to search for existing tables and add the tables he wants in the `cart`. For that, he uses the `Virtualize` menu 
 
-![](images/virtualize-1.png)
+![Data Virtualization menu](images/virtualize-1.png)
+**Figure 9: Data Virtualization menu**
 
-and then selects mongodb in the `Filters` column and may be apply some search on specific database name. 
+and then selects Mongo DB in the `Filters` column and may be apply some search on specific database name.
 
 ![](images/virtualization.png)
+**Figure 10: Data Virtualization on Mongo DB**
 
 Once done, he selects the expected tables and then use `Add to cart` link. It is important to note that we have two tables to match the telemetry json document and the sensors sub json document.
 
 The next step is to assign them to a project:
 
 ![](images/virtualize-tables.png)
+**Figure 11: Data Virtualization cart and tables**
+
 
 ## Create a joined view
 
-We need to join the telemetries and the sensors data into the same table, to flatten the records. As there is 1 to 1 relationship as of now.
-In the Data Virtualization, a data steward selects `My Virutalized data`, and then 
-select TELEMETRIES and TELEMETRY_SENSORS tables, then the `Join view`. Within this new panel, he needs to create a join key, by drag the `TELEMETRICS_ID` and `_ID` together:
+We need to join the telemetries and the sensors data into the same table, to flatten the records. In the current Mongo document, there is a 1 to 1 relationship between telemetry and telemetry sensor, so it is easy to flatten the model in one table.
 
-![](images/join-tables.png)
+In the Data Virtualization, as a data steward, we select `My Virtualized data`, and then 
+select TELEMETRICS and TELEMETRICS_SENSORS tables, then the `Join view`. Within this new panel, we create a join key, by dragging the `TELEMETRICS_ID` and `_ID` together:
 
-Once joined and the view is created, he can get those new assets as part of his project.
+![Joining tables](images/join-tables.png)
+**Figure 12: Joining tables**
 
-![](images/telemetries-asset.png)
+Once joined, a new view is created:
 
-Next is to start working within a notebook [--> Next -->](../analyze/ws-ml-dev.md)
+![Joined view](images/join-view.png)
+**Figure 13: Join view**
+
+We see, now, those new assets as part of the project (Use `Add to project`). The figure below show this new asset in the project:
+
+![Telemetries asset in the project](images/telemetries-asset.png)
+**Figure 14: Telemetries asset in the project**
+
+With some data:
+![Telemetry Data](images/telemetry-data.png)
+**Figure 15: Telemetry data**
+
+!!! Note
+        It is important to note that building those views will create new connection to the database engine that can be accessed by using external tool.
+
+## Next
+
+Next is to start working within a model [--> Next -->](../analyze/ws-ml-dev.md)
