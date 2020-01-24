@@ -1,8 +1,6 @@
 package ibm.gse.kcontainer.scoring.infrastructure;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -14,7 +12,6 @@ import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import ibm.gse.kcontainer.scoring.domain.Telemetry;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.Arrays;
 import java.util.Random;
 import javax.inject.Inject;
 
@@ -49,9 +46,9 @@ public class Receiver {
         System.out.println("This is the prediction: " + result.getPrediction());
         System.out.println("This is the probability: " + "[" + result.getMetrics()[0] + "," + result.getMetrics()[1] + "]");
 
-        Boolean anomaly = false;
+        boolean anomaly = false;
 
-        if ("yes".equals(mockup)){
+        if ("yes".equalsIgnoreCase(mockup)){
             // Mockup
             int number = new Random().nextInt(10);
             System.out.println("Number: " + number);
