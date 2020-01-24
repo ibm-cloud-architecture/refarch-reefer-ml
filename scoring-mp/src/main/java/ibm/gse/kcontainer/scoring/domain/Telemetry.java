@@ -44,7 +44,7 @@ public class Telemetry {
             this.nitrogen_level = Double.parseDouble(arrayValues[11].trim());
             this.humidity_level = Double.parseDouble(arrayValues[12].trim());
             this.target_humidity_level = Double.parseDouble(arrayValues[12].trim());
-            this.carbon_dioxide_level = Double.parseDouble(arrayValues[13].trim());
+            this.carbon_dioxide_level = Double.parseDouble(arrayValues[13].trim()) + 4;
             this.fan_1 = Boolean.valueOf(arrayValues[14].trim());
             this.fan_2 = Boolean.valueOf(arrayValues[15].trim());
             this.fan_3 = Boolean.valueOf(arrayValues[16].trim());
