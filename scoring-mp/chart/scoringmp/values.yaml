@@ -39,20 +39,15 @@ route:
 kafka:
   telemetryTopicName: reeferTelemetry
   containersTopicName: containers
-  brokersConfigMap: kafka-brokers
   security:
     enabled: true
-    securityProtocol: SASL_SSL
-    sslProtocol: TLSv1.2
-    saslMechanism: PLAIN
-    saslJaasConfigSecret: saslJaasConfigSecret
+    bootstrapSecret: openliberty-bootstrap
+    bootstrapPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
     truststoreRequired: true
     truststorePath: /config/resources/security
-    truststoreFile: es-cert.jks
-    truststorePassword: password
     truststoreSecret: es-truststore-jks
 predictiveModel:
   mockup: no
-  predictiveModelConfigMap: predictiveModelConfigMap
-  predictiveModelSecret: predictiveModelSecret
+  predictiveModelConfigMap: predictive-model-configmap
+  predictiveModelSecret: predictive-model-secret
 serviceAccountName: default

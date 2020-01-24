@@ -64,55 +64,31 @@ spec:
               secretKeyRef:
                 name: "{{ .Values.predictiveModel.predictiveModelSecret }}"
                 key: password
-          #####################################
-          ### Messaging backbone configuration
-          #####################################
-          # Kafka bootstrap servers
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_BOOTSTRAP_SERVERS
-            valueFrom:
-              configMapKeyRef:
-                name: "{{ .Values.kafka.brokersConfigMap }}"
-                key: brokers
-          # If we are using ES on IBM Cloud or Kafka with security enabled (API key, etc)
-          {{ if .Values.kafka.security.required }}
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SECURITY_PROTOCOL
-            value: "{{ .Values.kafka.security.securityProtocol }}"
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_PROTOCOL
-            value: "{{ .Values.kafka.security.sslProtocol }}"
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SASL_MECHANISM
-            value: "{{ .Values.kafka.security.saslMechanism }}"
-          # We need to load this as a secret since it will containe user and password information
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SASL_JAAS_CONFIG
-            valueFrom:
-              secretKeyRef:
-                name: "{{ .Values.kafka.security.saslJaasConfigSecret }}"
-                key: saslJaasConfig
-          {{ end }}
-          # If we are using ES on OpenShift or Kafka requires certificates
-          {{ if .Values.kafka.security.truststoreRequired }}
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_TRUSTSTORE_LOCATION
-            value: "{{ .Values.kafka.security.truststorePath }}/{{ .Values.kafka.security.truststoreFile }}"
-          - name: MP_MESSAGING_CONNECTOR_LIBERTY-KAFKA_SSL_TRUSTSTORE_PASSWORD
-            value: "{{ .Values.kafka.security.truststorePassword }}"
-          {{ end }}
           #############################
           ### Reactive Messaging topics
           #############################
-          - name: TELEMETRY_TOPIC
+          - name: MP_MESSAGING_INCOMING_REEFERTELEMETRY_TOPIC
             value: "{{ .Values.kafka.telemetryTopicName }}"
-          - name: CONTAINERS_TOPIC
+          - name: MP_MESSAGING_OUTGOING_CONTAINERS_TOPIC
             value: "{{ .Values.kafka.containersTopicName }}"
 {{- if .Values.generatedBindings.enabled }}
 {{.Files.Get "bindings.yaml" | indent 10 }}
 {{- end }}
-        {{- if .Values.kafka.security.truststoreRequired }}
         volumeMounts:
+          - mountPath: "{{ .Values.kafka.security.bootstrapPath }}"
+            subPath: "bootstrap.properties"
+            name: openliberty-bootstrap
+            readOnly: true
+        {{- if .Values.kafka.security.truststoreRequired }}
           - mountPath: "{{ .Values.kafka.security.truststorePath }}"
             name: kafka-truststore
             readOnly: true
         {{- end }}
-      {{- if .Values.kafka.security.truststoreRequired }}
       volumes:
+        - name: openliberty-bootstrap
+          secret:
+            secretName: "{{ .Values.kafka.security.bootstrapSecret }}"
+      {{- if .Values.kafka.security.truststoreRequired }}
         - name: kafka-truststore
           secret:
             secretName: "{{ .Values.kafka.security.truststoreSecret }}"
