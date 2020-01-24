@@ -51,7 +51,7 @@ public class Receiver {
 
         Boolean anomaly = false;
 
-        if (mockup == "yes"){
+        if (mockup.equals("yes")){
             // Mockup
             int number = new Random().nextInt(10);
             System.out.println("Number: " + number);
