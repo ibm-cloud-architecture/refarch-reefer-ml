@@ -3,6 +3,7 @@ package ibm.gse.kcontainer.scoring.infrastructure;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -30,7 +31,7 @@ public class Receiver {
     @Outgoing("containers")
     @Acknowledgment(Acknowledgment.Strategy.MANUAL)
     public PublisherBuilder<Message<String>> processTelemetry(Message<String> message) {
-        
+
         // Get the message as String
         String input = message.getPayload();
         System.out.println("Received message: " + input);
