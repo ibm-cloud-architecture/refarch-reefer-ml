@@ -732,9 +732,64 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#java-micro-profile-30-with-cloud-pak-for-application" class="md-nav__link">
-    Java Micro Profile 3.0 with Cloud Pak for Application
+  <a href="#java-microprofile-30-with-cloud-pak-for-application" class="md-nav__link">
+    Java MicroProfile 3.0 with Cloud Pak for Application
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reactive-systems" class="md-nav__link">
+    Reactive Systems
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    Use Cases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microprofile-reactive-messaging" class="md-nav__link">
+    MicroProfile Reactive Messaging
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implement" class="md-nav__link">
+    Implement
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    Build
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    Deploy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -909,9 +964,64 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#java-micro-profile-30-with-cloud-pak-for-application" class="md-nav__link">
-    Java Micro Profile 3.0 with Cloud Pak for Application
+  <a href="#java-microprofile-30-with-cloud-pak-for-application" class="md-nav__link">
+    Java MicroProfile 3.0 with Cloud Pak for Application
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reactive-systems" class="md-nav__link">
+    Reactive Systems
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    Use Cases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microprofile-reactive-messaging" class="md-nav__link">
+    MicroProfile Reactive Messaging
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implement" class="md-nav__link">
+    Implement
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build" class="md-nav__link">
+    Build
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    Deploy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -951,12 +1061,203 @@
                 <h1 id="develop-the-scoring-agent-with-cloud-pak-for-application">Develop the scoring agent with Cloud Pak for Application</h1>
 <p>We have two approaches to build the predictive scoring agent:</p>
 <ol>
-<li>A python Flask app listening to telemetry events coming from Kafka, run the predictive scoring within the same app. The model was developed with Jupiter notebook and serialized with <a href="https://docs.python.org/3/library/pickle.html">pickle</a>, so it responds in microseconds and generates anomaly to a second kafka topic. The code is under <code>scoring</code> folder, and uses essentially open source components. See <a href="../oss-scoring-app/">this article</a> to understand how it is built.</li>
-<li>A Java app built on MicroProfile 3.0 with the reactive messaging annotations, to consume telemetry events and call a remote predictive scoring service, developped and deployed within Cloud Pak for Data. The code is under <code>scoping-mp</code> folder.</li>
+<li>One using a python Flask app listening to telemetry events coming from Kafka, run the predictive scoring within the same app. The model was developed with Jupiter notebook and serialized with <a href="https://docs.python.org/3/library/pickle.html">pickle</a>, so it responds in microseconds and generates anomaly to a second kafka topic. The code is under <code>scoring</code> folder, and uses essentially open source components. See <a href="../oss-scoring-app/">this article</a> to understand how it is built.</li>
+<li>One using Java MicroProfile 3.0 with the Reactive Messaging annotations, to consume telemetry events and call a remote predictive scoring service, developed and deployed within Cloud Pak for Data. The code is under <code>scoping-mp</code> folder.</li>
 </ol>
 <p>The scoring service needs to use an analytics scoring model built using machine learning techniques, and serialized so that it can be loaded in memory.</p>
-<h2 id="java-micro-profile-30-with-cloud-pak-for-application">Java Micro Profile 3.0 with Cloud Pak for Application</h2>
-<p>As the <code>scoring-mp</code> component is consuming message from Kafka and produce messages, we want to use the Reactive messaging extension to microprofile. We are reusing the approach presented in <a href="https://github.com/Emily-Jiang/reactive-service-a">this repository</a> based on <a href="https://smallrye.io/smallrye-reactive-messaging/">SmallRye Reactive Messaging</a>.</p>
+<h2 id="java-microprofile-30-with-cloud-pak-for-application">Java MicroProfile 3.0 with Cloud Pak for Application</h2>
+<p>In this version we, we would like to introduce the new MicroProfile Reactive Messaging feature that allows you to build Reactive Systems. But, what is a Reactive System?</p>
+<h3 id="reactive-systems">Reactive Systems</h3>
+<p>Reactive Systems provide an architecture style to deliver responsive systems. By infusing asynchronous messaging passing at the core of the system, applications enforcing the reactive system’s characteristics are inherently resilient and become more elastic by scaling up and down the number of message consumers.</p>
+<p><img alt="reactive systems" src="../images/scoring-mp/image1.png" /></p>
+<p>Microservices as part of reactive systems interact using messages. The location and temporal decoupling, promoted by this interaction mechanism, enable numerous benefits such as:</p>
+<ul>
+<li>Better failure handling as the temporal decoupling enables message brokers to resend or reroute messages in the case of remote service failures.</li>
+<li>Improved elasticity as under fluctuating load the system can decide to scale up and down some of the microservices.</li>
+<li>The ability to introduce new features more easily as components are more loosely coupled by receiving and publishing messages.</li>
+</ul>
+<p>The MicroProfile Reactive Messaging specification aims to deliver applications embracing the characteristics of reactive systems.</p>
+<h3 id="use-cases">Use Cases</h3>
+<p>MicroProfile Reactive Messaging aims to provide a way to connect event-driven microservices. The key characteristics of the specification make it versatile and suitable for building different types of architecture and applications.</p>
+<p>First, asynchronous interactions with different services and resources can be implemented using Reactive Messaging. Typically, asynchronous database drivers can be used in conjunction with Reactive Messaging to read and write into a data store in a non-blocking and asynchronous manner.</p>
+<p>When building microservices, the CQRS and event-sourcing patterns provide an answer to the data sharing between microservices. Reactive Messaging can also be used as the foundation to CQRS and Event-Sourcing mechanism, as these patterns embrace message-passing as core communication pattern.</p>
+<p>IOT applications, dealing with events from various devices, and data streaming applications can also be implemented using Reactive Messaging. The application receives events or messages, process them, transform them, and may forward them to another microservices. It allows for more fluid architecture for building data-centric applications.</p>
+<h3 id="microprofile-reactive-messaging">MicroProfile Reactive Messaging</h3>
+<p>MicroProfile Reactive Messaging provides a very easy-to-use way to send, receive, and process messages and is well-suited to writing applications that process streams of events. With MicroProfile Reactive Messaging, you annotate application beans' methods and, under the covers, OpenLiberty (in our specific case) converts these to <a href="http://www.reactive-streams.org/">reactive streams</a>-compatible publishers, subscribers and processors and connects them up to each other.</p>
+<p><img alt="reactive messaging" src="../images/scoring-mp/image2.png" /></p>
+<p>Although sending messages within our application is nice, it’s more useful to be able to send and receive messages from other systems. For this, MicroProfile Reactive Messaging also provides a Connector API to allow your methods to be connected to external messaging systems. Open Liberty includes the liberty-kafka connector for sending and receiving messages from an Apache Kafka broker.</p>
+<p>It is important to understand that <a href="https://github.com/eclipse/microprofile-reactive-messaging">MicroProfile Reactive Messaging</a> does not contain an implementation itself but only provides the specified API, a TCK and documentation. It is down to application server or external libraries to provide such implementation. For instance, <a href="https://openliberty.io/blog/2019/09/13/microprofile-reactive-messaging-19009.html">Open Liberty 19.0.0.9</a> provides a full implementation of MicroProfile Reactive Messaging 1.0. OpenLiberty's implementation of the MicroProfile Reactive Messaging capabilities is based on <a href="https://smallrye.io/smallrye-reactive-messaging/">SmallRye Reactive Messaging</a>.</p>
+<h3 id="implement">Implement</h3>
+<p>Now that we have introduce what reactive systems are, what the use cases for these are and how the MicroProfile Reactive Messaging feature aims to help in constructing these, let's have a look at how we have implemented our scoring agent.</p>
+<p>First of all, we have based our implementation on <a href="https://microprofile.io/">MicroProfile</a> as the standardization for building microservices based applications. The application server we have chosen, that provides full MicroProfile support, is <a href="https://openliberty.io/">OpenLiberty</a>.</p>
+<p>As already introduced, the scoring agent will react to a stream of data, in the form of messaging being sent from an IOT device in the Reefer Containers to Kafka (through an MQTT connector), which is used as our event backbone. The scoring agent will react to that stream of data being sent into a kafka topic through the MicroProfile Reactive Messaging feature that OpenLiberty implements and supports. It will do some computation for each of the messages coming as a stream of data, which in this case is to call the container anomaly predictive system, and send out a container anomaly message a to specific kafka topic where the Reefer Container EDA reference application listens to and will act in consequence. If you have not yet realise, this scenario fits into the IOT applications use case described in the earlier <a href="#use-cases">section</a>.</p>
+<p>The main chunk of code that implements the scoring agent use case just described looks like this:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Incoming</span><span class="o">(</span><span class="s">&quot;reeferTelemetry&quot;</span><span class="o">)</span>
+<span class="nd">@Outgoing</span><span class="o">(</span><span class="s">&quot;containers&quot;</span><span class="o">)</span>
+<span class="nd">@Acknowledgment</span><span class="o">(</span><span class="n">Acknowledgment</span><span class="o">.</span><span class="na">Strategy</span><span class="o">.</span><span class="na">MANUAL</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">PublisherBuilder</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">processTelemetry</span><span class="o">(</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="c1">// Get the message as String</span>
+    <span class="n">String</span> <span class="n">input</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="na">getPayload</span><span class="o">();</span>
+
+    <span class="n">Gson</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Gson</span><span class="o">();</span>
+    <span class="c1">// Parsing the message into a TelemetryEvent Java Object</span>
+    <span class="n">TelemetryEvent</span> <span class="n">te</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="na">fromJson</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">TelemetryEvent</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="c1">// Getting the Telemetry out of the event.</span>
+    <span class="n">Telemetry</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Telemetry</span><span class="o">(</span><span class="n">te</span><span class="o">.</span><span class="na">getPayload</span><span class="o">());</span>
+
+    <span class="c1">// Calling the Anomaly Scoring service</span>
+    <span class="n">ScoringResult</span> <span class="n">scoringResult</span> <span class="o">=</span> <span class="n">scoringClient</span><span class="o">.</span><span class="na">callAnomalyScoring</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+    <span class="c1">// Getting the Scoring Prediction Results</span>
+    <span class="n">ScoringPredictionValues</span> <span class="n">result</span> <span class="o">=</span> <span class="n">scoringResult</span><span class="o">.</span><span class="na">getScoringPredictionValues</span><span class="o">();</span>
+
+    <span class="n">Boolean</span> <span class="n">anomaly</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getPrediction</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">&quot;Issue&quot;</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(!</span><span class="n">anomaly</span><span class="o">){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;No container anomaly&quot;</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">ack</span><span class="o">();</span> <span class="c1">// All processing of this message is done, ack it now</span>
+        <span class="k">return</span> <span class="n">ReactiveStreams</span><span class="o">.</span><span class="na">empty</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">else</span><span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;A container anomaly has been predicted. Therefore, sending a ContainerAnomaly Event to the appropriate topic&quot;</span><span class="o">);</span>
+        <span class="n">ContainerAnomalyEvent</span> <span class="n">cae</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ContainerAnomalyEvent</span><span class="o">(</span><span class="n">te</span><span class="o">.</span><span class="na">getContainerID</span><span class="o">(),</span> <span class="n">te</span><span class="o">.</span><span class="na">getTimestamp</span><span class="o">(),</span> <span class="n">t</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;ContainerAnomalyEvent object sent: &quot;</span> <span class="o">+</span> <span class="n">cae</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+
+        <span class="c1">// This message will be sent on, create a new message which acknowledges the incoming message when it is acked</span>
+        <span class="k">return</span> <span class="n">ReactiveStreams</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">Message</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">cae</span><span class="o">.</span><span class="na">toString</span><span class="o">(),</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">message</span><span class="o">.</span><span class="na">ack</span><span class="o">()));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>where we are consuming/producing the data from/to Kafka by simply annotating our method with <strong>@Incoming</strong> and <strong>@Outgoing</strong> and leaving the rest of the magic required to create the reactive streams to the MicroProfile Reactive Messaging implementation of the OpenLiberty server does. Although there is certain magic in this process, there is still some configuration we need to provide OpenLiberty with in order for it to properly create the reactive streams.</p>
+<p>Such configuration is provided in the <a href="../../src/main/resources/META-INF/microprofile-config.properties">microprofile-configuration.properties</a> file:</p>
+<div class="codehilite"><pre><span></span><span class="c"># Config specific to reeferTelemetry kafka topic</span>
+<span class="na">mp.messaging.incoming.reeferTelemetry.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
+<span class="na">mp.messaging.incoming.reeferTelemetry.group.id</span><span class="o">=</span><span class="s">reeferTelemetry-reactive</span>
+<span class="na">mp.messaging.incoming.reeferTelemetry.topic</span><span class="o">=</span><span class="s">reeferTelemetry</span>
+<span class="na">mp.messaging.incoming.reeferTelemetry.key.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+<span class="na">mp.messaging.incoming.reeferTelemetry.value.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+
+<span class="c"># Config specific to containers kafka topic</span>
+<span class="na">mp.messaging.outgoing.containers.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
+<span class="na">mp.messaging.outgoing.containers.group.id</span><span class="o">=</span><span class="s">containers-reactive</span>
+<span class="na">mp.messaging.outgoing.containers.topic</span><span class="o">=</span><span class="s">containers</span>
+<span class="na">mp.messaging.outgoing.containers.key.serializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringSerializer</span>
+<span class="na">mp.messaging.outgoing.containers.value.serializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringSerializer</span>
+
+<span class="c">#### Config shared between all kafka connections</span>
+
+<span class="c"># bootstrap server is the only config needed for plain insecure local kafka instance</span>
+<span class="na">mp.messaging.connector.liberty-kafka.bootstrap.servers</span><span class="o">=</span>
+</pre></div>
+
+<p>where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reeferTelemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the <strong>liberty-kafka</strong> connector. Otherwise, OpenLiberty would not be able to interact with Kafka.</p>
+<p>Finally, we are providing to the liberty-kafka connector the appropriate configuration for OpenLiberty to successfully connect and consume/produce data to Kafka. In the example above we are providing the Kafka bootstrap server but there are other properties that can be set here (such as security) that can be found in the <a href="https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html#_supported_method_signatures">MicroProfile Reactive Messaging Specification</a></p>
+<h3 id="build">Build</h3>
+<p>In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the <a href="../../src/main/liberty/config/server.xml">server.xml</a> file:</p>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;server</span> <span class="na">description=</span><span class="s">&quot;Liberty server&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;featureManager&gt;</span>
+        <span class="nt">&lt;feature&gt;</span>microProfile-3.0<span class="nt">&lt;/feature&gt;</span>
+        <span class="c">&lt;!-- Reactive messaging and reactive streams --&gt;</span>
+        <span class="nt">&lt;feature&gt;</span>mpReactiveMessaging-1.0<span class="nt">&lt;/feature&gt;</span>
+        <span class="nt">&lt;feature&gt;</span>mpReactiveStreams-1.0<span class="nt">&lt;/feature&gt;</span>
+    <span class="nt">&lt;/featureManager&gt;</span>
+    ...
+<span class="nt">&lt;/server&gt;</span>
+</pre></div>
+
+<p>Secondly, we need to configure our build process through the <a href="../../scoring-mp/pom.xml">pom.xml</a> file (we are using Maven to build our application) to compile the code and build the resulting application with:</p>
+<ol>
+<li>OpenLiberty as the target application server to run our application:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>net.wasdev.wlp.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>liberty-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;assemblyArtifact&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>${liberty.groupId}<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>${liberty.artifactId}<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${version.openliberty-runtime}<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;type&gt;</span>zip<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;/assemblyArtifact&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
+</pre></div>
+
+<ol>
+<li>MicroProfile as the Java framework:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.eclipse.microprofile<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>microprofile<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<ol>
+<li>MicroProfile Reactive Messaging and MicroProfile Reactive Streams capabilities:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.eclipse.microprofile.reactive.messaging<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>microprofile-reactive-messaging-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.eclipse.microprofile.reactive-streams-operators<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>microprofile-reactive-streams-operators-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<ol>
+<li>Apache Kafka Client:</li>
+</ol>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.kafka<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>kafka-clients<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.3.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<h3 id="deploy">Deploy</h3>
+<p>TBD</p>
+<h3 id="run">Run</h3>
+<p>Once we have our application running, we can confirm the following by looking at the application logs:</p>
+<ol>
+<li>It is reacting to a data stream from the reeferTelemetries Kafka topic.</li>
+<li>It is calling the container anomaly predictive system.</li>
+<li>It is producing container anomaly events, when needed, into the containers Kafka topic.</li>
+</ol>
+<div class="codehilite"><pre><span></span>[<span class="nv">AUDIT</span>   ] <span class="nv">CWWKF0011I</span>: <span class="nv">The</span> <span class="nv">defaultServer</span> <span class="nv">server</span> <span class="nv">is</span> <span class="nv">ready</span> <span class="nv">to</span> <span class="nv">run</span> <span class="nv">a</span> <span class="nv">smarter</span> <span class="nv">planet</span>. <span class="nv">The</span> <span class="nv">defaultServer</span> <span class="nv">server</span> <span class="nv">started</span> <span class="nv">in</span> <span class="mi">97</span>.<span class="mi">081</span> <span class="nv">seconds</span>.
+
+<span class="nv">Received</span> <span class="nv">message</span>: {<span class="s2">&quot;</span><span class="s">containerID</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">1111</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">payload</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">(&#39;1111&#39;, &#39;2020-01-15 17:59:45&#39;, &#39;P05&#39;, 5.02702153, 5., 20.52035697, 2.62176459, 0, 1, 5, 21.56977522, 75.97754859, 39.85714797, 4.74727473, True, True, True, &#39;37.8226902168957&#39;, &#39;-122.324895&#39;, 0)</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">timestamp</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">2020-01-15 17:59:45</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">type</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">ReeferTelemetries</span><span class="s2">&quot;</span>}
+
+<span class="nv">Getting</span> <span class="nv">Authentication</span> <span class="nv">token</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">prediction</span> <span class="nv">service</span>...
+<span class="nv">IAM</span> <span class="nv">service</span> <span class="nv">returned</span>: <span class="mi">200</span>
+
+<span class="nv">Payload</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">prediction</span> <span class="nv">service</span> <span class="nv">call</span>: {<span class="s2">&quot;</span><span class="s">input_data</span><span class="s2">&quot;</span>:[{<span class="s2">&quot;</span><span class="s">fields</span><span class="s2">&quot;</span>:[<span class="s2">&quot;</span><span class="s">temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">target_temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">ambiant_temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">kilowatts</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">time_door_open</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">defrost_cycle</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">oxygen_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">nitrogen_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">humidity_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">target_humidity_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">carbon_dioxide_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_1</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_2</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_3</span><span class="s2">&quot;</span>],<span class="s2">&quot;</span><span class="s">values</span><span class="s2">&quot;</span>:[[<span class="mi">5</span>.<span class="mi">02702153</span>,<span class="mi">5</span>.<span class="mi">0</span>,<span class="mi">20</span>.<span class="mi">52035697</span>,<span class="mi">2</span>.<span class="mi">62176459</span>,<span class="mi">0</span>.<span class="mi">0</span>,<span class="mi">5</span>,<span class="mi">21</span>.<span class="mi">56977522</span>,<span class="mi">75</span>.<span class="mi">97754859</span>,<span class="mi">39</span>.<span class="mi">85714797</span>,<span class="mi">39</span>.<span class="mi">85714797</span>,<span class="mi">4</span>.<span class="mi">74727473</span>,<span class="nv">true</span>,<span class="nv">true</span>,<span class="nv">true</span>]]}]}
+
+<span class="nv">This</span> <span class="nv">is</span> <span class="nv">the</span> <span class="nv">prediction</span>: <span class="nv">NoIssue</span>
+<span class="nv">This</span> <span class="nv">is</span> <span class="nv">the</span> <span class="nv">probability</span>: [<span class="mi">0</span>.<span class="mi">0010803937911987305</span>,<span class="mi">0</span>.<span class="mi">9989196062088013</span>]
+
+<span class="nv">No</span> <span class="nv">container</span> <span class="nv">anomaly</span>
+
+<span class="nv">Received</span> <span class="nv">message</span>: {<span class="s2">&quot;</span><span class="s">containerID</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">1111</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">payload</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">(&#39;1111&#39;, &#39;2020-01-15 17:59:45&#39;, &#39;P05&#39;, 5.02702153, 5., 20.52035697, 2.62176459, 0, 1, 5, 21.56977522, 75.97754859, 39.85714797, 4.74727473, True, True, True, &#39;37.8226902168957&#39;, &#39;-122.324895&#39;, 0)</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">timestamp</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">2020-01-15 17:59:45</span><span class="s2">&quot;</span>, <span class="s2">&quot;</span><span class="s">type</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">ReeferTelemetries</span><span class="s2">&quot;</span>}
+
+<span class="nv">Payload</span> <span class="k">for</span> <span class="nv">the</span> <span class="nv">prediction</span> <span class="nv">service</span> <span class="nv">call</span>: {<span class="s2">&quot;</span><span class="s">input_data</span><span class="s2">&quot;</span>:[{<span class="s2">&quot;</span><span class="s">fields</span><span class="s2">&quot;</span>:[<span class="s2">&quot;</span><span class="s">temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">target_temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">ambiant_temperature</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">kilowatts</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">time_door_open</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">defrost_cycle</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">oxygen_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">nitrogen_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">humidity_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">target_humidity_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">carbon_dioxide_level</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_1</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_2</span><span class="s2">&quot;</span>,<span class="s2">&quot;</span><span class="s">fan_3</span><span class="s2">&quot;</span>],<span class="s2">&quot;</span><span class="s">values</span><span class="s2">&quot;</span>:[[<span class="mi">5</span>.<span class="mi">02702153</span>,<span class="mi">5</span>.<span class="mi">0</span>,<span class="mi">20</span>.<span class="mi">52035697</span>,<span class="mi">2</span>.<span class="mi">62176459</span>,<span class="mi">0</span>.<span class="mi">0</span>,<span class="mi">5</span>,<span class="mi">21</span>.<span class="mi">56977522</span>,<span class="mi">75</span>.<span class="mi">97754859</span>,<span class="mi">39</span>.<span class="mi">85714797</span>,<span class="mi">39</span>.<span class="mi">85714797</span>,<span class="mi">4</span>.<span class="mi">74727473</span>,<span class="nv">true</span>,<span class="nv">true</span>,<span class="nv">true</span>]]}]}
+
+<span class="nv">This</span> <span class="nv">is</span> <span class="nv">the</span> <span class="nv">prediction</span>: <span class="nv">Issue</span>
+<span class="nv">This</span> <span class="nv">is</span> <span class="nv">the</span> <span class="nv">probability</span>: [<span class="mi">0</span>.<span class="mi">0010803937911987305</span>,<span class="mi">0</span>.<span class="mi">9989196062088013</span>]
+
+<span class="nv">A</span> <span class="nv">container</span> <span class="nv">anomaly</span> <span class="nv">has</span> <span class="nv">been</span> <span class="nv">predicted</span>. <span class="nv">Therefore</span>, <span class="nv">sending</span> <span class="nv">a</span> <span class="nv">ContainerAnomaly</span> <span class="nv">Event</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">appropriate</span> <span class="nv">topic</span>
+
+<span class="nv">ContainerAnomalyEvent</span> <span class="nv">object</span> <span class="nv">sent</span>: {<span class="nv">containerID</span>: <span class="mi">1111</span>, <span class="nv">timestamp</span>: <span class="mi">1579111185000</span>, <span class="nv">type</span>: <span class="nv">ContainerAnomaly</span>, <span class="nv">payload</span>: {<span class="nv">temperature</span>: <span class="mi">5</span>.<span class="mi">02702153</span>, <span class="nv">target_temperature</span>: <span class="mi">5</span>.<span class="mi">0</span>, <span class="nv">ambiant_temperature</span>: <span class="mi">20</span>.<span class="mi">52035697</span>, <span class="nv">kilowatts</span>: <span class="mi">2</span>.<span class="mi">62176459</span>, <span class="nv">time_door_open</span>: <span class="mi">0</span>.<span class="mi">0</span>, <span class="nv">content_type</span>: <span class="mi">1</span>, <span class="nv">defrost_cycle</span>: <span class="mi">5</span>, <span class="nv">oxygen_level</span>: <span class="mi">21</span>.<span class="mi">56977522</span>, <span class="nv">nitrogen_level</span>: <span class="mi">75</span>.<span class="mi">97754859</span>, <span class="nv">humidity_level</span>: <span class="mi">39</span>.<span class="mi">85714797</span>, <span class="nv">carbon_dioxide_level</span>: <span class="mi">4</span>.<span class="mi">74727473</span>, <span class="nv">fan_1</span>: <span class="nv">true</span>, <span class="nv">fan_2</span>: <span class="nv">true</span>, <span class="nv">fan_3</span>: <span class="nv">true</span>, <span class="nv">latitude</span>: <span class="mi">37</span>.<span class="mi">8226902168957</span>, <span class="nv">longitude</span>: <span class="o">-</span><span class="mi">122</span>.<span class="mi">324895</span>}}
+</pre></div>
+
 <h2 id="deploying-the-model-using-watson-machine-learning">Deploying the model using Watson Machine Learning</h2>
 <p>TODO Cloud Pak model deployment</p>
 <h2 id="further-readings">Further Readings</h2>
@@ -965,6 +1266,11 @@
 <li><a href="https://github.com/appsody/stacks/tree/master/incubator/java-microprofile">Appsody microprofile stack</a></li>
 <li><a href="https://www.youtube.com/watch?v=cKIkhhONBKM&amp;t=46s">Cloud Pak for Application demo video</a></li>
 <li><a href="https://www.eclipse.org/codewind/mdt-vsc-getting-started.html">Use Codewind for VScode</a></li>
+<li><a href="https://openliberty.io/blog/2019/09/13/microprofile-reactive-messaging-19009.html">Reactive messaging between microservices with MicroProfile on Open Liberty 19.0.0.9</a></li>
+<li><a href="https://openliberty.io/blog/2019/09/13/microprofile-reactive-messaging.html">Sending and receiving messages between microservices with MicroProfile Reactive Messaging</a></li>
+<li><a href="https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html">MicroProfile Reactive Messaging Specification</a></li>
+<li><a href="https://github.com/eclipse/microprofile-reactive-messaging">Reactive Messaging for MicroProfile</a></li>
+<li><a href="http://www.reactive-streams.org/">Reactive Streams</a></li>
 </ul>
                 
                   
