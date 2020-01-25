@@ -13,7 +13,9 @@ spec:
   resources:
   - name: git-source
     resourceRef:
-      name: git-source-reefer-ml
+      #name: git-source-reefer-ml
+      name: git-source-gitops
   params:
   - name: context
-    value: simulator
+    #value: simulator
+    value: reefersimulator
