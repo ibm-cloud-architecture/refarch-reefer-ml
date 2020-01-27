@@ -1130,7 +1130,7 @@
 </pre></div>
 
 <p>where we are consuming/producing the data from/to Kafka by simply annotating our method with <strong>@Incoming</strong> and <strong>@Outgoing</strong> and leaving the rest of the magic required to create the reactive streams to the MicroProfile Reactive Messaging implementation of the OpenLiberty server does. Although there is certain magic in this process, there is still some configuration we need to provide OpenLiberty with in order for it to properly create the reactive streams.</p>
-<p>Such configuration is provided in the <a href="../../src/main/resources/META-INF/microprofile-config.properties">microprofile-configuration.properties</a> file:</p>
+<p>Such configuration is provided in the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/resources/META-INF/microprofile-config.properties">microprofile-configuration.properties</a> file:</p>
 <div class="codehilite"><pre><span></span><span class="c"># Config specific to reeferTelemetry kafka topic</span>
 <span class="na">mp.messaging.incoming.reeferTelemetry.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
 <span class="na">mp.messaging.incoming.reeferTelemetry.group.id</span><span class="o">=</span><span class="s">reeferTelemetry-reactive</span>
@@ -1154,7 +1154,7 @@
 <p>where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reeferTelemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the <strong>liberty-kafka</strong> connector. Otherwise, OpenLiberty would not be able to interact with Kafka.</p>
 <p>Finally, we are providing to the liberty-kafka connector the appropriate configuration for OpenLiberty to successfully connect and consume/produce data to Kafka. In the example above we are providing the Kafka bootstrap server but there are other properties that can be set here (such as security) that can be found in the <a href="https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html#_supported_method_signatures">MicroProfile Reactive Messaging Specification</a></p>
 <h3 id="build">Build</h3>
-<p>In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the <a href="../../src/main/liberty/config/server.xml">server.xml</a> file:</p>
+<p>In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/liberty/config/server.xml">server.xml</a> file:</p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;server</span> <span class="na">description=</span><span class="s">&quot;Liberty server&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;featureManager&gt;</span>
         <span class="nt">&lt;feature&gt;</span>microProfile-3.0<span class="nt">&lt;/feature&gt;</span>
@@ -1166,7 +1166,7 @@
 <span class="nt">&lt;/server&gt;</span>
 </pre></div>
 
-<p>Secondly, we need to configure our build process through the <a href="../../scoring-mp/pom.xml">pom.xml</a> file (we are using Maven to build our application) to compile the code and build the resulting application with:</p>
+<p>Secondly, we need to configure our build process through the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/pom.xml">pom.xml</a> file (we are using Maven to build our application) to compile the code and build the resulting application with:</p>
 <ol>
 <li>OpenLiberty as the target application server to run our application:</li>
 </ol>
