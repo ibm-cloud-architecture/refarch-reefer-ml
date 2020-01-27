@@ -18,6 +18,8 @@ Once these YAMLs are generated, they are checked in to the main [GitOps reposito
 
 An ArgoCD application is then created on the ArgoCD deployment inside the target environment that can read from the GitOps repository. ArgoCD can also deploy between clusters, which does come in handy in certain use cases, but remember our squads main goal of _"zero-infrastructure overhead"_, so we deploy from ArgoCD into the same cluster it is deployed on the majority of the time. The ArgoCD application is a Custom-Resource Definition, comprising of the details necessary to determine the remote code repository URL, the branch of the code to use, the target namespace, and any formatting capabilities that are necessary.
 
+![Argo CD - Application Topology](images/argocd-application-topology.png)
+
 ArgoCD then handles automatically (or manually) syncing the deployments in the target namespace with the state that is described in the YAMLs on the specific branch in the GitOps repository. To keep in sync with the continuous integration implementation we have defined in [Continuous integration](ci.md), we have an additional GitHub Actions workflow defined in this repository that will update the YAML files contained in the repository with the latest microservice container images as they are modified, thus enabling a completely automated build-to-deployment lifecycle.
 
 Defined in the [.github/workflows/update-gitops-deployments-(eda-integration).yaml](https://github.com/ibm-cloud-architecture/refarch-kc-gitops/blob/master/.github/workflows/update-gitops-deployments-(eda-integration).yaml) workflow file, the workflow will scan the repository for all templated use of container images in Kubernetes Deployment files (and recently updated to be extensible to any YAML-based file!), search Docker Hub for the latest version of that container image, update the YAML file in-place, and check in the YAML updates back to the same repository and branch. This process is kicked off by the webhook Jobs mentioned in our CI process, as well as on a regularly-scheduled cron-like timer.
@@ -76,7 +78,11 @@ Defined in the [/scripts/tekton](https://github.com/ibm-cloud-architecture/refar
 
 The key artifact that enables Tekton to deploy our Appsody-based `refarch-reefer-ml/simulator` microservice is the generated `app-deploy.yaml` file. The [refarch-reefer-ml/simulator/app-deploy.yaml](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/simulator/app-deploy.yaml) file was generated according to the `appsody build` command and then annotated with the required environment variables and metadata for successful operation in a given namespace, very similar to the pattern required for generating our Helm-templated YAMLs in the [ArgoCD deployments](#argocd-deployments) section above.
 
+![Tekton CD - Dashboard](images/tekton-create-pr.png)
+
 We then make use of the [Appsody Operator](https://appsody.dev/docs/using-appsody/building-and-deploying#deployment-via-the-appsody-operator---overview) to apply the AppsodyApplication to the target environment through the `appsody deploy --no-build` command. As documented in the [Appsody Docs](https://appsody.dev/docs/using-appsody/building-and-deploying#deploying-your-application-through-docker-hub), we are able to take advantage of the pre-built container images available on Docker Hub and the annotated `app-deploy.yaml` file that is now a synonymous GitOps-like deployment artifact to quickly apply the change to the target namespace in the same cluster. Once the `appsody deploy` command is succesful, the Appsody Operator and Kubernetes takes care of the rest and reconciles the necessary underlying Kubernetes artifacts that are required to fulfill the requirements of serving up the application code in real-time!
+
+![Tekton CD - PipelineRun Logs](images/tekton-pr-logs.png)
 
 ### Deploying the simulator microservice with Tekton & Appsody
 
