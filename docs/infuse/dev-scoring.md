@@ -96,7 +96,7 @@ public PublisherBuilder<Message<String>> processTelemetry(Message<String> messag
 
 where we are consuming/producing the data from/to Kafka by simply annotating our method with **@Incoming** and **@Outgoing** and leaving the rest of the magic required to create the reactive streams to the MicroProfile Reactive Messaging implementation of the OpenLiberty server does. Although there is certain magic in this process, there is still some configuration we need to provide OpenLiberty with in order for it to properly create the reactive streams.
 
-Such configuration is provided in the [microprofile-configuration.properties](../../src/main/resources/META-INF/microprofile-config.properties) file:
+Such configuration is provided in the [microprofile-configuration.properties](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/resources/META-INF/microprofile-config.properties) file:
 
 ```properties
 # Config specific to reeferTelemetry kafka topic
@@ -125,7 +125,7 @@ Finally, we are providing to the liberty-kafka connector the appropriate configu
 
 ### Build
 
-In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the [server.xml](../../src/main/liberty/config/server.xml) file:
+In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the [server.xml](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/liberty/config/server.xml) file:
 
 ```xml
 <server description="Liberty server">
@@ -139,7 +139,7 @@ In order to be able to run our application, we first need to configure our OpenL
 </server>
 ```
 
-Secondly, we need to configure our build process through the [pom.xml](../../scoring-mp/pom.xml) file (we are using Maven to build our application) to compile the code and build the resulting application with:
+Secondly, we need to configure our build process through the [pom.xml](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/pom.xml) file (we are using Maven to build our application) to compile the code and build the resulting application with:
 
 1. OpenLiberty as the target application server to run our application:
 
