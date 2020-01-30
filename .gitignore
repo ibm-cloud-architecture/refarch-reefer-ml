@@ -1,35 +1,27 @@
-simulator/scripts/setenv.sh
-ml/.ipynb_checkpoints/
-simulator/__pycache__/
-simulator/api/__pycache__/
-simulator/domain/__pycache__/
-simulator/infrastructure/__pycache__/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+**/setenv.sh
 simulator/templates/
-simulator/certs/*.pem
-simulator/certs/ocp/*.pem
-scoring/webapp/__pycache__/
-scoring/webapp/infrastructure/__pycache__
-scoring/webapp/domain/__pycache__
+
+**/*.pem
+
 scoring/templates/
 scoring-mp/.vscode/
 scoring-mp/target/
-consumer/__pycache__/
-simulator/*.pem
-simulator-old/*.pem
-scoring/eventConsumer/*.pem
-scoring/eventConsumer/__pycache__/
-scoring/eventConsumer/infrastructure/__pycache__
-scoring/eventConsumer/domain/__pycache__
 site/
 docker/postgres-data/
 docker/kafka1/
 docker/zookeeper1/
-scripts/setenv.sh
 simulator/kaf/
 .vscode/
 .postgresql/
 .local/
-jovyan/
 work/
 
 # Jupyter temp files
@@ -37,4 +29,3 @@ work/
 
 # Vim temp files
 **/.*.swp
-
