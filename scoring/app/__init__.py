@@ -4,10 +4,12 @@ from server import app
 from server.routes.prometheus import track_requests
 import os, time, sys
 from datetime import datetime
+import json
 from userapp.domain.predictservice import PredictService
 
-application = Flask(__name__)
-# predictService = PredictService()
+app = Flask(__name__)
+predictService = PredictService()
+header="""temperature,target_temperature,ambiant_temperature,oxygen_level,carbon_dioxide_level,humidity_level,nitrogen_level,vent_1,vent_2,vent_3,kilowatts,content_type,time_door_open,defrost_cycle"""
 # The python-flask stack includes the flask extension flasgger, which will build
 # and publish your swagger ui and specification at the /apidocs url. Here we set up
 # the basic swagger attributes, which you should modify to match you application.
@@ -49,11 +51,11 @@ def HelloWorld():
     """
     return 'Hello from Appsody!'
 
-@app.route('/test')
+# This route is just to test and debug.
+heroes = [{'name' : 'Batman'}, {'name' : 'Superman'}]
+@app.route('/superHeros', methods = ['GET', 'POST'])
 @track_requests
-def TestWorld():
-    # To include an endpoint in the swagger ui and specification, we include a docstring that
-    # defines the attributes of this endpoint.
+def SuperHero():
     """A test message
     Example endpoint returning a Test message
     ---
@@ -63,22 +65,33 @@ def TestWorld():
         examples:
           text/plain: Test from Appsody!
     """
-    return 'Trying some stuff out'
+    content = request.get_json()
+    heroes.append(content)
+    return jsonify(heroes)
 
 # It is considered bad form to return an error for '/', so let's redirect to the apidocs
 @app.route('/')
 def index():
     return redirect('/apidocs')
 
-@application.route("/predict", methods = ['POST'])
+@app.route('/getting', methods = ['GET', 'POST'])
+@track_requests
 def predictContainerTelemetry():
+    """A test message
+    Example endpoint returning a Test message
+    ---
+    responses:
+      200:
+        description: A good reply
+        examples:
+          text/plain: Test from Appsody!
+    """
     metricValue = transformToCSV(request.json)
     metric = header+"\n"+metricValue
     print("Predict with this parameter " + metric)
     score=str(predictService.predict(metric))
     print("return prediction:" + score)
-    return score
-
+    return jsonify(heroes)
 
 def transformToCSV(metricJson):
     return str(metricJson["temperature"]) + "," \
