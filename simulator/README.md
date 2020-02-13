@@ -16,8 +16,9 @@ The Docker image can be built from this directory by using the `appsody build` c
 ### Application deployment
 
 The application can be deployed to a remote OpenShift cluster by using the `appsody deploy` command:
-1. There are three required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
+1. There are four required configuration elements for connectivity to IBM Event Streams (Kafka) prior to deployment:
   - A `ConfigMap` named `kafka-brokers` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-brokers_1)**
+  - A `ConfigMap` named `kafka-topics` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-kafka-topics_1)**
   - A `Secret` named `eventstreams-api-key` **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-api-key_1)**
   - A `Secret` named `eventstreams-cert-pem` _(if connecting to an on-premise version of IBM Event Streams)_ **[Reference Link](https://ibm-cloud-architecture.github.io/refarch-kc/deployments/backing-services/#event-streams-certificates)**
 

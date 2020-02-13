@@ -37,8 +37,7 @@ route:
   path: /
   urlPrefix: kcontainer-scoringmp
 kafka:
-  telemetryTopicName: reeferTelemetry
-  containersTopicName: containers
+  topicsConfigMap: kafka-topics
   security:
     enabled: true
     bootstrapSecret: openliberty-bootstrap
@@ -50,4 +49,4 @@ predictiveModel:
   mockup: no
   predictiveModelConfigMap: predictive-model-configmap
   predictiveModelSecret: predictive-model-secret
-serviceAccountName: default
+serviceAccountName: kcontainer-runtime

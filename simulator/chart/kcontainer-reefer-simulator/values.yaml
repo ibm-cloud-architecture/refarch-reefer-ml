@@ -20,11 +20,10 @@ service:
 ingress:
   enabled: false
 kafka:
-  brokersConfigMap: demo-kafka-brokers
-  telemetryTopicName: reeferTelemetries
-  containerTopicName: containers
+  brokersConfigMap: kafka-brokers
+  topicsConfigMap: kafka-topics
   capemSecret: es-cert-pem
 eventstreams:
   enabled: true
-  apikeyConfigMap: demo-es-apikey
+  apikeyConfigMap: eventstreams-apikey
 serviceAccountName: kcontainer-runtime

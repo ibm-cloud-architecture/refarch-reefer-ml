@@ -68,9 +68,15 @@ spec:
           ### Reactive Messaging topics
           #############################
           - name: MP_MESSAGING_INCOMING_REEFERTELEMETRY_TOPIC
-            value: "{{ .Values.kafka.telemetryTopicName }}"
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.kafka.topicsConfigMap }}"
+                key: reeferTelemetryTopic
           - name: MP_MESSAGING_OUTGOING_CONTAINERS_TOPIC
-            value: "{{ .Values.kafka.containersTopicName }}"
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.kafka.topicsConfigMap }}"
+                key: containersTopic
 {{- if .Values.generatedBindings.enabled }}
 {{.Files.Get "bindings.yaml" | indent 10 }}
 {{- end }}
