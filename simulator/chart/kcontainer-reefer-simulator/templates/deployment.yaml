@@ -62,9 +62,15 @@ spec:
                 name: "{{ .Values.kafka.brokersConfigMap }}"
                 key: brokers
           - name: TELEMETRY_TOPIC
-            value: "{{ .Values.kafka.telemetryTopicName }}"
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.kafka.topicsConfigMap }}"
+                key: reeferTelemetryTopic
           - name: CONTAINER_TOPIC
-            value: "{{ .Values.kafka.containerTopicName }}"
+            valueFrom:
+              configMapKeyRef:
+                name: "{{ .Values.kafka.topicsConfigMap }}"
+                key: containersTopic
           {{- if .Values.eventstreams.enabled }}
           - name: KAFKA_APIKEY
             valueFrom:

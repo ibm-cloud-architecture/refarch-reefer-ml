@@ -28,9 +28,15 @@ spec:
         key: brokers
         name: kafka-brokers
   - name: TELEMETRY_TOPIC
-    value: reeferTelemetry
+    valueFrom:
+      configMapKeyRef:
+        name: kafka-topics
+        key: reeferTelemetryTopic
   - name: CONTAINER_TOPIC
-    value: containers
+    valueFrom:
+      configMapKeyRef:
+        name: kafka-topics
+        key: containersTopic
   - name: KAFKA_APIKEY
     valueFrom:
       secretKeyRef:
