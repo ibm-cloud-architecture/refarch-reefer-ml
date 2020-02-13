@@ -4,12 +4,11 @@ from server import app
 from server.routes.prometheus import track_requests
 import os, time, sys
 from datetime import datetime
-import json
-from userapp.domain.predictservice import PredictService
+from userapp.predictservice import PredictService
+# import userapp.testt.test
 
-app = Flask(__name__)
+application = Flask(__name__)
 predictService = PredictService()
-header="""temperature,target_temperature,ambiant_temperature,oxygen_level,carbon_dioxide_level,humidity_level,nitrogen_level,vent_1,vent_2,vent_3,kilowatts,content_type,time_door_open,defrost_cycle"""
 # The python-flask stack includes the flask extension flasgger, which will build
 # and publish your swagger ui and specification at the /apidocs url. Here we set up
 # the basic swagger attributes, which you should modify to match you application.
@@ -31,6 +30,7 @@ swagger_template = {
     "http"
   ],
 }
+
 swagger = Swagger(app, template=swagger_template)
 
 # The python-flask stack includes the prometheus metrics engine. You can ensure your endpoints
@@ -74,24 +74,41 @@ def SuperHero():
 def index():
     return redirect('/apidocs')
 
-@app.route('/getting', methods = ['GET', 'POST'])
-@track_requests
+sample = {
+    "temperature" : 12,
+    "target_temperature" : 13,
+    "ambiant_temperature" : 14,
+    "oxygen_level" : 15,
+    "carbon_dioxide_level" : 16,
+    "humidity_level" : 17,
+    "nitrogen_level" : 18,
+    "vent_1" : 19,
+    "vent_2" : 21,
+    "vent_3" : 31,
+    "kilowatts" : 41,
+    "content_type" : 51,
+    "time_door_open" : 61,
+    "defrost_cycle": 71
+ }
+header = "temperature, target_temperature, ambiant_temperature, oxygen_level, carbon_dioxide_level, humidity_level, nitrogen_level, vent_1, vent_2, vent_3, kilowatts, content_type, time_door_open, defrost_cycle"
+
+@app.route("/predict", methods = ['POST'])
 def predictContainerTelemetry():
-    """A test message
-    Example endpoint returning a Test message
+    """Post Score
+    Endpoint returning score from predictService
     ---
     responses:
       200:
-        description: A good reply
+        description: A successful reply
         examples:
-          text/plain: Test from Appsody!
+          text/plain: Hello from Appsody!
     """
-    metricValue = transformToCSV(request.json)
-    metric = header+"\n"+metricValue
+    metricValue = transformToCSV(sample)
+    metric = header + "\n" + metricValue
     print("Predict with this parameter " + metric)
     score=str(predictService.predict(metric))
     print("return prediction:" + score)
-    return jsonify(heroes)
+    return jsonify(score)
 
 def transformToCSV(metricJson):
     return str(metricJson["temperature"]) + "," \
