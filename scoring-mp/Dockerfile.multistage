@@ -23,6 +23,7 @@ LABEL maintainer="IBM Cloud Architecture Solution Engineering at IBM Cloud"
 USER 1001
 COPY --from=0 /local/gitrepo/target/starter-app.war /config/dropins
 COPY --from=0 /local/gitrepo/src/main/liberty/config/server.xml /config
+COPY --from=0 /local/gitrepo/src/main/liberty/config/bootstrap.properties /config
 
 # Upgrade to production license if URL to JAR provided
 ARG LICENSE_JAR_URL

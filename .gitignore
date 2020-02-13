@@ -29,3 +29,6 @@ work/
 
 # Vim temp files
 **/.*.swp
+
+#appsody files
+simulator/app-deploy.yaml
