@@ -4,10 +4,8 @@ from server import app
 from server.routes.prometheus import track_requests
 import os, time, sys
 from datetime import datetime
-from userapp.predictservice import PredictService
-# import userapp.testt.test
+from userapp.domain.predictservice import PredictService
 
-application = Flask(__name__)
 predictService = PredictService()
 # The python-flask stack includes the flask extension flasgger, which will build
 # and publish your swagger ui and specification at the /apidocs url. Here we set up
@@ -97,13 +95,36 @@ def predictContainerTelemetry():
     """Post Score
     Endpoint returning score from predictService
     ---
+    consumes:
+        - application-json
+    parameters:
+      - in: body
+        name: telemetry
+        description: Incoming telemetry data from a single TelemetryEvent
+        required: true
+        example:
+            temperature: 12
+            target_temperature: 13
+            ambiant_temperature: 14
+            oxygen_level: 15
+            carbon_dioxide_level: 16
+            humidity_level: 17
+            nitrogen_level: 18
+            vent_1: 19
+            vent_2: 21
+            vent_3: 31
+            kilowatts: 41
+            content_type: 51
+            time_door_open: 61
+            defrost_cycle: 71
     responses:
       200:
-        description: A successful reply
+        description: Scoring result from the Pickle model, determining whether the telemetry data should generate a ContainerAnomalyEvent. 0 if no maintenance is needed, 1 otherwise.
         examples:
-          text/plain: Hello from Appsody!
+          application/json: [0]
     """
-    metricValue = transformToCSV(sample)
+    telemetry_json = request.get_json(force=True)
+    metricValue = transformToCSV(telemetry_json)
     metric = header + "\n" + metricValue
     print("Predict with this parameter " + metric)
     score=str(predictService.predict(metric))
