@@ -42,7 +42,7 @@ kafka:
     enabled: true
     bootstrapSecret: openliberty-bootstrap
     bootstrapPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
-    truststoreRequired: true
+    truststoreRequired: false
     truststorePath: /config/resources/security
     truststoreSecret: es-truststore-jks
 predictiveModel:
