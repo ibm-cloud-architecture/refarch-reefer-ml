@@ -44,11 +44,7 @@ createTopic(){
         echo $1 " topic already created"
     fi
 }
- 
-createTopic "containers" 
-createTopic "reeferTelemetries" 
+
+createTopic "containers"
+createTopic "reefer-telemetry" 
 rm topics
-
-
-
-

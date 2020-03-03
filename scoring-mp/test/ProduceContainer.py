@@ -31,15 +31,15 @@ TOPIC_NAME="test"
 # Create a default container
 def createContainer(id):
     print('Creating container...', end ='')
-    
-    # data = {"containerID": id, 
-    #     "type": "Reefer", 
-    #     "status": "Empty",
-    #     "latitude": 37.80,
-    #     "longitude":  -122.25,
-    #     "capacity": 110, 
-    #     "brand": "itg-brand"}
-    # containerEvent = {"containerID": id,"timestamp": int(time.time()),"type":"ContainerAdded","payload": data}
+
+    data = {"containerID": id,
+         "type": "Reefer",
+         "status": "Empty",
+         "latitude": 37.80,
+         "longitude":  -122.25,
+         "capacity": 110,
+         "brand": "fast-start"}
+    containerEvent = {"containerID": id,"timestamp": int(time.time()),"type":"ContainerAdded","payload": data}
 
     # containerEvent = {"containerID": "1111",  "temperature": 12.0,
     # "target_temperature": 12.0,
@@ -56,12 +56,13 @@ def createContainer(id):
     # "fan_1": "true",
     # "fan_2": "true",
     # "fan_3": "true"}
-    containerEvent = {
-  "containerID": "1111",
-  "payload": "('1111', '2020-01-15 17:59:45', 'P05', 5.02702153, 5., 20.52035697, 2.62176459, 0, 1, 5, 21.56977522, 75.97754859, 39.85714797, 4.74727473, True, True, True, '37.8226902168957', '-122.324895', 0)",
-  "timestamp": "2020-01-15 17:59:45",
-  "type": "ReeferTelemetries"
-    }
+
+    #containerEvent = {
+    #    "containerID": "1111",
+    #    "payload": "('1111', '2020-01-15 17:59:45', 'P05', 5.02702153, 5., 20.52035697, 2.62176459, 0, 1, 5, 21.56977522, 75.97754859, 39.85714797, 4.74727473, True, True, True, '37.8226902168957', '-122.324895', 0)",
+    #    "timestamp": "2020-01-15 17:59:45",
+    #    "type": "ReeferTelemetries"
+    #}
     print("DONE")
     return containerEvent
 

@@ -1,6 +1,6 @@
 # The Simulator as web app
 
-The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation to run and to produce Reefer telemetry events to kafka `reeferTelemetry` topic.
+The Simulator webapp is a simple python (3.7) Flask web app exposing a REST POST end point to control the type of simulation to run and to produce Reefer telemetry events to kafka `reefer-telemetry` topic.
 
 !!! What_to_learn
     In this article we shortly present the design and implementation approaches used for this application, as well as how to use [Appsody](https://appsody.dev) to jumpstart the implementation, and continously run and debug the application. We are presenting some best practice on TDD with python.

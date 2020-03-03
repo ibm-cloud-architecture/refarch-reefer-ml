@@ -57,7 +57,7 @@ As already introduced, the scoring agent will react to a stream of data, in the 
 The main chunk of code that implements the scoring agent use case just described looks like this:
 
 ```Java
-@Incoming("reeferTelemetry")
+@Incoming("reefer-telemetry")
 @Outgoing("containers")
 @Acknowledgment(Acknowledgment.Strategy.MANUAL)
 public PublisherBuilder<Message<String>> processTelemetry(Message<String> message) {
@@ -99,12 +99,12 @@ where we are consuming/producing the data from/to Kafka by simply annotating our
 Such configuration is provided in the [microprofile-configuration.properties](https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/resources/META-INF/microprofile-config.properties) file:
 
 ```properties
-# Config specific to reeferTelemetry kafka topic
-mp.messaging.incoming.reeferTelemetry.connector=liberty-kafka
-mp.messaging.incoming.reeferTelemetry.group.id=reeferTelemetry-reactive
-mp.messaging.incoming.reeferTelemetry.topic=reeferTelemetry
-mp.messaging.incoming.reeferTelemetry.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
-mp.messaging.incoming.reeferTelemetry.value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+# Config specific to reefer-telemetry kafka topic
+mp.messaging.incoming.reefer-telemetry.connector=liberty-kafka
+mp.messaging.incoming.reefer-telemetry.group.id=reefer-telemetry-reactive
+mp.messaging.incoming.reefer-telemetry.topic=reefer-telemetry
+mp.messaging.incoming.reefer-telemetry.key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+mp.messaging.incoming.reefer-telemetry.value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
 
 # Config specific to containers kafka topic
 mp.messaging.outgoing.containers.connector=liberty-kafka
@@ -119,7 +119,7 @@ mp.messaging.outgoing.containers.value.serializer=org.apache.kafka.common.serial
 mp.messaging.connector.liberty-kafka.bootstrap.servers=
 ```
 
-where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reeferTelemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the **liberty-kafka** connector. Otherwise, OpenLiberty would not be able to interact with Kafka.
+where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reefer-telemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the **liberty-kafka** connector. Otherwise, OpenLiberty would not be able to interact with Kafka.
 
 Finally, we are providing to the liberty-kafka connector the appropriate configuration for OpenLiberty to successfully connect and consume/produce data to Kafka. In the example above we are providing the Kafka bootstrap server but there are other properties that can be set here (such as security) that can be found in the [MicroProfile Reactive Messaging Specification](https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html#_supported_method_signatures)
 
@@ -226,7 +226,7 @@ kubectl apply -f ./scoringmp/template
 
 Once we have our application running, we can confirm the following by looking at the application logs:
 
-1. It is reacting to a data stream from the reeferTelemetries Kafka topic.
+1. It is reacting to a data stream from the reefer-telemetry Kafka topic.
 2. It is calling the container anomaly predictive system.
 3. It is producing container anomaly events, when needed, into the containers Kafka topic.
 
