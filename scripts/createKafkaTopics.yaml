@@ -29,7 +29,7 @@ spec:
                 bluewaterShip
                 containers
                 errors
-                orderCommands
+                order-commands
                 orders
                 reeferTelemetries
                 rejected-orders
