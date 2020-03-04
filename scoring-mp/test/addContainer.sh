@@ -5,10 +5,10 @@ echo -e " \e[32m@@@ Excuting script: \e[1;33maddContainer.sh \e[0m"
 
 ## Variables
 
-KAFKA_BROKERS="eventstream140-ibm-es-proxy-route-bootstrap-eventstreams.apps.green.ocp.csplab.local:443"
-KAFKA_APIKEY="VH6tt1EhnS_VpNA4bS0h1d8X6o4fI29ke16VAgIBaZB3"
-CA_LOCATION="/Users/osowski/Downloads/keys"
-PEM_FILE="es-cert.pem"
+KAFKA_BROKERS=""
+KAFKA_APIKEY=""
+CA_LOCATION=""
+PEM_FILE=""
 
 # Read arguments
 if [[ $# -ne 3 ]];then
