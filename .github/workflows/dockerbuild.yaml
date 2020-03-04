@@ -41,6 +41,7 @@ jobs:
         validate_secret DOCKER_PASSWORD ${DOCKER_PASSWORD}
         validate_secret DOCKER_REPOSITORY ${DOCKER_REPOSITORY}
         validate_secret DOCKER_IMAGE_SIMULATOR ${DOCKER_IMAGE_SIMULATOR}
+        validate_secret DOCKER_IMAGE_SCORING ${DOCKER_IMAGE_SCORING}
 
         if [ "${FAIL}" = "true" ]; then
           exit 1
@@ -50,6 +51,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
         DOCKER_IMAGE_SIMULATOR: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
+        DOCKER_IMAGE_SCORING: ${{ secrets.DOCKER_IMAGE_SCORING }}
   build-docker-images:
     needs:
       validate-docker-secrets

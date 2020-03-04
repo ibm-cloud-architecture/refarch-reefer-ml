@@ -10,7 +10,7 @@ The implementation is using two different approaches:
 * one using open sources mostly from Apache projects
 * one using IBM Cloud Pak products
 
-As we will detail in [next section](#mvp-component-view), there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process. 
+As we will detail in [next section](#mvp-component-view), there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process.
 
 ![](images/cp-solution-view.png)
 **Figure 1: The solution Components**
@@ -19,12 +19,12 @@ As we will detail in [next section](#mvp-component-view), there are five compone
 
 ## Problem statements
 
-The Reefer container is an IoT device, which emits container telemetries every 3 minutes via the MQTT protocol. 
+The Reefer container is an IoT device, which emits container telemetries every 3 minutes via the MQTT protocol.
 
 ![Reefer](analyze/images/reefer.png)
 **Figure 2: A Reefer or Refrigerator container as IoT**
 
-We want to detect sensor anomaly and trigger a field engineer dispatch job to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone (kafka) for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database (Cassandra or Mongo) or an object storage like [Ceph](https://docs.ceph.com/docs/master/).  
+We want to detect sensor anomaly and trigger a field engineer dispatch job to perform maintenance when the Reefer reaches an harbor. The Reefer container carries fresh product over seas. The telemetries are kept in the event backbone (kafka) for 20 days, an average vessel travel duration. And the telemetries are also persisted for longer time period in a document database (Cassandra or Mongo) or an object storage like [Ceph](https://docs.ceph.com/docs/master/).
 
 Going into this content you will learn the following:
 
@@ -37,9 +37,9 @@ Going into this content you will learn the following:
 Some sensors may act badly. For example the co2 sensor telemetry plotted over time shows some sporadic behavior:
 
 ![](analyze/images/co2sensor-plot.png)
-**Figure 3: A Co2 sensor acting strangely** 
+**Figure 3: A Co2 sensor acting strangely**
 
-The goal is to identify in real time such behavior. When anomaly is detected, a new  event is posted to the `containers` Kafka topic so the Reefer container manager microservice can apply the expected business logic. 
+The goal is to identify in real time such behavior. When anomaly is detected, a new  event is posted to the `containers` Kafka topic so the Reefer container manager microservice can apply the expected business logic.
 
 ## A Cloud Pak Approach
 
@@ -58,13 +58,13 @@ We also look at an open source version of this solution using an approach close 
 ![](images/oss-solution-view.png)
 **Figure 5: Open source components and the solution components**
 
-We are simplifying the Data ingestion layer, where normally the Reefer containers are sending telemetry via the MQTT protocol, so the data ingestion may leverage a product like [Apache Nifi](https://nifi.apache.org/) to transform the telemetry messages to kafka events. [Apache Kafka](https://kafka.apache.org/) is used as the event backbone and event sourcing so microservices, deployed on Openshift, can consume and publish messages. 
+We are simplifying the Data ingestion layer, where normally the Reefer containers are sending telemetry via the MQTT protocol, so the data ingestion may leverage a product like [Apache Nifi](https://nifi.apache.org/) to transform the telemetry messages to kafka events. [Apache Kafka](https://kafka.apache.org/) is used as the event backbone and event sourcing so microservices, deployed on Openshift, can consume and publish messages.
 
 For persistence reason, we may leverage big data type of storage like [Apache Cassandra](http://cassandra.apache.org/) or [mongodb](https://www.mongodb.com/) to persist the container's telemetries over a longer time period. This datasource is used by the Data Scientists to do its data preparation and build training and test sets and select the best model. We also illustrate how to connect to Kafka topic as data source, from a Jupyter notebook to also use data from Kafka to build training set and test set.
 
-Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of Reefer telemetry events. 
+Data scientists can run Jupyter lab on OpenShift and build a model to be deployed as python microservice, consumer of Reefer telemetry events.
 
-If you want to read more on how to build and run the solution with open source stack, see [this note](oos-approach.md). 
+If you want to read more on how to build and run the solution with open source stack, see [this note](oos-approach.md).
 
 ### MVP component view
 
@@ -83,10 +83,10 @@ For a minimum viable demonstration the runtime components looks like in the figu
     }
     ```
 
-    The simulation can be done on o2sensor, co2sensor or power. 
+    The simulation can be done on o2sensor, co2sensor or power.
 
 1. A curl script does the HTTP POST request of this json object. [See this paragraph.](#test-sending-a-simulation-control-to-the-post-api)
-1. The telemetry events are sent to the `reeferTelemetries` topic in Kafka. They are defined as Avro schema.
+1. The telemetry events are sent to the `reefer-telemetry` topic in Kafka. They are defined as Avro schema.
 1. The predictive scoring is a consumer of such events, read one event at a time and call the model internally, then sends a new event when maintenance is required. [See the note](analyze/oss-ml-dev.md) for details.
 1. The maintenance requirement is an event in the `containers` topic.
 1. The 6th component of the solution, is the [container microservice](https://ibm-cloud-architecture.github.io/refarch-kc-container-ms/) which was defined in the EDA reference implementation.

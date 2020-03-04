@@ -24,7 +24,7 @@ public class Receiver {
     @ConfigProperty(name = "mockup", defaultValue="no")
     private String mockup;
 
-    @Incoming("reeferTelemetry")
+    @Incoming("reefer-telemetry")
     @Outgoing("containers")
     @Acknowledgment(Acknowledgment.Strategy.MANUAL)
     public PublisherBuilder<Message<String>> processTelemetry(Message<String> message) {
