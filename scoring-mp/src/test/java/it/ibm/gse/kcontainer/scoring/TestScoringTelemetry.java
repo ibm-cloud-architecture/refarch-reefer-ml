@@ -1,7 +1,6 @@
 package it.ibm.gse.kcontainer.scoring;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.bind.Jsonb;
@@ -94,6 +93,7 @@ public class TestScoringTelemetry {
     }
     
     @Test
+    @SuppressWarnings("unchecked")
     public void shouldCreateScoringResult() {
     	// this approach is using jsonb
     	String inJson = "{\"predictions\": [{\"fields\": [\"prediction\", \"probability\"],\"values\": [[\"N\", [0.6555252075195312, 0.34447482228279114]]]}]}";

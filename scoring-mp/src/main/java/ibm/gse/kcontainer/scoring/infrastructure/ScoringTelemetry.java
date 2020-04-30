@@ -1,11 +1,6 @@
 package ibm.gse.kcontainer.scoring.infrastructure;
 
 import ibm.gse.kcontainer.scoring.domain.Telemetry;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
-
 
 /**
  * This is the input to WML deployed scoring service
