@@ -1,6 +1,6 @@
 # Reefer Anomaly Detection Solution
 
-This project aims to demonstrate how to perform real time analytics on data streams using an anomaly detection scoring service to assess Reefer container maintenance needs. Most of machine learning and analytics are done on data at rest and data warehouse. In this repository we are presenting an approach to use both data at rest and in motion within kafka.
+This project aims to demonstrate how to perform real time analytics on data streams using an anomaly detection scoring service to assess Reefer container maintenance needs. Most of machine learning and analytics are done on data at rest using data warehouse and data lake technologies. In this repository we are presenting an approach to use both data at rest and in data in motion running in Kafka event backbone.
 
 !!! note
     This project is part of the [reference implementation solution](https://ibm-cloud-architecture.github.io/refarch-kc/) to demonstrate the IBM [event driven reference architecture](https://ibm-cloud-architecture.github.io/refarch-eda) and represents one use case for the [IBM Data, AI and Analytics reference architecture](https://ibm-cloud-architecture.github.io/refarch-data-ai-analytics) but it also presents how to combine different IBM cloud paks to build the solution: Cloud pak for data,  Cloud pak for automation,  Cloud pak for integration and  Cloud pak for application.
@@ -10,7 +10,7 @@ The implementation is using two different approaches:
 * one using open sources mostly from Apache projects
 * one using IBM Cloud Pak products
 
-As we will detail in [next section](#mvp-component-view), there are five components in this solution that make the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a container microservice to manage reefer container as entity, an analytics scoring agent combined with a deployed model as a service and a business process.
+As we will detail in [next section](#mvp-component-view), there are six components working together to run the end to end anomaly detection solution: a Reefer simulator (we do not have such Reefer containers in our stock yet), a Kafka cluser, a container microservice to manage reefer container, an analytics scoring agent combined with a deployed model as a service and a business process.
 
 ![](images/cp-solution-view.png)
 **Figure 1: The solution Components**
