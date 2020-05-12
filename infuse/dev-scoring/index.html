@@ -1107,7 +1107,7 @@
 <p>First of all, we have based our implementation on <a href="https://microprofile.io/">MicroProfile</a> as the standardization for building microservices based applications. The application server we have chosen, that provides full MicroProfile support, is <a href="https://openliberty.io/">OpenLiberty</a>.</p>
 <p>As already introduced, the scoring agent will react to a stream of data, in the form of messaging being sent from an IOT device in the Reefer Containers to Kafka (through an MQTT connector), which is used as our event backbone. The scoring agent will react to that stream of data being sent into a kafka topic through the MicroProfile Reactive Messaging feature that OpenLiberty implements and supports. It will do some computation for each of the messages coming as a stream of data, which in this case is to call the container anomaly predictive system, and send out a container anomaly message a to specific kafka topic where the Reefer Container EDA reference application listens to and will act in consequence. If you have not yet realise, this scenario fits into the IOT applications use case described in the earlier <a href="#use-cases">section</a>.</p>
 <p>The main chunk of code that implements the scoring agent use case just described looks like this:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@Incoming</span><span class="o">(</span><span class="s">&quot;reeferTelemetry&quot;</span><span class="o">)</span>
+<div class="codehilite"><pre><span></span><span class="nd">@Incoming</span><span class="o">(</span><span class="s">&quot;reefer-telemetry&quot;</span><span class="o">)</span>
 <span class="nd">@Outgoing</span><span class="o">(</span><span class="s">&quot;containers&quot;</span><span class="o">)</span>
 <span class="nd">@Acknowledgment</span><span class="o">(</span><span class="n">Acknowledgment</span><span class="o">.</span><span class="na">Strategy</span><span class="o">.</span><span class="na">MANUAL</span><span class="o">)</span>
 <span class="kd">public</span> <span class="n">PublisherBuilder</span><span class="o">&lt;</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="nf">processTelemetry</span><span class="o">(</span><span class="n">Message</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
@@ -1146,12 +1146,12 @@
 
 <p>where we are consuming/producing the data from/to Kafka by simply annotating our method with <strong>@Incoming</strong> and <strong>@Outgoing</strong> and leaving the rest of the magic required to create the reactive streams to the MicroProfile Reactive Messaging implementation of the OpenLiberty server does. Although there is certain magic in this process, there is still some configuration we need to provide OpenLiberty with in order for it to properly create the reactive streams.</p>
 <p>Such configuration is provided in the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/resources/META-INF/microprofile-config.properties">microprofile-configuration.properties</a> file:</p>
-<div class="codehilite"><pre><span></span><span class="c"># Config specific to reeferTelemetry kafka topic</span>
-<span class="na">mp.messaging.incoming.reeferTelemetry.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
-<span class="na">mp.messaging.incoming.reeferTelemetry.group.id</span><span class="o">=</span><span class="s">reeferTelemetry-reactive</span>
-<span class="na">mp.messaging.incoming.reeferTelemetry.topic</span><span class="o">=</span><span class="s">reeferTelemetry</span>
-<span class="na">mp.messaging.incoming.reeferTelemetry.key.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
-<span class="na">mp.messaging.incoming.reeferTelemetry.value.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+<div class="codehilite"><pre><span></span><span class="c"># Config specific to reefer-telemetry kafka topic</span>
+<span class="na">mp.messaging.incoming.reefer-telemetry.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
+<span class="na">mp.messaging.incoming.reefer-telemetry.group.id</span><span class="o">=</span><span class="s">reefer-telemetry-reactive</span>
+<span class="na">mp.messaging.incoming.reefer-telemetry.topic</span><span class="o">=</span><span class="s">reefer-telemetry</span>
+<span class="na">mp.messaging.incoming.reefer-telemetry.key.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
+<span class="na">mp.messaging.incoming.reefer-telemetry.value.deserializer</span><span class="o">=</span><span class="s">org.apache.kafka.common.serialization.StringDeserializer</span>
 
 <span class="c"># Config specific to containers kafka topic</span>
 <span class="na">mp.messaging.outgoing.containers.connector</span><span class="o">=</span><span class="s">liberty-kafka</span>
@@ -1166,7 +1166,7 @@
 <span class="na">mp.messaging.connector.liberty-kafka.bootstrap.servers</span><span class="o">=</span>
 </pre></div>
 
-<p>where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reeferTelemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the <strong>liberty-kafka</strong> connector. Otherwise, OpenLiberty would not be able to interact with Kafka.</p>
+<p>where we can see the configuration for each of the incoming and outgoing reactive streams based on their names (reefer-telemetry and containers) that, in fact, match with the Kafka topics these reactive streams will be consuming/producing from/to. We also specify the serializer/deserializer we want MicroProfile Reactive Messaging to apply to our reactive streams for data processing but more importantly is the fact that we are telling OpenLiberty that the connector to be used is the <strong>liberty-kafka</strong> connector. Otherwise, OpenLiberty would not be able to interact with Kafka.</p>
 <p>Finally, we are providing to the liberty-kafka connector the appropriate configuration for OpenLiberty to successfully connect and consume/produce data to Kafka. In the example above we are providing the Kafka bootstrap server but there are other properties that can be set here (such as security) that can be found in the <a href="https://download.eclipse.org/microprofile/microprofile-reactive-messaging-1.0/microprofile-reactive-messaging-spec.html#_supported_method_signatures">MicroProfile Reactive Messaging Specification</a></p>
 <h3 id="build">Build</h3>
 <p>In order to be able to run our application, we first need to configure our OpenLiberty server to make use of the MicroProfile Reactive Messaging and MicroProfile Reactive Streams features it supports. Top do so, we specify such features in the <a href="https://github.com/ibm-cloud-architecture/refarch-reefer-ml/blob/master/scoring-mp/src/main/liberty/config/server.xml">server.xml</a> file:</p>
@@ -1266,7 +1266,7 @@ kubectl apply -f ./scoringmp/template
 <h3 id="run">Run</h3>
 <p>Once we have our application running, we can confirm the following by looking at the application logs:</p>
 <ol>
-<li>It is reacting to a data stream from the reeferTelemetries Kafka topic.</li>
+<li>It is reacting to a data stream from the reefer-telemetry Kafka topic.</li>
 <li>It is calling the container anomaly predictive system.</li>
 <li>It is producing container anomaly events, when needed, into the containers Kafka topic.</li>
 </ol>

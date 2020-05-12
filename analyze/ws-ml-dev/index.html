@@ -992,15 +992,16 @@
                 
                 
                 <h1 id="watson-studio-developing-the-predictive-model">Watson Studio: developing the predictive model</h1>
-<p>Cloud Pak for data integrate a well known product called Watson Studio. In this chapter we are using two approaches to develop the model, one using <a href="https://www.ibm.com/cloud/watson-studio/autoai">AutoAI</a> and one use <a href="#notebook">notebooks</a>.</p>
-<p>The Data Steward prepared a dataset with joined tables, but did not pay attention to the column semantic for building a machine learning. So the Data Scientist will start to review and adapt the model</p>
+<p>Cloud Pak for data integrates <a href="https://www.ibm.com/cloud/watson-studio">Watson Studio</a> to develop manchine learning models and do feature engineering. In this chapter we are using two approaches to develop the model, one using <a href="https://www.ibm.com/cloud/watson-studio/autoai">AutoAI</a> and one use <a href="#notebook">notebook</a>.</p>
+<p>The Data Steward has prepared a dataset by joining different datasources, but he did not pay attention to the column semantic for building a machine learning. So the Data Scientist will start to review and adapt the data.</p>
 <h2 id="data-analysis-and-refinery">Data analysis and refinery</h2>
-<p>The longitude and lattitude will not have any value to assess the sensor anomaly so those columns can be removed from the model.
-Also we want to transform the problem to be a classification so we need to add a column to be used for labels. For that we use the <code>Data Refinery</code> capability:</p>
+<p>The data scientist wants to do at least two things on the current data set: remove unnecessary features (the longitude and lattitude will not have any value to assess the sensor anomaly), and transform the problem to be a classification problem by adding a label column. </p>
+<p>Note that we could have model the problem using unsupervised learning and identify anomaly with clustering or anomaly detection. This will be done in the future to present a more realistic approach to this classical industrial problem.</p>
+<p>For that, we use the <code>Data Refinery</code> capability of Cloud Pak for Data:</p>
 <p><img alt="Access to Refinery" src="../images/access-refine.png" /></p>
 <p>and then clean and shape the data to prepare for the model. For example remove columns like latitude, longitude, timestamp, _id, telemetry_id:</p>
 <p><img alt="Remove columns" src="../images/remove-column.png" /></p>
-<p>To define a new column to be used as label,we use the Operation to add <code>Conditional replace</code> to apply some basic logic on the sensor columns by using two thresholds: test the value of the O2 to be less then a threshold (11) with a second condition on the CO2 to be greater than another threshold (12):</p>
+<p>To define a new column to be used as label, we use the <code>Operation</code> tab to add <code>Conditional replace</code> to apply some basic logic on the sensor columns by using two thresholds: test the value of the O2 to be less then a threshold (11) with a second condition on the CO2 to be greater than another threshold (12):</p>
 <p><img alt="Define condition" src="../images/anomaly-flag-1.png" /></p>
 <p>We add the new label (Issue, NoIssue) in the Anomaly Flag column:</p>
 <p><img alt="To add column" src="../images/anomaly-flag-2.png" /></p>
