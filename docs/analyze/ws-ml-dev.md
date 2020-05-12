@@ -1,13 +1,16 @@
 # Watson Studio: developing the predictive model
 
-Cloud Pak for data integrate a well known product called Watson Studio. In this chapter we are using two approaches to develop the model, one using [AutoAI](https://www.ibm.com/cloud/watson-studio/autoai) and one use [notebooks](#notebook).
+Cloud Pak for data integrates [Watson Studio](https://www.ibm.com/cloud/watson-studio) to develop manchine learning models and do feature engineering. In this chapter we are using two approaches to develop the model, one using [AutoAI](https://www.ibm.com/cloud/watson-studio/autoai) and one use [notebook](#notebook).
 
-The Data Steward prepared a dataset with joined tables, but did not pay attention to the column semantic for building a machine learning. So the Data Scientist will start to review and adapt the model
+The Data Steward has prepared a dataset by joining different datasources, but he did not pay attention to the column semantic for building a machine learning. So the Data Scientist will start to review and adapt the data.
 
 ## Data analysis and refinery
 
-The longitude and lattitude will not have any value to assess the sensor anomaly so those columns can be removed from the model.
-Also we want to transform the problem to be a classification so we need to add a column to be used for labels. For that we use the `Data Refinery` capability:
+The data scientist wants to do at least two things on the current data set: remove unnecessary features (the longitude and lattitude will not have any value to assess the sensor anomaly), and transform the problem to be a classification problem by adding a label column. 
+
+Note that we could have model the problem using unsupervised learning and identify anomaly with clustering or anomaly detection. This will be done in the future to present a more realistic approach to this classical industrial problem.
+
+For that, we use the `Data Refinery` capability of Cloud Pak for Data:
 
 ![Access to Refinery](images/access-refine.png)
 
@@ -15,7 +18,7 @@ and then clean and shape the data to prepare for the model. For example remove c
 
 ![Remove columns](images/remove-column.png)
 
-To define a new column to be used as label,we use the Operation to add `Conditional replace` to apply some basic logic on the sensor columns by using two thresholds: test the value of the O2 to be less then a threshold (11) with a second condition on the CO2 to be greater than another threshold (12):
+To define a new column to be used as label, we use the `Operation` tab to add `Conditional replace` to apply some basic logic on the sensor columns by using two thresholds: test the value of the O2 to be less then a threshold (11) with a second condition on the CO2 to be greater than another threshold (12):
 
 ![Define condition](images/anomaly-flag-1.png)
 
