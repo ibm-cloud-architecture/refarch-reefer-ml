@@ -46,7 +46,7 @@ kafka:
     truststorePath: /config/resources/security
     truststoreSecret: es-truststore-jks
 predictiveModel:
-  mockup: no
+  predictionsEnabled: false
   predictiveModelConfigMap: predictive-model-configmap
   predictiveModelSecret: predictive-model-secret
 serviceAccountName: kcontainer-runtime
