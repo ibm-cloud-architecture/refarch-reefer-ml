@@ -1,8 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kcontainer-reefer-simulator.fullname" . }}
+  name: "reefer-simulator"
   labels:
+    app.kubernetes.io/part-of: refarch-kc
 {{ include "kcontainer-reefer-simulator.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
