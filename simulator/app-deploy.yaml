@@ -4,25 +4,28 @@ metadata:
   annotations:
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
-    commit.image.appsody.dev/contextDir: /simulator
-    commit.image.appsody.dev/date: Tue May 12 09:41:39 2020 -0700
-    commit.image.appsody.dev/message: typo in main index
-    image.opencontainers.org/created: "2020-05-29T13:14:42+02:00"
-    image.opencontainers.org/documentation: https://github.com/jesusmah/refarch-reefer-ml
-    image.opencontainers.org/revision: eec58f83ff69dd749b84c7ed04403bb19bbf1c25-modified
-    image.opencontainers.org/source: https://github.com/jesusmah/refarch-reefer-ml/tree/master
-    image.opencontainers.org/url: https://github.com/jesusmah/refarch-reefer-ml
+    commit.image.appsody.dev/contextDir: C:\dev\refarch\refarch-reefer-ml\simulator
+    commit.image.appsody.dev/date: Fri May 29 13:02:34 2020 -0500
+    commit.image.appsody.dev/message: scoring prediction bypass (#63)
+    image.opencontainers.org/created: "2020-06-19T17:04:30+01:00"
+    image.opencontainers.org/documentation: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
+    image.opencontainers.org/revision: a199280ba8e998618c2a963463d8339379f16062
+    image.opencontainers.org/source: |
+      https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master
+    image.opencontainers.org/url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
     stack.appsody.dev/configured: docker.io/appsody/python-flask:0.1
     stack.appsody.dev/created: 2019-11-14T10:29:19+0000
+    stack.appsody.dev/digest: sha256:1405bd0d18b449f90d98ca31ba7c0a53d40dae6e62362a815cedde63bd2a18d2
     stack.appsody.dev/revision: b3e8a19b0a4b66a69daa8d1106f37bbe4167693a
     stack.appsody.dev/tag: appsody/python-flask:0.1.6
   creationTimestamp: null
   labels:
+    app.kubernetes.io/part-of: refarch-kc
     image.opencontainers.org/title: reefer-simulator
     stack.appsody.dev/version: 0.1.6
   name: reefer-simulator
 spec:
-  applicationImage: ibmcase/kcontainer-reefer-ml-flask-simulator:test
+  applicationImage: ibmcase/kcontainer-reefer-simulator-appsody:0.1.51
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
