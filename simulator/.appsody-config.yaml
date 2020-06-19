@@ -1,2 +1,4 @@
+application-name: refarch-kc
+id: "20200619170040.69203280"
 project-name: reefer-simulator
 stack: appsody/python-flask:0.1

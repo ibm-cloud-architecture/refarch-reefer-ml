@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{  .Chart.Name }}-service"
+  name: "scoring-mp"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app.kubernetes.io/part-of: refarch-kc
 spec:
   type: {{ .Values.service.type }}
   ports:

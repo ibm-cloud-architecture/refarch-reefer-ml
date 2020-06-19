@@ -29,7 +29,7 @@ spec:
         {{- range .paths }}
           - path: {{ . }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: "reefer-simulator"
               servicePort: http
         {{- end }}
   {{- end }}
