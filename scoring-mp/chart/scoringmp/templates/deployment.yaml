@@ -71,7 +71,7 @@ spec:
           #############################
           ### Reactive Messaging topics
           #############################
-          - name: MP_MESSAGING_INCOMING_REEFERTELEMETRY_TOPIC
+          - name: MP_MESSAGING_INCOMING_REEFER_TELEMETRY_TOPIC
             valueFrom:
               configMapKeyRef:
                 name: "{{ .Values.kafka.topicsConfigMap }}"

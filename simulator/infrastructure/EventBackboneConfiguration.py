@@ -21,7 +21,4 @@ def getKafkaCertificate():
     return KAFKA_CERT
 
 def getTelemetryTopicName():
-    return os.getenv("TELEMETRY_TOPIC","reefer-telemetry")
-
-def getContainerTopicName():
-    return os.getenv("CONTAINER_TOPIC","containers")
+    return os.getenv("MP_MESSAGING_INCOMING_REEFER_TELEMETRY_TOPIC","reefer-telemetry")
