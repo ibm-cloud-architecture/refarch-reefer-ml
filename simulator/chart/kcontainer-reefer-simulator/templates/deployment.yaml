@@ -62,16 +62,11 @@ spec:
               configMapKeyRef:
                 name: "{{ .Values.kafka.brokersConfigMap }}"
                 key: brokers
-          - name: TELEMETRY_TOPIC
+          - name: MP_MESSAGING_INCOMING_REEFER_TELEMETRY_TOPIC
             valueFrom:
               configMapKeyRef:
                 name: "{{ .Values.kafka.topicsConfigMap }}"
                 key: reeferTelemetryTopic
-          - name: CONTAINER_TOPIC
-            valueFrom:
-              configMapKeyRef:
-                name: "{{ .Values.kafka.topicsConfigMap }}"
-                key: containersTopic
           {{- if .Values.eventstreams.enabled }}
           - name: KAFKA_APIKEY
             valueFrom:

@@ -2,17 +2,17 @@ apiVersion: appsody.dev/v1beta1
 kind: AppsodyApplication
 metadata:
   annotations:
-    commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
-    commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
-    commit.image.appsody.dev/contextDir: C:\dev\refarch\refarch-reefer-ml\simulator
-    commit.image.appsody.dev/date: Fri May 29 13:02:34 2020 -0500
-    commit.image.appsody.dev/message: scoring prediction bypass (#63)
-    image.opencontainers.org/created: "2020-06-19T17:04:30+01:00"
-    image.opencontainers.org/documentation: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
-    image.opencontainers.org/revision: a199280ba8e998618c2a963463d8339379f16062
-    image.opencontainers.org/source: |
-      https://github.com/ibm-cloud-architecture/refarch-reefer-ml/tree/master
-    image.opencontainers.org/url: https://github.com/ibm-cloud-architecture/refarch-reefer-ml
+    commit.image.appsody.dev/author: David Jones <djones6dev@gmail.com>
+    commit.image.appsody.dev/committer: GitHub <noreply@github.com>
+    commit.image.appsody.dev/contextDir: /simulator
+    commit.image.appsody.dev/date: Fri Jun 19 14:37:56 2020 -0500
+    commit.image.appsody.dev/message: Update Helm chart with Appsody naming and part-of
+      labels (#64)
+    image.opencontainers.org/created: "2020-07-10T12:45:31+02:00"
+    image.opencontainers.org/documentation: https://github.com/jesusmah/refarch-reefer-ml
+    image.opencontainers.org/revision: 257be81ed5aae701e847e7db0587e7ca129e65ca-modified
+    image.opencontainers.org/source: https://github.com/jesusmah/refarch-reefer-ml/tree/master
+    image.opencontainers.org/url: https://github.com/jesusmah/refarch-reefer-ml
     stack.appsody.dev/configured: docker.io/appsody/python-flask:0.1
     stack.appsody.dev/created: 2019-11-14T10:29:19+0000
     stack.appsody.dev/digest: sha256:1405bd0d18b449f90d98ca31ba7c0a53d40dae6e62362a815cedde63bd2a18d2
@@ -20,12 +20,13 @@ metadata:
     stack.appsody.dev/tag: appsody/python-flask:0.1.6
   creationTimestamp: null
   labels:
+    app.appsody.dev/name: refarch-kc
     app.kubernetes.io/part-of: refarch-kc
     image.opencontainers.org/title: reefer-simulator
     stack.appsody.dev/version: 0.1.6
   name: reefer-simulator
 spec:
-  applicationImage: ibmcase/kcontainer-reefer-simulator-appsody:0.1.51
+  applicationImage: ibmcase/kcontainer-reefer-ml-flask-simulator:test
   createKnativeService: false
   env:
   - name: KAFKA_BROKERS
@@ -33,15 +34,10 @@ spec:
       configMapKeyRef:
         key: brokers
         name: kafka-brokers
-  - name: TELEMETRY_TOPIC
+  - name: MP_MESSAGING_INCOMING_REEFER_TELEMETRY_TOPIC
     valueFrom:
       configMapKeyRef:
         key: reeferTelemetryTopic
-        name: kafka-topics
-  - name: CONTAINER_TOPIC
-    valueFrom:
-      configMapKeyRef:
-        key: containersTopic
         name: kafka-topics
   - name: KAFKA_APIKEY
     valueFrom:
