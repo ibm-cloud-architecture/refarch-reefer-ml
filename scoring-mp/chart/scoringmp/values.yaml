@@ -44,7 +44,7 @@ kafka:
     bootstrapPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
     truststoreRequired: false
     truststorePath: /config/resources/security
-    truststoreSecret: es-truststore-jks
+    truststoreSecret: eventstreams-truststore
 predictiveModel:
   predictionsEnabled: false
   predictiveModelConfigMap: predictive-model-configmap

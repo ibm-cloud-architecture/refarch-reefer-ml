@@ -1,16 +1,20 @@
 import os
 
 KAFKA_BROKERS = os.getenv('KAFKA_BROKERS','localhost:9092')
-KAFKA_APIKEY = os.getenv('KAFKA_APIKEY','')
+KAFKA_PASSWORD = os.getenv('KAFKA_PASSWORD','')
+KAFKA_USER = os.getenv('KAFKA_USER','')
 KAFKA_CERT = os.getenv('KAFKA_CERT','')
 
 def getBrokerEndPoints():
     return KAFKA_BROKERS
 
-def getEndPointAPIKey():
-    return KAFKA_APIKEY
+def getKafkaPassword():
+    return KAFKA_PASSWORD
 
-def hasAPIKey():
+def getKafkaUser():
+    return KAFKA_USER
+
+def isSecured():
     return KAFKA_APIKEY != ''
 
 def isEncrypted():
