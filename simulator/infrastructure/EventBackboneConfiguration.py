@@ -15,7 +15,7 @@ def getKafkaUser():
     return KAFKA_USER
 
 def isSecured():
-    return KAFKA_APIKEY != ''
+    return KAFKA_PASSWORD != ''
 
 def isEncrypted():
     #return KAFKA_CERT != ''
