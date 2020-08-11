@@ -39,11 +39,16 @@ spec:
       configMapKeyRef:
         key: reeferTelemetryTopic
         name: kafka-topics
-  - name: KAFKA_APIKEY
+  - name: KAFKA_USER
     valueFrom:
       secretKeyRef:
-        key: binding
         name: eventstreams-apikey
+        key: username
+  - name: KAFKA_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: eventstreams-apikey
+        key: password
   - name: KAFKA_CERT
     value: /certs/es-cert.pem
   expose: true
