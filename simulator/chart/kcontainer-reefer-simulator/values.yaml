@@ -22,8 +22,8 @@ ingress:
 kafka:
   brokersConfigMap: kafka-brokers
   topicsConfigMap: kafka-topics
-  capemSecret: es-cert-pem
+  capemSecret: eventstreams-cert-pem
 eventstreams:
   enabled: true
-  apikeyConfigMap: eventstreams-apikey
+  esCredSecret: eventstreams-cred
 serviceAccountName: kcontainer-runtime

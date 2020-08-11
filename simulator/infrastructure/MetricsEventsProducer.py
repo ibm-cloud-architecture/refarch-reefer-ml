@@ -12,11 +12,16 @@ class MetricsEventsProducer:
                 'bootstrap.servers':  EventBackboneConfiguration.getBrokerEndPoints(),
                 'group.id': groupID,
         }
-        if (EventBackboneConfiguration.hasAPIKey()):
+        if (EventBackboneConfiguration.isSecured()):
             options['security.protocol'] = 'SASL_SSL'
-            options['sasl.mechanisms'] = 'PLAIN'
-            options['sasl.username'] = 'token'
-            options['sasl.password'] = EventBackboneConfiguration.getEndPointAPIKey()
+            # If we are connecting to ES on IBM Cloud, the SASL mechanism is plain
+            if (EventBackboneConfiguration.getKafkaUser() == 'token'):
+                options['sasl.mechanisms'] = 'PLAIN'
+            # If we are connecting to ES on OCP, the SASL mechanism is scram-sha-512
+            else:
+                options['sasl.mechanisms'] = 'SCRAM-SHA-512'
+            options['sasl.username'] = EventBackboneConfiguration.getKafkaUser()
+            options['sasl.password'] = EventBackboneConfiguration.getKafkaPassword()
         if (EventBackboneConfiguration.isEncrypted()):
             options['ssl.ca.location'] = EventBackboneConfiguration.getKafkaCertificate()
         print("Kafka options are:")

@@ -68,11 +68,16 @@ spec:
                 name: "{{ .Values.kafka.topicsConfigMap }}"
                 key: reeferTelemetryTopic
           {{- if .Values.eventstreams.enabled }}
-          - name: KAFKA_APIKEY
+          - name: KAFKA_USER
             valueFrom:
               secretKeyRef:
-                name: "{{ .Values.eventstreams.apikeyConfigMap }}"
-                key: binding
+                name: "{{ .Values.eventstreams.esCredSecret }}"
+                key: username
+          - name: KAFKA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.eventstreams.esCredSecret }}"
+                key: password
           - name: KAFKA_CERT
             valueFrom:
               secretKeyRef:
