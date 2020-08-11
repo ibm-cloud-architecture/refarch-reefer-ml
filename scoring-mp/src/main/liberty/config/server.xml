@@ -1,6 +1,6 @@
 <server description="Liberty server">
     <featureManager>
-        <feature>microProfile-3.0</feature>
+        <feature>microProfile-3.2</feature>
         <!-- Reactive messaging and reactive streams -->
         <feature>mpReactiveMessaging-1.0</feature>
         <feature>mpReactiveStreams-1.0</feature>
@@ -12,6 +12,8 @@
     <logging traceSpecification="REACTIVEMESSAGE=all:org.apache.kafka.*=all"/>
     <logging traceSpecification="*=info:logservice=detail:REACTIVEMESSAGE=all:REACTIVESTREAMS=all:com.ibm.ws.microprofile.reactive.streams.operators.*=all:com.ibm.ws.microprofile.reactive.messaging.kafka.adapter.impl.*=FINEST:org.apache.kafka.*=all"/>-->
     <quickStartSecurity userName="admin" userPassword="adminpwd"/>
-    <httpEndpoint host="*" httpPort="9080" 
+    <httpEndpoint host="*" httpPort="9080"
         httpsPort="9443" id="defaultHttpEndpoint"/>
+
+    <webApplication name="scoring-mp-ms" location="scoring-mp.war" contextRoot="/"/>
 </server>
