@@ -1,2 +1,3 @@
+id: "20200811134144.75445000"
 project-name: scoring-mp
-stack: appsody/java-microprofile:0.2
+stack: docker.io/appsody/java-openliberty:0.2

@@ -1,29 +1,106 @@
-apiVersion: appsody.dev/v1beta1
-kind: AppsodyApplication
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
 metadata:
   annotations:
+    architecture: x86_64
+    authoritative-source-url: registry.access.redhat.com
+    build-date: 2020-03-31T14:54:13.907559
     commit.image.appsody.dev/author: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/committer: Jerome Boyer <boyerje@us.ibm.com>
     commit.image.appsody.dev/contextDir: /scoring-mp
-    commit.image.appsody.dev/date: Wed Dec 11 19:37:28 2019 -0800
-    commit.image.appsody.dev/message: Work on fast start content structure
-    image.opencontainers.org/created: "2019-12-17T14:51:30-08:00"
-    image.opencontainers.org/documentation: https://github.com/jbcodeforce/refarch-reefer-ml
-    image.opencontainers.org/revision: e0ccc19f84668ee4639cb963bb43cc63eaca2cb8-modified
-    image.opencontainers.org/source: https://github.com/jbcodeforce/refarch-reefer-ml/tree/master
-    image.opencontainers.org/url: https://github.com/jbcodeforce/refarch-reefer-ml
-    stack.appsody.dev/configured: docker.io/appsody/java-microprofile:0.2
-    stack.appsody.dev/created: 2019-11-26T15:01:00+0000
-    stack.appsody.dev/revision: 697abc712b0ee47832d1016bbf0d1b5d50129338
-    stack.appsody.dev/tag: appsody/java-microprofile:0.2.21
+    commit.image.appsody.dev/date: Tue Aug 11 14:52:52 2020 -0500
+    commit.image.appsody.dev/message: Merge remote-tracking branch 'upstream/master'
+    commit.stack.appsody.dev/contextDir: /incubator/java-openliberty
+    commit.stack.appsody.dev/date: Tue Jul 21 16:48:17 2020 +0100
+    commit.stack.appsody.dev/message: Upgrade java-openliberty stack to Open Liberty
+      20.0.0.6 (#847)
+    description: Eclipse MicroProfile & Jakarta EE on Open Liberty & OpenJ9 using
+      Maven
+    distribution-scope: public
+    image.opencontainers.org/created: "2020-08-11T15:51:25-05:00"
+    image.opencontainers.org/documentation: https://github.com/osowski/refarch-reefer-ml
+    image.opencontainers.org/revision: ddd59e5eb8e302090d131a87760f132d0803cfa4-modified
+    image.opencontainers.org/source: https://github.com/osowski/refarch-reefer-ml/tree/master
+    image.opencontainers.org/url: https://github.com/osowski/refarch-reefer-ml
+    k8s.io/description: The Universal Base Image is designed and engineered to be
+      the base layer for all of your containerized applications, middleware and utilities.
+      This base image is freely redistributable, but Red Hat only supports Red Hat
+      technologies through subscriptions for Red Hat products. This image is maintained
+      by Red Hat and updated regularly.
+    k8s.io/display-name: Red Hat Universal Base Image 8
+    maintainer: Red Hat, Inc.
+    name: java-openliberty
+    openshift.io/expose-services: ""
+    openshift.io/tags: base rhel8
+    redhat.com/build-host: cpt-1007.osbs.prod.upshift.rdu2.redhat.com
+    redhat.com/component: ubi8-container
+    redhat.com/license_terms: https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI
+    release: "408"
+    stack.appsody.dev/authors: Mike Andrasak <uberskigeek>, Andy Mauer <ajm01>, Scott
+      Kurz <scottkurz>, Adam Wisniewski <awisniew90>
+    stack.appsody.dev/configured: docker.io/appsody/java-openliberty:0.2
+    stack.appsody.dev/created: "2020-07-21T15:51:13Z"
+    stack.appsody.dev/description: Eclipse MicroProfile & Jakarta EE on Open Liberty
+      & OpenJ9 using Maven
+    stack.appsody.dev/digest: sha256:eacaf472af2ab870a09834baf653108bef890a136d211f938ff900ad89d53c7d
+    stack.appsody.dev/documentation: https://github.com/appsody/stacks/tree/master/incubator/java-openliberty/README.md
+    stack.appsody.dev/licenses: Apache-2.0
+    stack.appsody.dev/revision: 02083c860c608940e8845948a0b9c00e459767d0
+    stack.appsody.dev/source: https://github.com/appsody/stacks/tree/master/incubator/java-openliberty/image
+    stack.appsody.dev/tag: docker.io/appsody/java-openliberty:0.2.15
+    stack.appsody.dev/title: Open Liberty
+    stack.appsody.dev/url: https://github.com/appsody/stacks/tree/master/incubator/java-openliberty
+    summary: Open Liberty
+    url: https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/images/8.1-408
+    vcs-ref: 26f36bfa3e3a04c8c866b250924c1aefc34f01c9
+    vcs-type: git
+    vendor: Open Liberty
+    version: 0.2.15
   creationTimestamp: null
   labels:
+    app.appsody.dev/name: refarch-kc
+    app.kubernetes.io/part-of: refarch-kc
     image.opencontainers.org/title: scoring-mp
-    stack.appsody.dev/version: 0.2.21
+    stack.appsody.dev/id: java-openliberty
+    stack.appsody.dev/version: 0.2.15
   name: scoring-mp
 spec:
-  applicationImage: dev.local/scoring-mp
+  applicationImage: ibmcase/kcontainer-scoringmp-ms:latest
+  pullPolicy: Always
   createKnativeService: false
+  env:
+  - name: PREDICTIONS_ENABLED
+    value: "false"
+  - name: CP4D_BASE_URL
+    valueFrom:
+      configMapKeyRef:
+        key: baseURL
+        name: predictive-model-configmap
+  - name: CP4D_PREDICTION_URL
+    valueFrom:
+      configMapKeyRef:
+        key: predictionURL
+        name: predictive-model-configmap
+  - name: CP4D_USER
+    valueFrom:
+      secretKeyRef:
+        key: user
+        name: predictive-model-secret
+  - name: CP4D_PWD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: predictive-model-secret
+  - name: MP_MESSAGING_INCOMING_REEFER_TELEMETRY_TOPIC
+    valueFrom:
+      configMapKeyRef:
+        key: reeferTelemetryTopic
+        name: kafka-topics
+  - name: MP_MESSAGING_OUTGOING_CONTAINERS_TOPIC
+    valueFrom:
+      configMapKeyRef:
+        key: containersTopic
+        name: kafka-topics
   expose: true
   livenessProbe:
     failureThreshold: 12
@@ -47,4 +124,12 @@ spec:
     type: NodePort
   stack: java-microprofile
   version: 1.0.0
-status: {}
+  volumeMounts:
+  - mountPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
+    name: openliberty-bootstrap
+    readOnly: true
+    subPath: bootstrap.properties
+  volumes:
+  - name: openliberty-bootstrap
+    secret:
+      secretName: openliberty-bootstrap
