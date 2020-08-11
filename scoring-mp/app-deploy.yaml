@@ -122,7 +122,6 @@ spec:
       prometheus.io/scrape: "true"
     port: 9080
     type: NodePort
-  stack: java-microprofile
   version: 1.0.0
   volumeMounts:
   - mountPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
