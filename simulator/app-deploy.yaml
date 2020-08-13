@@ -39,18 +39,6 @@ spec:
       configMapKeyRef:
         key: reeferTelemetryTopic
         name: kafka-topics
-  - name: KAFKA_USER
-    valueFrom:
-      secretKeyRef:
-        name: eventstreams-apikey
-        key: username
-  - name: KAFKA_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: eventstreams-apikey
-        key: password
-  - name: KAFKA_CERT
-    value: /certs/es-cert.pem
   expose: true
   livenessProbe:
     failureThreshold: 12
@@ -69,12 +57,4 @@ spec:
     type: NodePort
   stack: python-flask
   version: 1.0.0
-  volumeMounts:
-  - mountPath: /certs
-    name: eventstreams-cert-pem
-  volumes:
-  - name: eventstreams-cert-pem
-    secret:
-      optional: true
-      secretName: eventstreams-cert-pem
 status: {}
