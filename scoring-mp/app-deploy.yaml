@@ -123,12 +123,3 @@ spec:
     port: 9080
     type: NodePort
   version: 1.0.0
-  volumeMounts:
-  - mountPath: /opt/ol/wlp/usr/servers/defaultServer/bootstrap.properties
-    name: openliberty-bootstrap
-    readOnly: true
-    subPath: bootstrap.properties
-  volumes:
-  - name: openliberty-bootstrap
-    secret:
-      secretName: openliberty-bootstrap
