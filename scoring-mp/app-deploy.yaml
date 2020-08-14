@@ -65,7 +65,7 @@ metadata:
     stack.appsody.dev/version: 0.2.15
   name: scoring-mp
 spec:
-  applicationImage: ibmcase/kcontainer-scoringmp-ms:latest
+  applicationImage: ibmcase/kcontainer-scoringmp-ms:0.1.60
   pullPolicy: Always
   createKnativeService: false
   env:
@@ -101,6 +101,11 @@ spec:
       configMapKeyRef:
         key: containersTopic
         name: kafka-topics
+  - name: MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS
+    valueFrom:
+        configMapKeyRef:
+          key: brokers
+          name: kafka-brokers
   expose: true
   livenessProbe:
     failureThreshold: 12
