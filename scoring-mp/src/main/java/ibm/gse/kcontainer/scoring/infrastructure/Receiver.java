@@ -57,6 +57,7 @@ public class Receiver {
             System.out.println("Prediction services disabled. Mocking the call");
             int number = new Random().nextInt(10);
             if (number > 6) anomaly = true;
+            else anomaly = false;
         }
 
         if (!anomaly){
