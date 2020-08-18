@@ -42,6 +42,9 @@ jobs:
         validate_secret DOCKER_REPOSITORY ${DOCKER_REPOSITORY}
         validate_secret DOCKER_IMAGE_SIMULATOR ${DOCKER_IMAGE_SIMULATOR}
         validate_secret DOCKER_IMAGE_SCORING ${DOCKER_IMAGE_SCORING}
+        validate_secret GITOPS_EMAIL ${GITOPS_EMAIL}
+        validate_secret GITOPS_TOKEN ${GITOPS_TOKEN}
+        validate_secret GITOPS_ORG ${GITOPS_ORG}
 
         if [ "${FAIL}" = "true" ]; then
           exit 1
@@ -52,6 +55,10 @@ jobs:
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
         DOCKER_IMAGE_SIMULATOR: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
         DOCKER_IMAGE_SCORING: ${{ secrets.DOCKER_IMAGE_SCORING }}
+        GITOPS_EMAIL: ${{ secrets.GITOPS_EMAIL }}
+        GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+        GITOPS_ORG: ${{ secrets.GITOPS_ORG }}
+
   build-docker-images:
     needs:
       validate-docker-secrets
@@ -64,17 +71,9 @@ jobs:
       env:
         DEFAULT_BUMP: patch
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Install latest Appsody CLI
+    - name: Install Appsody CLI
       id: install-appsody-cli
-      run: |
-        echo "Installing Appsody..."
-        APPSODY_RELEASE=$(curl -s https://api.github.com/repos/appsody/appsody/releases/latest \
-        | grep "browser_download_url.*deb" \
-        | cut -d : -f 2,3 \
-        | tr -d \")
-        echo "Latest Appsody Release found: ${APPSODY_RELEASE}"
-        wget ${APPSODY_RELEASE}
-        sudo apt install -f ./appsody_*_amd64.deb
+      uses: ibm-cloud-architecture/appsody-install-action@master
     - name: Build the simulator docker image
       id: build-simulator-image
       run: |
@@ -92,6 +91,11 @@ jobs:
         DOCKER_I: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
         WORKDIR: simulator
         IMAGE_TAG: ${{ steps.bump-version-action.outputs.new_tag }}
+    - name: Save simulator app-deploy.yaml
+      uses: actions/upload-artifact@v2
+      with:
+        name: simulator-app-deploy.yaml
+        path: simulator/app-deploy.yaml
     - name: Build the scoring-mp docker image
       id: build-scoring-image
       run: |
@@ -109,12 +113,44 @@ jobs:
         DOCKER_I: ${{ secrets.DOCKER_IMAGE_SCORING }}
         WORKDIR: scoring-mp
         IMAGE_TAG: ${{ steps.bump-version-action.outputs.new_tag }}
-    - name: Webhook to GitOps repo
-      id: gitops-repo-webhook
-      uses: osowski/repository-dispatch@v1
-      if: startsWith(github.repository, 'ibm-cloud-architecture/')
+    - name: Save scoring-mp app-deploy.yaml
+      uses: actions/upload-artifact@v2
       with:
-        token: ${{ secrets.WEBHOOK_TOKEN }}
-        repository: ibm-cloud-architecture/refarch-kc-gitops
-        event-type: gitops-refresh
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "source": "${{ github.repository }}"}'
+        name: scoringmp-app-deploy.yaml
+        path: scoring-mp/app-deploy.yaml
+
+  update-gitops:
+    needs:
+      build-docker-images
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure git client
+      id: configure-git
+      uses: ibm-cloud-architecture/git-config-action@master
+      with:
+        user-email: ${{ secrets.GITOPS_EMAIL }}
+        gitops-token: ${{ secrets.GITOPS_TOKEN }}
+    - name: Retrieve simulator app-deploy.yaml
+      uses: actions/download-artifact@v2
+      with:
+        name: simulator-app-deploy.yaml
+        path: reefersimulator
+    - name: Update simulator app-deploy.yaml in GitOps repo
+      id: update-ordercommand-gitops
+      uses: ibm-cloud-architecture/appsody-gitops-update-action@master
+      with:
+        service-name: reefersimulator
+        github-org: ${{ secrets.GITOPS_ORG }}
+        gitops-repo-name: refarch-kc-gitops
+    - name: Retrieve scoringmp app-deploy.yaml
+      uses: actions/download-artifact@v2
+      with:
+        name: scoringmp-app-deploy.yaml
+        path: scoringmp
+    - name: Update scoringmp app-deploy.yaml in GitOps repo
+      id: update-scoringmp-gitops
+      uses: ibm-cloud-architecture/appsody-gitops-update-action@master
+      with:
+        service-name: scoringmp
+        github-org: ${{ secrets.GITOPS_ORG }}
+        gitops-repo-name: refarch-kc-gitops
