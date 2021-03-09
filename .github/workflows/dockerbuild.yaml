@@ -5,12 +5,10 @@ on:
       - master
     paths-ignore:
       - 'docs/**'
-      - 'cassandra/'
       - 'consumer/'
       - 'data_schema/'
       - 'docker/'
       - 'ml/'
-      - 'postgresql/'
       - 'scripts/'
       - '*/chart/**'
 
@@ -40,6 +38,7 @@ jobs:
         validate_secret DOCKER_USERNAME ${DOCKER_USERNAME}
         validate_secret DOCKER_PASSWORD ${DOCKER_PASSWORD}
         validate_secret DOCKER_REPOSITORY ${DOCKER_REPOSITORY}
+        validate_secret DOCKER_REGISTRY ${DOCKER_REGISTRY}
         validate_secret DOCKER_IMAGE_SIMULATOR ${DOCKER_IMAGE_SIMULATOR}
         validate_secret DOCKER_IMAGE_SCORING ${DOCKER_IMAGE_SCORING}
         validate_secret GITOPS_EMAIL ${GITOPS_EMAIL}
@@ -53,6 +52,7 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
         DOCKER_IMAGE_SIMULATOR: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
         DOCKER_IMAGE_SCORING: ${{ secrets.DOCKER_IMAGE_SCORING }}
         GITOPS_EMAIL: ${{ secrets.GITOPS_EMAIL }}
@@ -67,7 +67,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Bump version and push tag
       id: bump-version-action
-      uses: osowski/github-tag-action@master
+      uses: ibm-cloud-architecture/github-tag-action@master
       env:
         DEFAULT_BUMP: patch
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -78,8 +78,8 @@ jobs:
       id: build-simulator-image
       run: |
         echo "Build and push the docker image"
-        IMAGE_NAME="${DOCKER_R}/${DOCKER_I}"
-        docker login -u ${DOCKER_U} -p ${DOCKER_P}
+        IMAGE_NAME="${DOCKER_REG}/${DOCKER_R}/${DOCKER_I}"
+        docker login -u ${DOCKER_U} -p ${DOCKER_P} ${DOCKER_REG}
         cd ${WORKDIR}
         appsody build --tag ${IMAGE_NAME}:${IMAGE_TAG} --push
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
@@ -88,6 +88,7 @@ jobs:
         DOCKER_U: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_P: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_R: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_REG: ${{ secrets.DOCKER_REGISTRY }}
         DOCKER_I: ${{ secrets.DOCKER_IMAGE_SIMULATOR }}
         WORKDIR: simulator
         IMAGE_TAG: ${{ steps.bump-version-action.outputs.new_tag }}
@@ -100,8 +101,8 @@ jobs:
       id: build-scoring-image
       run: |
         echo "Build and push the docker image"
-        IMAGE_NAME="${DOCKER_R}/${DOCKER_I}"
-        docker login -u ${DOCKER_U} -p ${DOCKER_P}
+        IMAGE_NAME="${DOCKER_REG}/${DOCKER_R}/${DOCKER_I}"
+        docker login -u ${DOCKER_U} -p ${DOCKER_P} ${DOCKER_REG}
         cd ${WORKDIR}
         appsody build --tag ${IMAGE_NAME}:${IMAGE_TAG} --push
         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
@@ -110,6 +111,7 @@ jobs:
         DOCKER_U: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_P: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_R: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_REG: ${{ secrets.DOCKER_REGISTRY }}
         DOCKER_I: ${{ secrets.DOCKER_IMAGE_SCORING }}
         WORKDIR: scoring-mp
         IMAGE_TAG: ${{ steps.bump-version-action.outputs.new_tag }}
