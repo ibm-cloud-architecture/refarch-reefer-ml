@@ -65,7 +65,7 @@ metadata:
     stack.appsody.dev/version: 0.2.15
   name: scoring-mp
 spec:
-  applicationImage: ibmcase/kcontainer-scoringmp-ms:0.1.60
+  applicationImage: quay.io/ibmcase/kcontainer-scoringmp-ms:latest
   pullPolicy: Always
   createKnativeService: false
   env:
